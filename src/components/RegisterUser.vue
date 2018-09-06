@@ -3,11 +3,13 @@
     <h1>Register a new user</h1>
 
     <v-text-field
+      name="email"
       label="E-mail"
       :rules="[rules.required, rules.email]"
     ></v-text-field>
 
     <v-text-field
+      name="username"
       label="Username"
       :rules="[rules.required]"
     ></v-text-field>
@@ -15,6 +17,7 @@
     <Password :confirmation="true"></Password>
 
     <v-autocomplete
+      name="hosting"
       label="Hosting"
       :items="hosts"
       placeholder="Choose where to store your data..."
@@ -27,11 +30,13 @@
     </div>
     
     <v-btn
+      name="submit"
       @click="submit"
       :disabled="!validForm"
     >Submit</v-btn>
 
     <v-btn
+      name="clear"
       @click="clear"
     >Clear</v-btn>
 

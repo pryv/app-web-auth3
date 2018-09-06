@@ -1,0 +1,74 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`RegisterUser.test.js renders correctly (snapshots matching) 1`] = `
+<v-form>
+  <h1>
+    Register a new user
+  </h1>
+   
+  <v-text-field
+    label="E-mail"
+    name="email"
+    rules="function required(value) {
+          return !!value || 'This field is required.';
+        },function email(value) {
+          return (/.+@.+/.test(value) || 'E-mail must be valid'
+          );
+        }"
+  />
+   
+  <v-text-field
+    label="Username"
+    name="username"
+    rules="function required(value) {
+          return !!value || 'This field is required.';
+        }"
+  />
+   
+  <password-stub
+    confirmation="true"
+  />
+   
+  <v-autocomplete
+    items="EU,US,ASIA"
+    label="Hosting"
+    name="hosting"
+    placeholder="Choose where to store your data..."
+    rules="function required(value) {
+          return !!value || 'This field is required.';
+        }"
+  />
+   
+  <div>
+    
+    By registering you agree with our
+    
+    <a
+      href="https://pryv.com/terms-of-use/"
+      target="_blank"
+    >
+      terms of use
+    </a>
+    .
+  
+  </div>
+   
+  <v-btn
+    disabled="true"
+    name="submit"
+  >
+    Submit
+  </v-btn>
+   
+  <v-btn
+    name="clear"
+  >
+    Clear
+  </v-btn>
+   
+  <navigationbutton-stub
+    page="auth"
+    title="Already a Pryv user ? Sign in."
+  />
+</v-form>
+`;
