@@ -3,22 +3,25 @@
     <h1>Register a new user</h1>
 
     <v-text-field
-      name="email"
       label="E-mail"
+      id="email"
+      v-model="email"
       :rules="[rules.required, rules.email]"
     ></v-text-field>
 
     <v-text-field
-      name="username"
       label="Username"
+      id="username"
+      v-model="username"
       :rules="[rules.required]"
     ></v-text-field>
     
     <Password :confirmation="true"></Password>
 
     <v-autocomplete
-      name="hosting"
       label="Hosting"
+      id="hosting"
+      v-model="hosting"
       :items="hosts"
       placeholder="Choose where to store your data..."
       :rules="[rules.required]"
@@ -30,13 +33,13 @@
     </div>
     
     <v-btn
-      name="submit"
+      id="submitButton"
       @click="submit"
       :disabled="!validForm"
     >Submit</v-btn>
 
     <v-btn
-      name="clear"
+      id="clearButton"
       @click="clear"
     >Clear</v-btn>
 
@@ -59,6 +62,9 @@
     },
     data: () => ({
       hosts: [ 'EU', 'US', 'ASIA' ],
+      email: '',
+      username: '',
+      hosting: '',
       rules: {
         required: value => !!value || 'This field is required.',
         email: value => /.+@.+/.test(value) || 'E-mail must be valid'

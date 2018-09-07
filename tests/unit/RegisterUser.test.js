@@ -1,5 +1,9 @@
-import { shallowMount } from '@vue/test-utils'
+import { shallowMount, createLocalVue } from '@vue/test-utils'
 import RegisterUser from '../../src/components/RegisterUser'
+import Vue from 'vue'
+import Vuetify from 'vuetify'
+
+Vue.use(Vuetify)
 
 describe ('RegisterUser.test.js', () => {
 
@@ -13,28 +17,24 @@ describe ('RegisterUser.test.js', () => {
     expect(wrapper.element).toMatchSnapshot()
   })
 
-  it('deactivates submit button when form is invalid', () => {
-    wrapper.find({name: 'submit'}).element.disabled.toBe(true)
+  it('deactivates submit button when form is not yet filled', () => {
+    const submitButton = wrapper.find('#submitButton')
+    expect(wrapper.vm.validForm).toBe(false)
+    expect(submitButton.attributes().disabled).toBe("true")
   })
 
   it('activates submit button when form is valid', () => {
-
+    wrapper.setData({
+      validForm: true
+    })
+    const submitButton = wrapper.find('#submitButton')
+    expect(submitButton.attributes().disabled).toBeFalsy()
   })
 
   it('validates email correctly', () => {
-
   })
 
   it('validates username correctly', () => {
-
-  })
-
-  it('validates password correctly', () => {
-
-  })
-
-  it('validates password confirmation correctly', () => {
-
   })
 
   it('validates hosting correctly', () => {
