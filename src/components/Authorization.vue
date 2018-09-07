@@ -42,10 +42,10 @@
 </template>
 
 <script>
-  import Password from './Password.vue'
-  import NavigationButton from './NavigationButton.vue'
-  import Permissions from './Permissions.vue'
-  import Alerts from './Alerts.vue'
+  import Password from './Password.vue';
+  import NavigationButton from './NavigationButton.vue';
+  import Permissions from './Permissions.vue';
+  import Alerts from './Alerts.vue';
 
   export default {
     components: {

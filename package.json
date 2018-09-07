@@ -12,6 +12,8 @@
     "test": "./node_modules/.bin/jest"
   },
   "dependencies": {
+    "axios": "^0.18.0",
+    "eslint-plugin-vue": "^4.7.1",
     "vue": "^2.5.2",
     "vue-router": "^3.0.1",
     "vuetify": "^1.0.0"

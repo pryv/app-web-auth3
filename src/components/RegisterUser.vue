@@ -23,10 +23,10 @@
       id="hosting"
       v-model="hosting"
       :items="hosts"
-      placeholder="Choose where to store your data..."
+      placeholder="Choose hosting..."
       :rules="[rules.required]"
     ></v-autocomplete>
-    
+
     <div>
       By registering you agree with our
       <a target="_blank" href="https://pryv.com/terms-of-use/">terms of use</a>.
@@ -52,8 +52,9 @@
 </template>
 
 <script>
-  import Password from './Password.vue'
-  import NavigationButton from './NavigationButton.vue'
+  import Password from './Password.vue';
+  import NavigationButton from './NavigationButton.vue';
+  import axios from 'axios';
 
   export default {
     components: {
@@ -61,16 +62,32 @@
       NavigationButton
     },
     data: () => ({
-      hosts: [ 'EU', 'US', 'ASIA' ],
       email: '',
       username: '',
       hosting: '',
+      hosts: [],
+      errors: [],
       rules: {
         required: value => !!value || 'This field is required.',
         email: value => /.+@.+/.test(value) || 'E-mail must be valid'
       },
       validForm: false
     }),
+    created() {
+      axios.get(`https://reg.pryv.me/hostings`)
+      .then(response => {
+        const regions = response.data.regions;
+        Object.keys(regions).forEach(region => {
+          const zones = regions[region].zones;
+          Object.keys(zones).forEach(zone => {
+            this.hosts.push(zones[zone].name);
+          });
+        });
+      })
+      .catch(e => {
+        console.log(e)
+      })
+    },
     methods: {
       submit () {
         if (this.$refs.form.validate()) {
