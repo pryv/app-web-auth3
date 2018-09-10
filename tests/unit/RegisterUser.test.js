@@ -28,29 +28,19 @@ describe('RegisterUser.test.js', () => {
     wrapper.setData({
       validForm: true
     });
-    const submitButton = wrapper.find('#submitButton')
-    expect(submitButton.attributes().disabled).toBeFalsy()
+    const submitButton = wrapper.find('#submitButton');
+    expect(submitButton.attributes().disabled).toBeFalsy();
   });
 
   it('validates email correctly', () => {
+    const emailRule = wrapper.vm.rules.email;
+    expect(emailRule('invalidEmail')).toBe('E-mail must be valid.');
+    expect(emailRule('validEmail@test.com')).toBe(true);
   });
 
-  it('validates username correctly', () => {
-  });
-
-  it('validates hosting correctly', () => {
-
-  });
-
-  it('contains a valid link to terms of use', () => {
-
-  });
-
-  it('clears the form when clicking on clear button', () => {
-
-  });
-
-  it('redirects to auth view when clicking on sign in button', () => {
-
+  it('validates required fields correctly', () => {
+    const requiredRule = wrapper.vm.rules.required;
+    expect(requiredRule()).toBe('This field is required.');
+    expect(requiredRule('notEmpty')).toBe(true);
   });
 });

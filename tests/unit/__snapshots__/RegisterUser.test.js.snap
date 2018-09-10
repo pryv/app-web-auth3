@@ -1,0 +1,94 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`RegisterUser.test.js renders correctly (snapshots matching) 1`] = `
+<vform-stub>
+  <h1>
+    Register a new user
+  </h1>
+   
+  <vtextfield-stub
+    id="email"
+    label="E-mail"
+    rules="function required(value) {
+          return !!value || 'This field is required.';
+        },function email(value) {
+          return (/.+@.+/.test(value) || 'E-mail must be valid'
+          );
+        }"
+  />
+   
+  <vtextfield-stub
+    id="username"
+    label="Username"
+    rules="function required(value) {
+          return !!value || 'This field is required.';
+        }"
+  />
+   
+  <password-stub
+    confirmation="true"
+  />
+   
+  <vautocomplete-stub
+    allowoverflow="true"
+    browserautocomplete="off"
+    filter="function _default(item, queryText, itemText) {
+                var hasValue = function hasValue(val) {
+                    return val != null ? val : '';
+                };
+                var text = hasValue(itemText);
+                var query = hasValue(queryText);
+                return text.toString().toLowerCase().indexOf(query.toString().toLowerCase()) > -1;
+            }"
+    id="hosting"
+    items=""
+    label="Hosting"
+    menuprops="[object Object]"
+    placeholder="Choose hosting..."
+    rules="function required(value) {
+          return !!value || 'This field is required.';
+        }"
+  />
+   
+  <div>
+    
+    By registering you agree with our
+    
+    <a
+      href="https://pryv.com/terms-of-use/"
+      id="termsLink"
+      target="_blank"
+    >
+      terms of use
+    </a>
+    .
+  
+  </div>
+   
+  <vbtn-stub
+    activeclass="v-btn--active"
+    disabled="true"
+    id="submitButton"
+    ripple="true"
+    tag="button"
+    type="button"
+  >
+    Submit
+  </vbtn-stub>
+   
+  <vbtn-stub
+    activeclass="v-btn--active"
+    id="clearButton"
+    ripple="true"
+    tag="button"
+    type="button"
+  >
+    Clear
+  </vbtn-stub>
+   
+  <navigationbutton-stub
+    page="auth"
+    title="Already a Pryv user ? Sign in."
+  />
+</vform-stub>
+`;

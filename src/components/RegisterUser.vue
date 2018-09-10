@@ -66,10 +66,9 @@
       username: '',
       hosting: '',
       hosts: [],
-      errors: [],
       rules: {
         required: value => !!value || 'This field is required.',
-        email: value => /.+@.+/.test(value) || 'E-mail must be valid'
+        email: value => /.+@.+/.test(value) || 'E-mail must be valid.'
       },
       validForm: false
     }),
