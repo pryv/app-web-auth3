@@ -12,7 +12,7 @@ exports[`RegisterUser.test.js renders correctly (snapshots matching) 1`] = `
     rules="function required(value) {
           return !!value || 'This field is required.';
         },function email(value) {
-          return (/.+@.+/.test(value) || 'E-mail must be valid'
+          return (/.+@.+/.test(value) || 'E-mail must be valid.'
           );
         }"
   />
@@ -56,7 +56,6 @@ exports[`RegisterUser.test.js renders correctly (snapshots matching) 1`] = `
     
     <a
       href="https://pryv.com/terms-of-use/"
-      id="termsLink"
       target="_blank"
     >
       terms of use

@@ -1,32 +1,20 @@
 <template>
   <v-form ref="form" v-model="validForm">
-    
-    <div v-if="!resetToken">
-      <h1>Request password reset</h1>
-      <v-text-field
-        label="Username or email"
-        :rules="[rules.required]"
-      ></v-text-field>
-      <v-btn
-        @click="submit"
-        :disabled="!validForm"
-      >Reset password</v-btn>
-    </div>
+    <h1>{{pageTitle}}</h1>
 
-    <div v-else>
-      <h1>Set a new password</h1>
-      <v-text-field
-        label="Username or email"
-        :rules="[rules.required]"
-      ></v-text-field>
+    <v-text-field
+      id="usernameOrEmail"
+      label="Username or email"
+      :rules="[rules.required]"
+    ></v-text-field>
 
-      <Password :confirmation="true"></Password>
-      
-      <v-btn
-        @click="submit"
-        :disabled="!validForm"
-      >Change password</v-btn>
-    </div>
+    <Password :confirmation="true" v-if="resetToken"></Password>
+
+    <v-btn
+      id="submitButton"
+      @click="submit"
+      :disabled="!validForm"
+    >{{buttonText}}</v-btn>
 
     <NavigationButton
       :title="'Go back to Sign in.'"
@@ -57,6 +45,14 @@
         if (this.$refs.form.validate()) {
           alert('Submit form...')
         }
+      }
+    },
+    computed: {
+      pageTitle: function() {
+        return this.resetToken ? 'Set a new password' : 'Reset password';
+      },
+      buttonText: function() {
+        return this.resetToken ? 'Change password' : 'Request password reset';
       }
     }
   }
