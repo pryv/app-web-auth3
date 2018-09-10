@@ -1,0 +1,17 @@
+[ignore]
+.*/flow-coverage/.*
+.*/node_modules/config-chain/.*
+
+[include]
+
+[libs]
+flow-typed
+
+[lints]
+
+[options]
+
+[strict]
+
+[untyped]
+.*/node_modules/.*

@@ -54,7 +54,7 @@
 <script>
   import Password from './Password.vue';
   import NavigationButton from './NavigationButton.vue';
-  import axios from 'axios';
+  import Hostings from './Hostings.js';
 
   export default {
     components: {
@@ -73,20 +73,10 @@
       },
       validForm: false
     }),
-    created() {
-      axios.get(`https://reg.pryv.me/hostings`)
-      .then(response => {
-        const regions = response.data.regions;
-        Object.keys(regions).forEach(region => {
-          const zones = regions[region].zones;
-          Object.keys(zones).forEach(zone => {
-            this.hosts.push(zones[zone].name);
-          });
-        });
-      })
-      .catch(e => {
-        console.log(e)
-      })
+    async created() {
+      const hostings = new Hostings();
+      await hostings.syncHostings();
+      this.hosts = Object.keys(hostings.getHostings());
     },
     methods: {
       submit () {

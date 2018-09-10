@@ -18,7 +18,8 @@ module.exports = {
   // required to lint *.vue files
   plugins: [
     'vue',
-    'html'
+    'html',
+    "flowtype-errors"
   ],
   // add your custom rules here
   rules: {
@@ -26,6 +27,7 @@ module.exports = {
     'generator-star-spacing': 'off',
     // allow debugger during development
     'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off',
-    'semi': [2, "always"]
+    'semi': [2, "always"],
+    "flowtype-errors/show-errors": 2
   }
 }
