@@ -1,6 +1,7 @@
 <template>
   <div>
     <v-text-field
+      id="password"
       label="Password"
       v-model="password"
       :append-icon="visiblePass ? 'lock_open' : 'lock'"
@@ -9,6 +10,7 @@
       :rules="[rules.required]"
     ></v-text-field>
     <v-text-field
+      id="passConfirmation"
       label="Password confirmation"
       v-if="confirmation"
       v-model="repass"
