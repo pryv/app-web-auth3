@@ -1,5 +1,6 @@
 <template>
     <v-btn
+      id="navButton"
       @click="goTo(page)"
     >{{title}}</v-btn>
 </template>

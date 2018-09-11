@@ -42,17 +42,15 @@
 </template>
 
 <script>
-  import Password from './Password.vue';
-  import NavigationButton from './NavigationButton.vue';
-  import Permissions from './Permissions.vue';
-  import Alerts from './Alerts.vue';
+  import Password from './bits/Password.vue';
+  import NavigationButton from './bits/NavigationButton.vue';
+  import Permissions from './bits/Permissions.vue';
 
   export default {
     components: {
       Password,
       NavigationButton,
-      Permissions,
-      Alerts
+      Permissions
     },
     props: ['permissionsArray', 'appId'],
     data: () => ({

@@ -25,8 +25,8 @@
 </template>
 
 <script>
-  import Password from './Password.vue';
-  import NavigationButton from './NavigationButton.vue';
+  import Password from './bits/Password.vue';
+  import NavigationButton from './bits/NavigationButton.vue';
 
   export default {
     components: {

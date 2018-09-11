@@ -1,0 +1,13 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`NavigationButton.test.js renders correctly (snapshots matching) 1`] = `
+<vbtn-stub
+  activeclass="v-btn--active"
+  id="navButton"
+  ripple="true"
+  tag="button"
+  type="button"
+>
+  
+</vbtn-stub>
+`;
