@@ -1,7 +1,7 @@
 /* global describe, it, beforeEach, expect */
 
 import { shallowMount } from '@vue/test-utils';
-import Password from '../../src/components/Password';
+import Password from '../../src/components/views/Password';
 import Vue from 'vue';
 import Vuetify from 'vuetify';
 

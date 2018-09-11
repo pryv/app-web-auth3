@@ -1,7 +1,7 @@
 /* global describe, it, beforeEach, expect */
 
 import { shallowMount } from '@vue/test-utils';
-import RegisterUser from '../../src/components/RegisterUser';
+import RegisterUser from '../../src/components/views/RegisterUser';
 import Vue from 'vue';
 import Vuetify from 'vuetify';
 

@@ -1,8 +1,8 @@
 import Vue from 'vue';
 import Router from 'vue-router';
-import RegisterUser from '@/components/RegisterUser';
-import ResetPassword from '@/components/ResetPassword';
-import Authorization from '@/components/Authorization';
+import RegisterUser from '@/components/views/RegisterUser';
+import ResetPassword from '@/components/views/ResetPassword';
+import Authorization from '@/components/views/Authorization';
 
 Vue.use(Router);
 

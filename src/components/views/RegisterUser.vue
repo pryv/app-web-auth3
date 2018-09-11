@@ -54,7 +54,7 @@
 <script>
   import Password from './Password.vue';
   import NavigationButton from './NavigationButton.vue';
-  import Hostings from './Hostings.js';
+  import Hostings from '../models/Hostings.js';
 
   export default {
     components: {
