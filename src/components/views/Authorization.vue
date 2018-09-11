@@ -1,7 +1,5 @@
 <template>
   <div>
-    <Alerts></Alerts>
-
     <Permissions v-if="permissionsArray && appId" :appId="appId" :permissionsArray="permissionsArray"></Permissions>
 
     <v-form ref="form" v-model="validForm" v-else>
@@ -15,6 +13,7 @@
       <Password></Password>
 
       <v-btn
+        id="submitButton"
         @click="submit"
         :disabled="!validForm"
       >Sign In</v-btn>

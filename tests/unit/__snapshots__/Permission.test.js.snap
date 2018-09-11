@@ -1,0 +1,64 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Permissions.test.js renders correctly (snapshots matching) 1`] = `
+<vform-stub>
+  <h1>
+    Permissions
+  </h1>
+   
+  <div
+    id="appIdText"
+  >
+    
+    App 
+    <b>
+      testApp
+    </b>
+     is requesting:
+  
+  </div>
+   
+  <ul>
+    <li>
+      
+    A permission on stream 
+      <b>
+        diary
+      </b>
+       with level 
+      <b>
+        read
+      </b>
+    </li>
+    <li>
+      
+    A permission on stream 
+      <b>
+        work
+      </b>
+       with level 
+      <b>
+        manage
+      </b>
+    </li>
+  </ul>
+   
+  <vbtn-stub
+    activeclass="v-btn--active"
+    ripple="true"
+    tag="button"
+    type="button"
+  >
+    Reject
+  </vbtn-stub>
+   
+  <vbtn-stub
+    activeclass="v-btn--active"
+    ripple="true"
+    tag="button"
+    type="button"
+  >
+    Accept
+  </vbtn-stub>
+</vform-stub>
+`;

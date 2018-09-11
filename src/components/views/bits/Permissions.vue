@@ -2,7 +2,7 @@
   <v-form>
     <h1>Permissions</h1>
 
-    <div>
+    <div id="appIdText">
       App <b>{{appId}}</b> is requesting:
     </div>
 

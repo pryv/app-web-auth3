@@ -39,7 +39,7 @@ describe('ResetPassword.test.js', () => {
     expect(requiredRule('notEmpty')).toBe(true);
   });
 
-  it('renders password reset request view by default', () => {
+  it('shows password reset form by default', () => {
     const pageTitle = wrapper.find('h1').text();
     expect(pageTitle).toBe('Reset password');
     const submitButton = wrapper.find('#submitButton');
@@ -50,7 +50,7 @@ describe('ResetPassword.test.js', () => {
     expect(password.exists()).toBe(false);
   });
 
-  it('renders password change view when resetToken is provided', () => {
+  it('shows password change form when resetToken is provided', () => {
     wrapper = shallowMount(ResetPassword, {
       propsData: {
         resetToken: 'reset'

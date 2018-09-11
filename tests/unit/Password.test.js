@@ -7,7 +7,7 @@ import Vuetify from 'vuetify';
 
 Vue.use(Vuetify);
 
-describe('RegisterUser.test.js', () => {
+describe('Password.test.js', () => {
   let wrapper;
 
   beforeEach(() => {
