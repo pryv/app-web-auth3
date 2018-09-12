@@ -7,11 +7,15 @@ module.exports = {
   },
   env: {
     browser: true,
+    commonjs: true,
+    es6: true,
+    jest: true,
+    node: true
   },
   extends: [
     // https://github.com/vuejs/eslint-plugin-vue#priority-a-essential-error-prevention
     // consider switching to `plugin:vue/strongly-recommended` or `plugin:vue/recommended` for stricter rules.
-    'plugin:vue/essential',
+    'plugin:vue/recommended',
     // https://github.com/standard/standard/blob/master/docs/RULES-en.md
     'standard'
   ],
@@ -19,7 +23,7 @@ module.exports = {
   plugins: [
     'vue',
     'html',
-    "flowtype-errors"
+    'flowtype-errors'
   ],
   // add your custom rules here
   rules: {
@@ -28,6 +32,7 @@ module.exports = {
     // allow debugger during development
     'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off',
     'semi': [2, "always"],
-    "flowtype-errors/show-errors": 2
+    "flowtype-errors/show-errors": 2,
+    "comma-dangle": ["error", "always-multiline"]
   }
 }

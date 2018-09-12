@@ -12,15 +12,15 @@ describe('Permissions.test.js', () => {
   const appId = 'testApp';
   const permissions = [
     {streamId: 'diary', level: 'read'},
-    {streamId: 'work', level: 'manage'}
+    {streamId: 'work', level: 'manage'},
   ];
 
   beforeAll(() => {
     wrapper = shallowMount(Permissions, {
       propsData: {
         permissionsArray: JSON.stringify(permissions),
-        appId: appId
-      }
+        appId: appId,
+      },
     });
   });
 

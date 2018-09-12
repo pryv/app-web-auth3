@@ -10,7 +10,7 @@ export default new Router({
   routes: [
     {
       path: '/',
-      redirect: '/auth'
+      redirect: '/auth',
     },
     {
       path: '/auth',
@@ -18,21 +18,21 @@ export default new Router({
       component: Authorization,
       props: (route) => ({
         permissionsArray: route.query.requestedPermissions,
-        appId: route.query.requestingAppId
-      })
+        appId: route.query.requestingAppId,
+      }),
     },
     {
       path: '/register',
       name: 'RegisterUser',
-      component: RegisterUser
+      component: RegisterUser,
     },
     {
       path: '/reset',
       name: 'ResetPassword',
       component: ResetPassword,
       props: (route) => ({
-        resetToken: route.query.resetToken
-      })
-    }
-  ]
+        resetToken: route.query.resetToken,
+      }),
+    },
+  ],
 });

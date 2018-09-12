@@ -27,7 +27,7 @@ describe('Authorization.test.js', () => {
 
   it('activates submit button when form is valid', () => {
     wrapper.setData({
-      validForm: true
+      validForm: true,
     });
     const submitButton = wrapper.find('#submitButton');
     expect(submitButton.attributes().disabled).toBeFalsy();
@@ -50,8 +50,8 @@ describe('Authorization.test.js', () => {
     wrapper = shallowMount(Authorization, {
       propsData: {
         permissionsArray: '[{streamId: "diary", level: "read"}]',
-        appId: 'testApp'
-      }
+        appId: 'testApp',
+      },
     });
     const authForm = wrapper.find({ref: 'form'});
     expect(authForm.exists()).toBe(false);

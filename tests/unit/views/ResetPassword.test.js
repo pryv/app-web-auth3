@@ -27,7 +27,7 @@ describe('ResetPassword.test.js', () => {
 
   it('activates submit button when form is valid', () => {
     wrapper.setData({
-      validForm: true
+      validForm: true,
     });
     const submitButton = wrapper.find('#submitButton');
     expect(submitButton.attributes().disabled).toBeFalsy();
@@ -53,8 +53,8 @@ describe('ResetPassword.test.js', () => {
   it('shows password change form when resetToken is provided', () => {
     wrapper = shallowMount(ResetPassword, {
       propsData: {
-        resetToken: 'reset'
-      }
+        resetToken: 'reset',
+      },
     });
     const pageTitle = wrapper.find('h1').text();
     expect(pageTitle).toBe('Set a new password');

@@ -24,10 +24,10 @@ describe('NavigationButton.test.js', () => {
     const wrapper = mount(NavigationButton, {
       propsData: {
         title: title,
-        page: page
+        page: page,
       },
       localVue,
-      router
+      router,
     });
     const button = wrapper.find('#navButton');
     expect(button.text()).toBe(title);

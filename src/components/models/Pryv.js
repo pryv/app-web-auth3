@@ -21,7 +21,7 @@ class Pryv {
     const res = await axios.post(
       `${this.core}/auth/login`, {
         username: username,
-        password: password
+        password: password,
       }
     );
     return res;
@@ -31,7 +31,7 @@ class Pryv {
     const res = await axios.post(
       `${this.core}/access/check-app`, {
         appId: appId,
-        permissions: permissions
+        permissions: permissions,
       }
     );
     return res;
@@ -42,7 +42,7 @@ class Pryv {
       `${this.core}/accesses`, {
         appId: appId,
         type: 'app',
-        permissions: permissions
+        permissions: permissions,
       }
     );
     return res;
@@ -64,7 +64,7 @@ class Pryv {
         password: password,
         email: email,
         lang: lang,
-        invitationToken: 'enjoy'
+        invitationToken: 'enjoy',
       }
     );
     return res;
@@ -81,7 +81,7 @@ class Pryv {
     const res = await axios.post(
       `${this.core}/account/request-password-reset`, {
         appId: appId,
-        username: username
+        username: username,
       }
     );
     return res;
@@ -93,7 +93,7 @@ class Pryv {
         username: username,
         password: newPassword,
         appId: appId,
-        resetToken: resetToken
+        resetToken: resetToken,
       }
     );
     return res;

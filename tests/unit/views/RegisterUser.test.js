@@ -26,7 +26,7 @@ describe('RegisterUser.test.js', () => {
 
   it('activates submit button when form is valid', () => {
     wrapper.setData({
-      validForm: true
+      validForm: true,
     });
     const submitButton = wrapper.find('#submitButton');
     expect(submitButton.attributes().disabled).toBeFalsy();
