@@ -5,10 +5,11 @@
     <v-text-field
       id="usernameOrEmail"
       label="Username or email"
+      v-model="username"
       :rules="[rules.required]"
     ></v-text-field>
 
-    <Password :confirmation="true" v-if="resetToken"></Password>
+    <Password v-model="password" :confirmation="true" v-if="resetToken"></Password>
 
     <v-btn
       id="submitButton"
@@ -25,8 +26,9 @@
 </template>
 
 <script>
-  import Password from './bits/Password.vue';
-  import NavigationButton from './bits/NavigationButton.vue';
+  import Password from './bits/Password';
+  import NavigationButton from './bits/NavigationButton';
+  import Pryv from '../models/Pryv';
 
   export default {
     components: {
@@ -35,6 +37,8 @@
     },
     props: ['resetToken'],
     data: () => ({
+      username: '',
+      password: '',
       rules: {
         required: value => !!value || 'This field is required.'
       },
@@ -43,7 +47,12 @@
     methods: {
       submit () {
         if (this.$refs.form.validate()) {
-          alert('Submit form...')
+          const pryv = new Pryv('reg.pryv.me', 'pryv.me', this.username);
+          if (this.resetToken) {
+            pryv.changePassword(this.username, this.password, this.resetToken);
+          } else {
+            pryv.requestPasswordReset(this.username);
+          }
         }
       }
     },

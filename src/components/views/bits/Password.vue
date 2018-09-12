@@ -3,7 +3,8 @@
     <v-text-field
       id="password"
       label="Password"
-      v-model="password"
+      v-bind:value="value"
+      v-on:input="$emit('input', $event)"
       :append-icon="visiblePass ? 'lock_open' : 'lock'"
       @click:append="() => (visiblePass = !visiblePass)"
       :type="visiblePass ? 'text' : 'password'"
@@ -24,11 +25,10 @@
 
 <script>
   export default {
-    props: ['confirmation'],
+    props: ['confirmation', 'value'],
     data: () => ({
       visiblePass: false,
       visibleRepass: false,
-      password: '',
       repass: '',
       rules: {
         required: value => !!value || 'Password is required.'
@@ -36,7 +36,7 @@
     }),
     computed: {
       matchPassword: function () {
-        return this.password === this.repass || 'Password confirmation does not match.'
+        return this.value === this.repass || 'Password confirmation does not match.'
       }
     }
   }
