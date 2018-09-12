@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-class APIcalls {
+class Pryv {
   constructor (core, register) {
     this.core = core;
     this.register = register;
@@ -17,7 +17,7 @@ class APIcalls {
     return res;
   }
 
-  async pryvLogin (username, password) {
+  async login (username, password) {
     const res = await axios.post(
       `${this.core}/auth/login`, {
         username: username,
@@ -107,4 +107,4 @@ class APIcalls {
   }
 }
 
-export default APIcalls;
+export default Pryv;
