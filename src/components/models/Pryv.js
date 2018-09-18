@@ -1,8 +1,8 @@
 import axios from 'axios';
 
 class Pryv {
-  constructor (domain, username, appId, origin) {
-    this.core = `https://${username}.${domain}`;
+  constructor (domain, appId, origin) {
+    this.core = username => `https://${username}.${domain}`;
     this.register = `https://reg.${domain}`;
     this.appId = appId;
     this.origin = origin;
@@ -35,7 +35,7 @@ class Pryv {
 
   login (username, password) {
     return axios.post(
-      `${this.core}/auth/login`, {
+      `${this.core(username)}/auth/login`, {
         username: username,
         password: password,
         appId: this.appId,
@@ -46,7 +46,7 @@ class Pryv {
   checkAppAccess (username, permissions, personalToken, deviceName?) {
     // TODO: flowtype Permission: streamId/tag, level, defaultName
     return axios.post(
-      `${this.core}/access/check-app`, {
+      `${this.core(username)}/access/check-app`, {
         requestingAppId: this.appId,
         requestedPermissions: permissions,
         deviceName: deviceName,
@@ -58,7 +58,7 @@ class Pryv {
 
   createAppAccess (username, permissions, personalToken, appToken?, expireAfter?) {
     return axios.post(
-      `${this.core}/accesses`, {
+      `${this.core(username)}/accesses`, {
         name: this.appId,
         type: 'app',
         permissions: permissions,
@@ -77,7 +77,7 @@ class Pryv {
     );
   }
 
-  createUser (username, password, email, lang, hosting, invitation?, referer?) {
+  createUser (username, password, email, hosting, lang, invitation?, referer?) {
     return axios.post(
       `${this.register}/user`, {
         appid: this.appId,
@@ -85,7 +85,7 @@ class Pryv {
         password: password,
         email: email,
         hosting: hosting,
-        languageCode: lang,
+        languageCode: lang || 'en',
         invitationtoken: invitation || 'enjoy',
         referer: referer,
       }
@@ -100,7 +100,7 @@ class Pryv {
   // ---------- RESET calls ----------
   requestPasswordReset (username) {
     return axios.post(
-      `${this.core}/account/request-password-reset`, {
+      `${this.core(username)}/account/request-password-reset`, {
         appId: this.appId,
         username: username,
       }, {
@@ -111,7 +111,7 @@ class Pryv {
 
   changePassword (username, newPassword, resetToken) {
     return axios.post(
-      `${this.core}/account/reset-password`, {
+      `${this.core(username)}/account/reset-password`, {
         username: username,
         newPassword: newPassword,
         appId: this.appId,

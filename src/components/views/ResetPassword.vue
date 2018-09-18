@@ -57,16 +57,18 @@
       },
       validForm: false
     }),
+    created() {
+      this.pryv = new Pryv('pryv.me', 'app-web-auth');
+    },
     methods: {
       async submit () {
         if (this.$refs.form.validate()) {
-          const pryv = new Pryv('pryv.me', this.username, 'app-web-auth');
           try {
             if (this.resetToken) {
-              const res = await pryv.changePassword(this.username, this.password, this.resetToken);
+              const res = await this.pryv.changePassword(this.username, this.password, this.resetToken);
             }
             else {
-              const res = await pryv.requestPasswordReset(this.username);
+              const res = await this.pryv.requestPasswordReset(this.username);
               this.reset = (res.status === 200);
             }
           } catch(err) {

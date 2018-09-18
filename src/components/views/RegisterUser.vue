@@ -1,5 +1,12 @@
 <template>
   <v-form ref="form" v-model="validForm">
+
+    <v-alert
+      :value="err"
+      type="error"
+      transition="scale-transition"
+    >{{err}}</v-alert>
+
     <h1>Register a new user</h1>
 
     <v-text-field
@@ -16,7 +23,7 @@
       :rules="[rules.required]"
     ></v-text-field>
     
-    <Password :confirmation="true"></Password>
+    <Password v-model="password" :confirmation="true"></Password>
 
     <v-autocomplete
       label="Hosting"
@@ -55,6 +62,7 @@
   import Password from './bits/Password.vue';
   import NavigationButton from './bits/NavigationButton.vue';
   import Hostings from '../controllers/Hostings.js';
+  import Pryv from '../models/Pryv.js';
 
   export default {
     components: {
@@ -62,10 +70,12 @@
       NavigationButton
     },
     data: () => ({
-      email: '',
       username: '',
+      password: '',
+      email: '',
       hosting: '',
       hosts: [],
+      err: '',
       rules: {
         required: value => !!value || 'This field is required.',
         email: value => /.+@.+/.test(value) || 'E-mail must be valid.'
@@ -73,14 +83,25 @@
       validForm: false
     }),
     async created() {
-      const hostings = new Hostings();
-      await hostings.syncHostings();
-      this.hosts = Object.keys(hostings.getHostings());
+      this.pryv = new Pryv('pryv.me', 'pryv-reg-standalone');
+      const res = await this.pryv.getAvailableHostings();
+      this.hosts = new Hostings().parseHostings(res);
     },
     methods: {
-      submit () {
+      async submit () {
         if (this.$refs.form.validate()) {
-          alert('Submit form...')
+          try {
+            const res = await this.pryv.createUser(
+              this.username,
+              this.password,
+              this.email,
+              this.hosting
+            );
+            this.$router.push('auth');
+          } catch(err) {
+            console.error(err);
+            this.err = JSON.stringify(err.response.data);
+          }
         }
       },
       clear () {

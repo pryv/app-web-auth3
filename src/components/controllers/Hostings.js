@@ -1,9 +1,5 @@
 // @flow
 
-import axios from 'axios';
-
-const ENDPOINT = 'https://reg.pryv.me/hostings';
-
 type Hosting = {
   url: string,
   name: string,
@@ -55,9 +51,8 @@ class Hostings {
     this.regions = this.zones = this.hostings = {};
   }
 
-  async syncHostings () {
-    const response = await axios.get(ENDPOINT);
-    const hostingsData: HostingDefinition = response.data;
+  parseHostings (hostings) {
+    const hostingsData: HostingDefinition = hostings.data;
     const regions = this.regions = hostingsData.regions;
     Object.keys(regions).forEach(region => {
       const zones = this.zones = regions[region].zones;
@@ -68,6 +63,7 @@ class Hostings {
         });
       });
     });
+    return this.getHostings();
   }
 
   getRegions () {
@@ -79,7 +75,7 @@ class Hostings {
   }
 
   getHostings () {
-    return this.hostings;
+    return Object.keys(this.hostings);
   }
 }
 
