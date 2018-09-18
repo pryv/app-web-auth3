@@ -61,7 +61,7 @@ class Pryv {
       `${this.core(username)}/accesses`, {
         name: this.appId,
         type: 'app',
-        permissions: JSON.parse(permissions),
+        permissions: permissions,
         token: appToken,
         expireAfter: expireAfter,
       }, {

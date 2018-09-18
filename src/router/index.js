@@ -19,6 +19,7 @@ export default new Router({
       props: (route) => ({
         permissionsArray: route.query.requestedPermissions,
         appId: route.query.requestingAppId,
+        pollKey: route.query.key,
       }),
     },
     {

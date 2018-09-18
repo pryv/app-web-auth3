@@ -7,7 +7,7 @@
     >{{err}}</v-alert>
 
     <Permissions
-      v-if="showPermissions"
+      v-if="checkedPermissions"
       :appId="appId"
       :permissionsArray="permissionsArray"
       :accept="accept"
@@ -66,13 +66,13 @@
       NavigationButton,
       Permissions
     },
-    props: ['permissionsArray', 'appId'],
+    props: ['pollKey', 'permissionsArray', 'appId'],
     data: () => ({
       username: '',
       password: '',
       personalToken: null,
       err: '',
-      showPermissions: false,
+      checkedPermissions: null,
       rules: {
         required: value => !!value || 'This field is required.',
         email: value => /.+@.+/.test(value) || 'E-mail must be valid'
@@ -89,19 +89,15 @@
           const login = await this.pryv.login(this.username, this.password);
           this.personalToken = login.data.token;
           const checkApp = await this.pryv.checkAppAccess(this.username, this.permissionsArray, this.personalToken);
-          const checkedPermissions = checkApp.checkedPermissions;
-          const mismatchingAccess = checkApp.mismatchingAccess;
-          const matchingAccess = checkApp.matchingAccess;
+          const mismatchingAccess = checkApp.data.mismatchingAccess;
+          const matchingAccess = checkApp.data.matchingAccess;
           if (mismatchingAccess) {
-            return this.err = 'Mismatching access already exists: ' + mismatchingAccess;
+            return this.err = 'Mismatching access already exists: ' + JSON.stringify(mismatchingAccess);
           }
           if (matchingAccess) {
-            return this.err = 'Matching access already exists: ' + matchingAccess;
+            return this.err = 'Matching access already exists: ' + JSON.stringify(matchingAccess);
           }
-          if (checkedPermissions) {
-            this.permissionsArray = checkedPermissions;
-          }
-          this.showPermissions = true;
+          this.checkedPermissions = checkApp.data.checkedPermissions;
           } catch(err) {
             console.error(err);
             this.err = JSON.stringify(err.response.data);
@@ -110,9 +106,13 @@
       },
       async accept () {
         try {
-          const createAccess = await this.pryv.createAppAccess(this.username, this.permissionsArray, this.personalToken);
+          const createAccess = await this.pryv.createAppAccess(this.username, this.checkedPermissions, this.personalToken);
           const appToken = createAccess.data.token;
-          return this.err = 'Acces created: ' + appToken;
+          await this.pryv.updateAuthState(this.pollKey, {
+            status: 'ACCEPTED',
+            username: this.username,
+            token: appToken,
+          });
         } catch(err) {
           console.error(err);
           this.err = JSON.stringify(err.response.data);
