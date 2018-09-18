@@ -64,6 +64,10 @@
       async submit () {
         if (this.$refs.form.validate()) {
           try {
+            if (this.username.search('@') > 0) {
+              const res = await this.pryv.getUsernameForEmail(this.username);
+              this.username = res.data.uid;
+            }
             if (this.resetToken) {
               const res = await this.pryv.changePassword(this.username, this.password, this.resetToken);
             }
