@@ -1,22 +1,21 @@
 import axios from 'axios';
 
 class Pryv {
-  constructor (core, register, appId, origin) {
-    this.core = core;
-    this.register = register;
+  constructor (domain, username, appId, origin) {
+    this.core = `https://${username}.${domain}`;
+    this.register = `https://reg.${domain}`;
     this.appId = appId;
     this.origin = origin;
   }
 
   // ---------- AUTH calls ----------
-  async poll (pollKey) {
-    const res = await axios.get(
+  poll (pollKey) {
+    return axios.get(
       `${this.register}/access/${pollKey}`
     );
-    return res;
   }
 
-  async updateAuthState (pollKey, authState) {
+  updateAuthState (pollKey, authState) {
     // TODO: flowtype authState
     // authState.status === REFUSED
     // authState.reasonID
@@ -28,28 +27,26 @@ class Pryv {
     // authState.status === ACCEPTED
     // authState.username
     // authState.token
-    const res = await axios.post(
+    return axios.post(
       `${this.register}/access/${pollKey}`,
       {authState}
     );
-    return res;
   }
 
-  async login (username, password) {
-    const res = await axios.post(
-      `${username}.${this.core}/auth/login`, {
+  login (username, password) {
+    return axios.post(
+      `${this.core}/auth/login`, {
         username: username,
         password: password,
         appId: this.appId,
       }
     );
-    return res;
   }
 
-  async checkAppAccess (username, permissions, personalToken, deviceName?) {
+  checkAppAccess (username, permissions, personalToken, deviceName?) {
     // TODO: flowtype Permission: streamId/tag, level, defaultName
-    const res = await axios.post(
-      `${username}.${this.core}/access/check-app`, {
+    return axios.post(
+      `${this.core}/access/check-app`, {
         requestingAppId: this.appId,
         requestedPermissions: permissions,
         deviceName: deviceName,
@@ -57,12 +54,11 @@ class Pryv {
         headers: { Authorization: personalToken },
       }
     );
-    return res;
   }
 
-  async createAppAccess (username, permissions, personalToken, appToken?, expireAfter?) {
-    const res = await axios.post(
-      `${username}.${this.core}/accesses`, {
+  createAppAccess (username, permissions, personalToken, appToken?, expireAfter?) {
+    return axios.post(
+      `${this.core}/accesses`, {
         name: this.appId,
         type: 'app',
         permissions: permissions,
@@ -72,19 +68,17 @@ class Pryv {
         headers: { Authorization: personalToken },
       }
     );
-    return res;
   }
 
   // ---------- REGISTER calls ----------
-  async getAvailableHostings () {
-    const res = await axios.get(
+  getAvailableHostings () {
+    return axios.get(
       `${this.register}/hostings`
     );
-    return res;
   }
 
-  async createUser (username, password, email, lang, hosting, invitation?, referer?) {
-    const res = await axios.post(
+  createUser (username, password, email, lang, hosting, invitation?, referer?) {
+    return axios.post(
       `${this.register}/user`, {
         appid: this.appId,
         username: username,
@@ -96,47 +90,42 @@ class Pryv {
         referer: referer,
       }
     );
-    return res;
   }
 
-  async getUsernameForEmail (email) {
-    const res = await axios.get(
+  getUsernameForEmail (email) {
+    return axios.get(
       `${this.register}/${email}/uid`
     );
-    return res;
   }
   // ---------- RESET calls ----------
-  async requestPasswordReset (username) {
-    const res = await axios.post(
-      `${username}.${this.core}/account/request-password-reset`, {
+  requestPasswordReset (username) {
+    return axios.post(
+      `${this.core}/account/request-password-reset`, {
         appId: this.appId,
         username: username,
       }, {
         headers: { Origin: this.origin },
       }
     );
-    return res;
   }
 
-  async changePassword (username, newPassword, resetToken) {
-    const res = await axios.post(
-      `${username}.${this.core}/account/reset-password`, {
+  changePassword (username, newPassword, resetToken) {
+    return axios.post(
+      `${this.core}/account/reset-password`, {
         username: username,
-        password: newPassword,
+        newPassword: newPassword,
         appId: this.appId,
         resetToken: resetToken,
       }, {
         headers: { Origin: this.origin },
       }
     );
-    return res;
   }
 
   // ---------- UTILS calls ----------
-  async getServiceInfo () {
-    const res = await axios.get(
+  getServiceInfo () {
+    return axios.get(
       `${this.register}/service/info`);
-    return res;
   }
 }
 

@@ -1,5 +1,15 @@
 <template>
-  <v-form ref="form" v-model="validForm">
+  <div v-if="reset">
+    We have sent you a reset link by email.
+  </div>
+  <v-form ref="form" v-model="validForm" v-else>
+
+    <v-alert
+      :value="err"
+      type="error"
+      transition="scale-transition"
+    >{{err}}</v-alert>
+
     <h1>{{pageTitle}}</h1>
 
     <v-text-field
@@ -29,6 +39,7 @@
   import Password from './bits/Password';
   import NavigationButton from './bits/NavigationButton';
   import Pryv from '../models/Pryv';
+  import ErrorsHandling from '../controllers/ErrorsHandling';
 
   export default {
     components: {
@@ -39,19 +50,29 @@
     data: () => ({
       username: '',
       password: '',
+      err: '',
+      reset: false,
       rules: {
         required: value => !!value || 'This field is required.'
       },
       validForm: false
     }),
     methods: {
-      submit () {
+      async submit () {
         if (this.$refs.form.validate()) {
-          const pryv = new Pryv('reg.pryv.me', 'pryv.me', this.username);
-          if (this.resetToken) {
-            pryv.changePassword(this.username, this.password, this.resetToken);
-          } else {
-            pryv.requestPasswordReset(this.username);
+          const pryv = new Pryv('pryv.me', this.username, 'app-web-auth');
+          try {
+            if (this.resetToken) {
+              const res = await pryv.changePassword(this.username, this.password, this.resetToken);
+              console.log(JSON.stringify(res));
+            }
+            else {
+              const res = await pryv.requestPasswordReset(this.username);
+              if(res.status === 200) this.reset = true;
+            }
+          } catch(err) {
+            console.error(err);
+            this.err = JSON.stringify(err);
           }
         }
       }
