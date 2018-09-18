@@ -46,9 +46,9 @@ class Pryv {
   checkAppAccess (username, permissions, personalToken, deviceName?) {
     // TODO: flowtype Permission: streamId/tag, level, defaultName
     return axios.post(
-      `${this.core(username)}/access/check-app`, {
+      `${this.core(username)}/accesses/check-app`, {
         requestingAppId: this.appId,
-        requestedPermissions: permissions,
+        requestedPermissions: JSON.parse(permissions),
         deviceName: deviceName,
       }, {
         headers: { Authorization: personalToken },
@@ -61,7 +61,7 @@ class Pryv {
       `${this.core(username)}/accesses`, {
         name: this.appId,
         type: 'app',
-        permissions: permissions,
+        permissions: JSON.parse(permissions),
         token: appToken,
         expireAfter: expireAfter,
       }, {

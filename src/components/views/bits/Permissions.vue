@@ -13,10 +13,11 @@
     </ul>
     
     <v-btn
+    @click="refuse"
     >Reject</v-btn>
 
     <v-btn
-      @click="submit"
+      @click="accept"
     >Accept</v-btn>
 
   </v-form>
@@ -24,12 +25,6 @@
 
 <script>
   export default {
-    props: ['permissionsArray', 'appId'],
-    data: () => ({
-    }),
-    methods: {
-      submit () {
-      }
-    }
+    props: ['permissionsArray', 'appId', 'accept', 'refuse']
   }
 </script>
