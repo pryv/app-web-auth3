@@ -64,15 +64,14 @@
           try {
             if (this.resetToken) {
               const res = await pryv.changePassword(this.username, this.password, this.resetToken);
-              console.log(JSON.stringify(res));
             }
             else {
               const res = await pryv.requestPasswordReset(this.username);
-              if(res.status === 200) this.reset = true;
+              this.reset = (res.status === 200);
             }
           } catch(err) {
             console.error(err);
-            this.err = JSON.stringify(err);
+            this.err = JSON.stringify(err.response.data);
           }
         }
       }
