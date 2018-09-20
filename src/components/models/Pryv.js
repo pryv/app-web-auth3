@@ -33,19 +33,20 @@ class Pryv {
     );
   }
 
-  login (username, password) {
-    return axios.post(
+  async login (username, password) {
+    const res = await axios.post(
       `${this.core(username)}/auth/login`, {
         username: username,
         password: password,
         appId: this.appId,
       }
     );
+    return res.data.token;
   }
 
-  checkAppAccess (username, permissions, personalToken, deviceName?) {
+  async checkAppAccess (username, permissions, personalToken, deviceName?) {
     // TODO: flowtype Permission: streamId/tag, level, defaultName
-    return axios.post(
+    const res = await axios.post(
       `${this.core(username)}/accesses/check-app`, {
         requestingAppId: this.appId,
         requestedPermissions: JSON.parse(permissions),
@@ -54,10 +55,12 @@ class Pryv {
         headers: { Authorization: personalToken },
       }
     );
+    const data = res.data;
+    return [data.checkedPermissions, data.matchingAccess, data.mismatchingAccess];
   }
 
-  createAppAccess (username, permissions, personalToken, appToken?, expireAfter?) {
-    return axios.post(
+  async createAppAccess (username, permissions, personalToken, appToken?, expireAfter?) {
+    const res = await axios.post(
       `${this.core(username)}/accesses`, {
         name: this.appId,
         type: 'app',
@@ -68,6 +71,7 @@ class Pryv {
         headers: { Authorization: personalToken },
       }
     );
+    return res.data.token;
   }
 
   // ---------- REGISTER calls ----------
@@ -92,11 +96,13 @@ class Pryv {
     );
   }
 
-  getUsernameForEmail (email) {
-    return axios.get(
+  async getUsernameForEmail (email) {
+    const res = await axios.get(
       `${this.register}/${email}/uid`
     );
+    return res.data.uid;
   }
+
   // ---------- RESET calls ----------
   requestPasswordReset (username) {
     return axios.post(

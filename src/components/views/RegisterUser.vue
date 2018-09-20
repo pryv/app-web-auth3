@@ -91,7 +91,7 @@
       async submit () {
         if (this.$refs.form.validate()) {
           try {
-            const res = await this.pryv.createUser(
+            await this.pryv.createUser(
               this.username,
               this.password,
               this.email,
@@ -100,7 +100,7 @@
             this.$router.push('auth');
           } catch(err) {
             console.error(err);
-            this.err = JSON.stringify(err.response.data);
+            this.err = JSON.stringify(err);
           }
         }
       },

@@ -86,28 +86,24 @@
       async submit () {
         if (this.$refs.form.validate()) {
           try {
-          const login = await this.pryv.login(this.username, this.password);
-          this.personalToken = login.data.token;
-          const checkApp = await this.pryv.checkAppAccess(this.username, this.permissionsArray, this.personalToken);
-          const mismatchingAccess = checkApp.data.mismatchingAccess;
-          const matchingAccess = checkApp.data.matchingAccess;
-          if (mismatchingAccess) {
-            return this.err = 'Mismatching access already exists: ' + JSON.stringify(mismatchingAccess);
+          this.personalToken = await this.pryv.login(this.username, this.password);
+          const [permissions, match, mismatch] = await this.pryv.checkAppAccess(this.username, this.permissionsArray, this.personalToken);
+          if (mismatch) {
+            return this.err = 'Mismatching access already exists: ' + JSON.stringify(mismatch);
           }
-          if (matchingAccess) {
-            return this.err = 'Matching access already exists: ' + JSON.stringify(matchingAccess);
+          if (match) {
+            return this.err = 'Matching access already exists: ' + JSON.stringify(match);
           }
-          this.checkedPermissions = checkApp.data.checkedPermissions;
+          this.checkedPermissions = permissions;
           } catch(err) {
             console.error(err);
-            this.err = JSON.stringify(err.response.data);
+            this.err = JSON.stringify(err);
           }
         }
       },
       async accept () {
         try {
-          const createAccess = await this.pryv.createAppAccess(this.username, this.checkedPermissions, this.personalToken);
-          const appToken = createAccess.data.token;
+          const appToken = await this.pryv.createAppAccess(this.username, this.checkedPermissions, this.personalToken);
           await this.pryv.updateAuthState(this.pollKey, {
             status: 'ACCEPTED',
             username: this.username,
@@ -115,7 +111,7 @@
           });
         } catch(err) {
           console.error(err);
-          this.err = JSON.stringify(err.response.data);
+          this.err = JSON.stringify(err);
         }
       },
       async refuse () {

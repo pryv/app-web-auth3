@@ -65,11 +65,10 @@
         if (this.$refs.form.validate()) {
           try {
             if (this.username.search('@') > 0) {
-              const res = await this.pryv.getUsernameForEmail(this.username);
-              this.username = res.data.uid;
+              this.username = await this.pryv.getUsernameForEmail(this.username);
             }
             if (this.resetToken) {
-              const res = await this.pryv.changePassword(this.username, this.password, this.resetToken);
+              await this.pryv.changePassword(this.username, this.password, this.resetToken);
             }
             else {
               const res = await this.pryv.requestPasswordReset(this.username);
@@ -77,7 +76,7 @@
             }
           } catch(err) {
             console.error(err);
-            this.err = JSON.stringify(err.response.data);
+            this.err = JSON.stringify(err);
           }
         }
       }
