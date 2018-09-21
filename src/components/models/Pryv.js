@@ -49,7 +49,7 @@ class Pryv {
     const res = await axios.post(
       `${this.core(username)}/accesses/check-app`, {
         requestingAppId: this.appId,
-        requestedPermissions: JSON.parse(permissions),
+        requestedPermissions: permissions,
         deviceName: deviceName,
       }, {
         headers: { Authorization: personalToken },

@@ -87,7 +87,8 @@
         if (this.$refs.form.validate()) {
           try {
           this.personalToken = await this.pryv.login(this.username, this.password);
-          const [permissions, match, mismatch] = await this.pryv.checkAppAccess(this.username, this.permissionsArray, this.personalToken);
+          const permissionsArray = JSON.parse(this.permissionsArray);
+          const [permissions, match, mismatch] = await this.pryv.checkAppAccess(this.username, permissionsArray, this.personalToken);
           if (mismatch) {
             return this.err = 'Mismatching access already exists: ' + JSON.stringify(mismatch);
           }
@@ -115,6 +116,11 @@
         }
       },
       async refuse () {
+        await this.pryv.updateAuthState(this.pollKey, {
+          status: 'REFUSED',
+          reasonId: 'REFUSED_BY_USER',
+          message: 'The user refused to give access to the requested permissions',
+        });
         return this.err = 'Requested permissions were refused by user!';
       }
     }
