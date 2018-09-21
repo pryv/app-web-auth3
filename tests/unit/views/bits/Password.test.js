@@ -26,10 +26,8 @@ describe('Password.test.js', () => {
   });
 
   it('asks for password and confirmation if needed', () => {
-    wrapper = shallowMount(Password, {
-      propsData: {
-        confirmation: true,
-      },
+    wrapper.setProps({
+      confirmation: true,
     });
     const password = wrapper.find('#password');
     expect(password.exists()).toBe(true);
@@ -44,13 +42,17 @@ describe('Password.test.js', () => {
   });
 
   it('validates password confirmation correctly', () => {
+    wrapper.setProps({
+      value: '1234',
+    });
     wrapper.setData({
-      password: '1234',
       repass: '1234',
     });
     expect(wrapper.vm.matchPassword).toBe(true);
+    wrapper.setProps({
+      value: '1234',
+    });
     wrapper.setData({
-      password: '1234',
       repass: '4321',
     });
     expect(wrapper.vm.matchPassword).toBe('Password confirmation does not match.');

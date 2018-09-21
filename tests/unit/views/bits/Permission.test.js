@@ -20,6 +20,8 @@ describe('Permissions.test.js', () => {
       propsData: {
         permissionsArray: JSON.stringify(permissions),
         appId: appId,
+        accept: () => {},
+        refuse: () => {},
       },
     });
   });

@@ -46,12 +46,9 @@ describe('Authorization.test.js', () => {
     expect(permissions.exists()).toBe(false);
   });
 
-  it('shows requested permissions when permissions array and appId are provided', () => {
-    wrapper = shallowMount(Authorization, {
-      propsData: {
-        permissionsArray: '[{streamId: "diary", level: "read"}]',
-        appId: 'testApp',
-      },
+  it('shows requested permissions when app access check is successful', () => {
+    wrapper.setData({
+      checkedPermissions: '[{streamId: "diary", level: "read"}]',
     });
     const authForm = wrapper.find({ref: 'form'});
     expect(authForm.exists()).toBe(false);

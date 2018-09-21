@@ -2,6 +2,14 @@
 
 exports[`Authorization.test.js renders correctly (snapshots matching) 1`] = `
 <div>
+  <valert-stub
+    transition="scale-transition"
+    type="error"
+    value=""
+  >
+    
+  </valert-stub>
+   
   <vform-stub>
     <h1>
       Sign in
@@ -14,7 +22,9 @@ exports[`Authorization.test.js renders correctly (snapshots matching) 1`] = `
         }"
     />
      
-    <password-stub />
+    <password-stub
+      value=""
+    />
      
     <vbtn-stub
       activeclass="v-btn--active"

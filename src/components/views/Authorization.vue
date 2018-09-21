@@ -9,7 +9,7 @@
     <Permissions
       v-if="checkedPermissions"
       :appId="appId"
-      :permissionsArray="permissionsArray"
+      :permissionsArray="checkedPermissions"
       :accept="accept"
       :refuse="refuse"
     ></Permissions>

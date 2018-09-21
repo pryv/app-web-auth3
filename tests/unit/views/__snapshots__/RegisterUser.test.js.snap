@@ -2,6 +2,14 @@
 
 exports[`RegisterUser.test.js renders correctly (snapshots matching) 1`] = `
 <vform-stub>
+  <valert-stub
+    transition="scale-transition"
+    type="error"
+    value=""
+  >
+    
+  </valert-stub>
+   
   <h1>
     Register a new user
   </h1>
@@ -27,6 +35,7 @@ exports[`RegisterUser.test.js renders correctly (snapshots matching) 1`] = `
    
   <password-stub
     confirmation="true"
+    value=""
   />
    
   <vautocomplete-stub

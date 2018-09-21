@@ -51,10 +51,8 @@ describe('ResetPassword.test.js', () => {
   });
 
   it('shows password change form when resetToken is provided', () => {
-    wrapper = shallowMount(ResetPassword, {
-      propsData: {
-        resetToken: 'reset',
-      },
+    wrapper.setProps({
+      resetToken: 'reset',
     });
     const pageTitle = wrapper.find('h1').text();
     expect(pageTitle).toBe('Set a new password');
