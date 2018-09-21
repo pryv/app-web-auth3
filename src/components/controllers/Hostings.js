@@ -51,7 +51,7 @@ class Hostings {
     this.regions = this.zones = this.hostings = {};
   }
 
-  parseHostings (hostings) {
+  parse (hostings) {
     const hostingsData: HostingDefinition = hostings.data;
     const regions = this.regions = hostingsData.regions;
     Object.keys(regions).forEach(region => {

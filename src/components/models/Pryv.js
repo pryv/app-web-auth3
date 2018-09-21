@@ -1,4 +1,5 @@
 import axios from 'axios';
+import Hostings from '../controllers/Hostings.js';
 
 class Pryv {
   constructor (domain, appId, origin) {
@@ -9,13 +10,13 @@ class Pryv {
   }
 
   // ---------- AUTH calls ----------
-  poll (pollKey) {
-    return axios.get(
+  async poll (pollKey) {
+    return asyncCall(axios.get,
       `${this.register}/access/${pollKey}`
     );
   }
 
-  updateAuthState (pollKey, authState) {
+  async updateAuthState (pollKey, authState) {
     // TODO: flowtype authState
     // authState.status === REFUSED
     // authState.reasonID
@@ -27,26 +28,26 @@ class Pryv {
     // authState.status === ACCEPTED
     // authState.username
     // authState.token
-    return axios.post(
+    return asyncCall(axios.get,
       `${this.register}/access/${pollKey}`,
       {authState}
     );
   }
 
   async login (username, password) {
-    const res = await axios.post(
+    const [err, res] = await asyncCall(axios.post,
       `${this.core(username)}/auth/login`, {
         username: username,
         password: password,
         appId: this.appId,
       }
     );
-    return res.data.token;
+    return [err, res.data.token];
   }
 
   async checkAppAccess (username, permissions, personalToken, deviceName?) {
     // TODO: flowtype Permission: streamId/tag, level, defaultName
-    const res = await axios.post(
+    const [err, res] = await asyncCall(axios.post,
       `${this.core(username)}/accesses/check-app`, {
         requestingAppId: this.appId,
         requestedPermissions: permissions,
@@ -56,11 +57,15 @@ class Pryv {
       }
     );
     const data = res.data;
-    return [data.checkedPermissions, data.matchingAccess, data.mismatchingAccess];
+    return [err, {
+      permissions: data.checkedPermissions,
+      match: data.matchingAccess,
+      mismatch: data.mismatchingAccess,
+    }];
   }
 
   async createAppAccess (username, permissions, personalToken, appToken?, expireAfter?) {
-    const res = await axios.post(
+    const [err, res] = await asyncCall(axios.post,
       `${this.core(username)}/accesses`, {
         name: this.appId,
         type: 'app',
@@ -71,18 +76,19 @@ class Pryv {
         headers: { Authorization: personalToken },
       }
     );
-    return res.data.token;
+    return [err, res.data.token];
   }
 
   // ---------- REGISTER calls ----------
-  getAvailableHostings () {
-    return axios.get(
+  async getAvailableHostings () {
+    const [err, res] = await asyncCall(axios.get,
       `${this.register}/hostings`
     );
+    return [err, new Hostings().parse(res)];
   }
 
-  createUser (username, password, email, hosting, lang, invitation?, referer?) {
-    return axios.post(
+  async createUser (username, password, email, hosting, lang, invitation?, referer?) {
+    return asyncCall(axios.post,
       `${this.register}/user`, {
         appid: this.appId,
         username: username,
@@ -97,15 +103,15 @@ class Pryv {
   }
 
   async getUsernameForEmail (email) {
-    const res = await axios.get(
+    const [err, res] = await asyncCall(axios.get,
       `${this.register}/${email}/uid`
     );
-    return res.data.uid;
+    return [err, res.data.uid];
   }
 
   // ---------- RESET calls ----------
-  requestPasswordReset (username) {
-    return axios.post(
+  async requestPasswordReset (username) {
+    const [err, res] = await asyncCall(axios.post,
       `${this.core(username)}/account/request-password-reset`, {
         appId: this.appId,
         username: username,
@@ -113,10 +119,11 @@ class Pryv {
         headers: { Origin: this.origin },
       }
     );
+    return [err, res.status];
   }
 
-  changePassword (username, newPassword, resetToken) {
-    return axios.post(
+  async changePassword (username, newPassword, resetToken) {
+    return asyncCall(axios.post,
       `${this.core(username)}/account/reset-password`, {
         username: username,
         newPassword: newPassword,
@@ -129,10 +136,31 @@ class Pryv {
   }
 
   // ---------- UTILS calls ----------
-  getServiceInfo () {
-    return axios.get(
+  async getServiceInfo () {
+    return asyncCall(axios.get,
       `${this.register}/service/info`);
   }
 }
+
+const asyncCall = async (fun, ...params) => {
+  try {
+    const res = await fun(params);
+    return [null, res];
+  } catch (err) {
+    // TODO: improve errors parsing
+    return [JSON.stringify(err), null];
+  }
+};
+
+const asyncCallHandler = (fun) => {
+  return async (next, ...params) => {
+    try {
+      const res = await fun(params);
+      return next(res);
+    } catch (err) {
+      return next(err);
+    }
+  };
+};
 
 export default Pryv;

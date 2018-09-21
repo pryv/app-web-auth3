@@ -70,7 +70,8 @@
     data: () => ({
       username: '',
       password: '',
-      personalToken: null,
+      personalToken: '',
+      appToken: '',
       err: '',
       checkedPermissions: null,
       rules: {
@@ -85,43 +86,41 @@
     methods: {
       async submit () {
         if (this.$refs.form.validate()) {
-          try {
-          this.personalToken = await this.pryv.login(this.username, this.password);
+
+          [this.err, this.personalToken] = await this.pryv.login(this.username, this.password);
+
+          let checkApp;
           const permissionsArray = JSON.parse(this.permissionsArray);
-          const [permissions, match, mismatch] = await this.pryv.checkAppAccess(this.username, permissionsArray, this.personalToken);
-          if (mismatch) {
-            return this.err = 'Mismatching access already exists: ' + JSON.stringify(mismatch);
+          [this.err, checkApp] = await this.pryv.checkAppAccess(this.username, permissionsArray, this.personalToken);
+
+          if (checkApp.mismatch) {
+            return this.err = 'Mismatching access already exists: ' + JSON.stringify(checkApp.mismatch);
           }
-          if (match) {
-            return this.err = 'Matching access already exists: ' + JSON.stringify(match);
+
+          if (checkApp.match) {
+            return this.err = 'Matching access already exists: ' + JSON.stringify(checkApp.match);
           }
-          this.checkedPermissions = permissions;
-          } catch(err) {
-            console.error(err);
-            this.err = JSON.stringify(err);
-          }
+
+          this.checkedPermissions = checkApp.permissions;
         }
       },
+
       async accept () {
-        try {
-          const appToken = await this.pryv.createAppAccess(this.username, this.checkedPermissions, this.personalToken);
-          await this.pryv.updateAuthState(this.pollKey, {
-            status: 'ACCEPTED',
-            username: this.username,
-            token: appToken,
-          });
-        } catch(err) {
-          console.error(err);
-          this.err = JSON.stringify(err);
-        }
+        [this.err, this.appToken] = await this.pryv.createAppAccess(this.username, this.checkedPermissions, this.personalToken);
+
+        [this.err] = await this.pryv.updateAuthState(this.pollKey, {
+          status: 'ACCEPTED',
+          username: this.username,
+          token: appToken,
+        });
       },
+
       async refuse () {
-        await this.pryv.updateAuthState(this.pollKey, {
+        [this.err] = await this.pryv.updateAuthState(this.pollKey, {
           status: 'REFUSED',
           reasonId: 'REFUSED_BY_USER',
           message: 'The user refused to give access to the requested permissions',
         });
-        return this.err = 'Requested permissions were refused by user!';
       }
     }
   }

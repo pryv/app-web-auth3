@@ -61,7 +61,6 @@
 <script>
   import Password from './bits/Password.vue';
   import NavigationButton from './bits/NavigationButton.vue';
-  import Hostings from '../controllers/Hostings.js';
   import Pryv from '../models/Pryv.js';
 
   export default {
@@ -84,24 +83,18 @@
     }),
     async created() {
       this.pryv = new Pryv('pryv.me', 'pryv-reg-standalone');
-      const res = await this.pryv.getAvailableHostings();
-      this.hosts = new Hostings().parseHostings(res);
+      [this.err, this.hosts] = await this.pryv.getAvailableHostings();
     },
     methods: {
       async submit () {
         if (this.$refs.form.validate()) {
-          try {
-            await this.pryv.createUser(
-              this.username,
-              this.password,
-              this.email,
-              this.hosting
-            );
-            this.$router.push('auth');
-          } catch(err) {
-            console.error(err);
-            this.err = JSON.stringify(err);
-          }
+          [this.err] = await this.pryv.createUser(
+            this.username,
+            this.password,
+            this.email,
+            this.hosting
+          );
+          this.$router.push('auth');
         }
       },
       clear () {
