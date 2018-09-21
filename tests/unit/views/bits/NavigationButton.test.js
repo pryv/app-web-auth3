@@ -1,5 +1,3 @@
-/* global describe, it, expect */
-
 import { shallowMount, mount, createLocalVue } from '@vue/test-utils';
 import NavigationButton from '@/components/views/bits/NavigationButton';
 import Vue from 'vue';

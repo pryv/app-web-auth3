@@ -1,5 +1,3 @@
-/* global describe, it, beforeAll, expect */
-
 import { shallowMount } from '@vue/test-utils';
 import Permissions from '@/components/views/bits/Permissions';
 import Vue from 'vue';

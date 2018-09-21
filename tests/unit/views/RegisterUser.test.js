@@ -1,5 +1,3 @@
-/* global describe, it, beforeEach, expect */
-
 import { shallowMount } from '@vue/test-utils';
 import RegisterUser from '@/components/views/RegisterUser';
 import Vue from 'vue';
