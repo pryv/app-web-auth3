@@ -144,7 +144,7 @@ class Pryv {
 
 const asyncCall = async (fun, ...params) => {
   try {
-    const res = await fun(params);
+    const res = await fun(...params);
     return [null, res];
   } catch (err) {
     // TODO: improve errors parsing
@@ -155,7 +155,7 @@ const asyncCall = async (fun, ...params) => {
 const asyncCallHandler = (fun) => {
   return async (next, ...params) => {
     try {
-      const res = await fun(params);
+      const res = await fun(...params);
       return next(res);
     } catch (err) {
       return next(err);

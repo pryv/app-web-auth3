@@ -10,7 +10,8 @@
     "lint": "eslint --ext .js,.vue src",
     "build": "node build/build.js",
     "unit": "./node_modules/.bin/jest tests/unit/",
-    "e2e": "testcafe firefox tests/e2e/*.test.js --app \"yarn run dev\" --app-init-delay 10000 -S -s screenshots"
+    "e2e": "testcafe firefox tests/e2e/*.test.js --app \"yarn run dev\" --app-init-delay 10000",
+    "e2eS": "testcafe firefox tests/e2e/*.test.js --app \"yarn run dev\" --app-init-delay 10000 -S -s screenshots"
   },
   "dependencies": {
     "axios": "^0.18.0",

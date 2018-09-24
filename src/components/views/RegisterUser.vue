@@ -1,5 +1,5 @@
 <template>
-  <v-form ref="form" v-model="validForm">
+  <v-form id="registerForm" ref="form" v-model="validForm">
 
     <v-alert
       :value="err"
