@@ -1,6 +1,6 @@
-import {Selector, RequestMock, RequestLogger} from 'testcafe';
+import {RequestMock, RequestLogger} from 'testcafe';
 
-const resetEndpoint = 'https://tmodoux.pryv.me/account/request-password-reset';
+const resetEndpoint = 'https://tmodoux.pryv.me/account/reset-password';
 const emailEndpoint = 'https://reg.pryv.me/test@test.com/uid';
 
 const resetLogger = RequestLogger(resetEndpoint, {
@@ -18,13 +18,15 @@ const usernameForEmailMock = RequestMock()
   .onRequestTo(emailEndpoint)
   .respond({uid: 'tmodoux'}, 200, {'Access-Control-Allow-Origin': '*'});
 
-fixture(`Reset password request`)
-  .page('http://localhost:8080/#/reset')
+fixture(`Reset password`)
+  .page('http://localhost:8080/#/reset?resetToken=1234')
   .requestHooks(resetLogger, emailLogger, resetRequestMock, usernameForEmailMock);
 
-test('Reset request with email-username conversion', async testController => {
+test('Reset password', async testController => {
   await testController
     .typeText('#usernameOrEmail', 'test@test.com')
+    .typeText('#password', '123456789')
+    .typeText('#passConfirmation', '123456789')
     .click('#submitButton')
     .expect(emailLogger.contains(record =>
       record.request.method === 'get' &&
@@ -34,7 +36,8 @@ test('Reset request with email-username conversion', async testController => {
       record.request.method === 'post' &&
       record.response.statusCode === 200 &&
       record.request.body.includes('"appId":"pryv-reset-standalone"') &&
-      record.request.body.includes('"username":"tmodoux"')
-    )).ok()
-    .expect(Selector('body').textContent).contains('We have sent you a reset link by email');
+      record.request.body.includes('"username":"tmodoux"') &&
+      record.request.body.includes('"newPassword":"123456789"') &&
+      record.request.body.includes('"resetToken":"1234"')
+    )).ok();
 });

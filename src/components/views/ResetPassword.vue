@@ -57,7 +57,7 @@
       validForm: false
     }),
     created() {
-      this.pryv = new Pryv('pryv.me', 'app-web-auth');
+      this.pryv = new Pryv('pryv.me', 'pryv-reset-standalone');
     },
     methods: {
       async submit () {
