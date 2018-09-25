@@ -111,12 +111,13 @@
       },
 
       async accept () {
-        [this.err, this.appToken] = await this.pryv.createAppAccess(this.username, this.checkedPermissions, this.personalToken);
+        const permissions = JSON.parse(this.checkedPermissions);
+        [this.err, this.appToken] = await this.pryv.createAppAccess(this.username, permissions, this.personalToken);
 
         [this.err] = await this.pryv.updateAuthState(this.pollKey, {
           status: 'ACCEPTED',
           username: this.username,
-          token: appToken,
+          token: this.appToken,
         });
       },
 

@@ -13,10 +13,12 @@
     </ul>
     
     <v-btn
+    id="refusePermissions"
     @click="refuse"
     >Reject</v-btn>
 
     <v-btn
+      id="acceptPermissions"
       @click="accept"
     >Accept</v-btn>
 

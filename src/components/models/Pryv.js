@@ -28,7 +28,7 @@ class Pryv {
     // authState.status === ACCEPTED
     // authState.username
     // authState.token
-    return asyncCall(axios.get,
+    return asyncCall(axios.post,
       `${this.register}/access/${pollKey}`,
       {authState}
     );
