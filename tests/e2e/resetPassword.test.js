@@ -22,7 +22,7 @@ fixture(`Reset password`)
   .page('http://localhost:8080/#/reset?resetToken=1234')
   .requestHooks(resetLogger, emailLogger, resetRequestMock, usernameForEmailMock);
 
-test('Reset password', async testController => {
+test('Reset password with email conversion', async testController => {
   await testController
     .typeText('#usernameOrEmail', 'test@test.com')
     .typeText('#password', '123456789')

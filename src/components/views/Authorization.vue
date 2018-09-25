@@ -20,6 +20,7 @@
 
       <v-text-field
         label="Username or email"
+        id="usernameOrEmail"
         v-model="username"
         :rules="[rules.required]"
       ></v-text-field>
@@ -81,11 +82,15 @@
       validForm: false
     }),
     async created() {
-      this.pryv = new Pryv('pryv.me', 'pryv-reg-standalone');
+      this.pryv = new Pryv('pryv.me', 'pryv-auth-standalone');
     },
     methods: {
       async submit () {
         if (this.$refs.form.validate()) {
+  
+          if (this.username.search('@') > 0) {
+            [this.err, this.username] = await this.pryv.getUsernameForEmail(this.username);
+          }
 
           [this.err, this.personalToken] = await this.pryv.login(this.username, this.password);
 
