@@ -45,7 +45,7 @@
       Password,
       NavigationButton
     },
-    props: ['resetToken'],
+    props: ['resetToken', 'appId', 'pryvDomain', 'language', 'returnURL'],
     data: () => ({
       username: '',
       password: '',

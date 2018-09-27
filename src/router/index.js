@@ -20,12 +20,21 @@ export default new Router({
         permissionsArray: route.query.requestedPermissions,
         appId: route.query.requestingAppId,
         pollKey: route.query.key,
+        language: route.query.lang,
+        returnURL: route.query.returnURL,
+        pryvDomain: route.query.domain,
       }),
     },
     {
       path: '/register',
       name: 'RegisterUser',
       component: RegisterUser,
+      props: (route) => ({
+        appId: route.query.requestingAppId,
+        language: route.query.lang,
+        returnURL: route.query.returnURL,
+        pryvDomain: route.query.domain,
+      }),
     },
     {
       path: '/reset',
@@ -33,6 +42,10 @@ export default new Router({
       component: ResetPassword,
       props: (route) => ({
         resetToken: route.query.resetToken,
+        appId: route.query.requestingAppId,
+        language: route.query.lang,
+        returnURL: route.query.returnURL,
+        pryvDomain: route.query.domain,
       }),
     },
   ],

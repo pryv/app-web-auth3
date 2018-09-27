@@ -68,6 +68,7 @@
       Password,
       NavigationButton
     },
+    props: ['appId', 'pryvDomain', 'language', 'returnURL'],
     data: () => ({
       username: '',
       password: '',

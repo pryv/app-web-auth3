@@ -67,7 +67,7 @@
       NavigationButton,
       Permissions
     },
-    props: ['pollKey', 'permissionsArray', 'appId'],
+    props: ['pollKey', 'permissionsArray', 'appId', 'pryvDomain', 'language', 'returnURL'],
     data: () => ({
       username: '',
       password: '',
