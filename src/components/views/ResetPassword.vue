@@ -27,23 +27,18 @@
       :disabled="!validForm"
     >{{buttonText}}</v-btn>
 
-    <NavigationButton
-      :title="'Go back to Sign in.'"
-      :page="'auth'"
-    ></NavigationButton>
+    <router-link :to="{ name: 'Authorization' }">Go back to Sign in.</router-link>
 
   </v-form>
 </template>
 
 <script>
   import Password from './bits/Password';
-  import NavigationButton from './bits/NavigationButton';
   import Pryv from '../models/Pryv';
 
   export default {
     components: {
       Password,
-      NavigationButton
     },
     props: ['resetToken', 'appId', 'pryvDomain', 'language', 'returnURL'],
     data: () => ({

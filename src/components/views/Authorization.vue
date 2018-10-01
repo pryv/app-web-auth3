@@ -36,15 +36,9 @@
       <v-btn
       >Cancel</v-btn>
       
-      <NavigationButton
-        :title="'Create an account'"
-        :page="'register'"
-      ></NavigationButton>
+      <router-link :to="{ name: 'RegisterUser' }">Create an account</router-link>
 
-      <NavigationButton
-        :title="'Forgot password'"
-        :page="'reset'"
-      ></NavigationButton>
+      <router-link :to="{ name: 'ResetPassword' }">Forgot password</router-link>
 
       <div>
         Feel free to reach our
@@ -57,15 +51,13 @@
 
 <script>
   import Password from './bits/Password.vue';
-  import NavigationButton from './bits/NavigationButton.vue';
   import Permissions from './bits/Permissions.vue';
   import Pryv from '../models/Pryv.js';
 
   export default {
     components: {
       Password,
-      NavigationButton,
-      Permissions
+      Permissions,
     },
     props: ['pollKey', 'permissionsArray', 'appId', 'pryvDomain', 'language', 'returnURL'],
     data: () => ({

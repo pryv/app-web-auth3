@@ -50,23 +50,18 @@
       @click="clear"
     >Clear</v-btn>
 
-    <NavigationButton
-      :title="'Already a Pryv user ? Sign in.'"
-      :page="'auth'"
-    ></NavigationButton>
+    <router-link :to="{ name: 'Authorization' }">Already a Pryv user ? Sign in.</router-link>
 
   </v-form>
 </template>
 
 <script>
   import Password from './bits/Password.vue';
-  import NavigationButton from './bits/NavigationButton.vue';
   import Pryv from '../models/Pryv.js';
 
   export default {
     components: {
       Password,
-      NavigationButton
     },
     props: ['appId', 'pryvDomain', 'language', 'returnURL'],
     data: () => ({
