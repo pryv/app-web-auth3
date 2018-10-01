@@ -6,8 +6,6 @@ const context = {
     language: 'en',
     returnURL: false,
     pryvDomain: 'pryv.me',
-    pryvReg: () => `https://reg.${this.pryvDomain}`,
-    pryvCore: (username) => `https://${username}.${this.pryvDomain}`,
   },
   setPryvDomain (domain) {
     if (domain) this.settings.pryvDomain = domain;
