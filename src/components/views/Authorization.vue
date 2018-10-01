@@ -53,13 +53,14 @@
   import Password from './bits/Password.vue';
   import Permissions from './bits/Permissions.vue';
   import Pryv from '../models/Pryv.js';
+  import config from '../../config.js'
 
   export default {
     components: {
       Password,
       Permissions,
     },
-    props: ['pollKey', 'permissionsArray', 'appId', 'pryvDomain', 'language', 'returnURL'],
+    props: ['pollKey', 'permissionsArray'],
     data: () => ({
       username: '',
       password: '',
@@ -67,6 +68,7 @@
       appToken: '',
       err: '',
       checkedPermissions: null,
+      appId: config.settings.appId,
       rules: {
         required: value => !!value || 'This field is required.',
         email: value => /.+@.+/.test(value) || 'E-mail must be valid'
@@ -74,7 +76,7 @@
       validForm: false
     }),
     async created() {
-      this.pryv = new Pryv('pryv.me', 'pryv-auth-standalone');
+      this.pryv = new Pryv(config.settings.pryvDomain, config.settings.appId);
     },
     methods: {
       async submit () {

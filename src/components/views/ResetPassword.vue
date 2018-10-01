@@ -35,12 +35,13 @@
 <script>
   import Password from './bits/Password';
   import Pryv from '../models/Pryv';
+  import config from '../../config.js';
 
   export default {
     components: {
       Password,
     },
-    props: ['resetToken', 'appId', 'pryvDomain', 'language', 'returnURL'],
+    props: ['resetToken'],
     data: () => ({
       username: '',
       password: '',
@@ -52,7 +53,7 @@
       validForm: false
     }),
     created() {
-      this.pryv = new Pryv('pryv.me', 'pryv-reset-standalone');
+      this.pryv = new Pryv(config.settings.pryvDomain, config.settings.appId);
     },
     methods: {
       async submit () {

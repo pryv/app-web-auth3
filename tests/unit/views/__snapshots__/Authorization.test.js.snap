@@ -47,15 +47,21 @@ exports[`Authorization.test.js renders correctly (snapshots matching) 1`] = `
       Cancel
     </vbtn-stub>
      
-    <navigationbutton-stub
-      page="register"
-      title="Create an account"
-    />
+    <router-link-stub
+      event="click"
+      tag="a"
+      to="[object Object]"
+    >
+      Create an account
+    </router-link-stub>
      
-    <navigationbutton-stub
-      page="reset"
-      title="Forgot password"
-    />
+    <router-link-stub
+      event="click"
+      tag="a"
+      to="[object Object]"
+    >
+      Forgot password
+    </router-link-stub>
      
     <div>
       

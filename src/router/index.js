@@ -1,40 +1,27 @@
 import Vue from 'vue';
-import Router from 'vue-router';
+import VueRouter from 'vue-router';
 import RegisterUser from '@/components/views/RegisterUser';
 import ResetPassword from '@/components/views/ResetPassword';
 import Authorization from '@/components/views/Authorization';
+import config from '../config.js';
 
-Vue.use(Router);
+Vue.use(VueRouter);
 
-export default new Router({
+let Router = new VueRouter({
   routes: [
-    {
-      path: '/',
-      redirect: '/auth',
-    },
     {
       path: '/auth',
       name: 'Authorization',
       component: Authorization,
       props: (route) => ({
         permissionsArray: route.query.requestedPermissions,
-        appId: route.query.requestingAppId,
         pollKey: route.query.key,
-        language: route.query.lang,
-        returnURL: route.query.returnURL,
-        pryvDomain: route.query.domain,
       }),
     },
     {
       path: '/register',
       name: 'RegisterUser',
       component: RegisterUser,
-      props: (route) => ({
-        appId: route.query.requestingAppId,
-        language: route.query.lang,
-        returnURL: route.query.returnURL,
-        pryvDomain: route.query.domain,
-      }),
     },
     {
       path: '/reset',
@@ -42,11 +29,16 @@ export default new Router({
       component: ResetPassword,
       props: (route) => ({
         resetToken: route.query.resetToken,
-        appId: route.query.requestingAppId,
-        language: route.query.lang,
-        returnURL: route.query.returnURL,
-        pryvDomain: route.query.domain,
       }),
     },
   ],
 });
+
+Router.beforeEach((to, from, next) => {
+  if (from.name == null) {
+    config.init(to.query);
+  }
+  next();
+});
+
+export default Router;

@@ -58,12 +58,12 @@
 <script>
   import Password from './bits/Password.vue';
   import Pryv from '../models/Pryv.js';
+  import config from '../../config.js';
 
   export default {
     components: {
       Password,
     },
-    props: ['appId', 'pryvDomain', 'language', 'returnURL'],
     data: () => ({
       username: '',
       password: '',
@@ -78,7 +78,7 @@
       validForm: false
     }),
     async created() {
-      this.pryv = new Pryv('pryv.me', 'pryv-reg-standalone');
+      this.pryv = new Pryv(config.settings.pryvDomain, config.settings.appId);
       [this.err, this.hosts] = await this.pryv.getAvailableHostings();
     },
     methods: {

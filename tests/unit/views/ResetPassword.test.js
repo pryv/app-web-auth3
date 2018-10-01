@@ -3,8 +3,10 @@ import ResetPassword from '@/components/views/ResetPassword';
 import Password from '@/components/views/bits/Password';
 import Vue from 'vue';
 import Vuetify from 'vuetify';
+import VueRouter from 'vue-router';
 
 Vue.use(Vuetify);
+Vue.use(VueRouter);
 
 describe('ResetPassword.test.js', () => {
   let wrapper;

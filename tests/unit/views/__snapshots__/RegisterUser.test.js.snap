@@ -96,9 +96,12 @@ exports[`RegisterUser.test.js renders correctly (snapshots matching) 1`] = `
     Clear
   </vbtn-stub>
    
-  <navigationbutton-stub
-    page="auth"
-    title="Already a Pryv user ? Sign in."
-  />
+  <router-link-stub
+    event="click"
+    tag="a"
+    to="[object Object]"
+  >
+    Already a Pryv user ? Sign in.
+  </router-link-stub>
 </vform-stub>
 `;

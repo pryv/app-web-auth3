@@ -2,20 +2,12 @@
 
 > Pryv.io web pages for user registration, authentication & password reset.
 
-## Build Setup
+## How to?
 
-``` bash
-# install dependencies
-npm install
-
-# serve with hot reload at localhost:8080
-npm run dev
-
-# build for production with minification
-npm run build
-
-# build for production and view the bundle analyzer report
-npm run build --report
-```
-
-For a detailed explanation on how things work, check out the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
+| Task                              | Command                        |
+| --------------------------------- | ------------------------------ |
+| Setup                             | `yarn install`                 |
+| Create Distribution               | `yarn build`                   |
+| Run unit tests                    | `yarn unit`                    |
+| Run E2E tests                     | `yarn e2e`                     |
+| Run E2E tests with snapshots      | `yarn e2eS`                    |
