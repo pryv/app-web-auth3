@@ -78,12 +78,15 @@
       validForm: false
     }),
     async created() {
-      [this.err, this.hosts] = await context.pryv.getAvailableHostings();
+      context.pryv.setErrorHandler(err => {
+        return this.err = JSON.stringify(err);
+      });
+      this.hosts = await context.pryv.getAvailableHostings();
     },
     methods: {
       async submit () {
         if (this.$refs.form.validate()) {
-          [this.err] = await context.pryv.createUser(
+          await context.pryv.createUser(
             this.username,
             this.password,
             this.email,

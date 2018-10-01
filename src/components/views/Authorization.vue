@@ -75,19 +75,23 @@
       },
       validForm: false
     }),
+    async created() {
+      context.pryv.setErrorHandler(err => {
+        return this.err = JSON.stringify(err);
+      });
+    },
     methods: {
       async submit () {
         if (this.$refs.form.validate()) {
   
           if (this.username.search('@') > 0) {
-            [this.err, this.username] = await context.pryv.getUsernameForEmail(this.username);
+            this.username = await context.pryv.getUsernameForEmail(this.username);
           }
 
-          [this.err, this.personalToken] = await context.pryv.login(this.username, this.password);
+          this.personalToken = await context.pryv.login(this.username, this.password);
 
-          let checkApp;
           const permissionsArray = JSON.parse(this.permissionsArray);
-          [this.err, checkApp] = await context.pryv.checkAppAccess(this.username, permissionsArray, this.personalToken);
+          const checkApp = await context.pryv.checkAppAccess(this.username, permissionsArray, this.personalToken);
 
           if (checkApp.mismatch) {
             return this.err = 'Mismatching access already exists: ' + JSON.stringify(checkApp.mismatch);
@@ -101,7 +105,7 @@
       },
 
       async accept () {
-        [this.err, this.appToken] = await context.pryv.createAppAccess(this.username, this.checkedPermissions, this.personalToken);
+        this.appToken = await context.pryv.createAppAccess(this.username, this.checkedPermissions, this.personalToken);
 
         const state = {
           status: 'ACCEPTED',
@@ -109,7 +113,7 @@
           token: this.appToken,
         };
 
-        [this.err] = await context.pryv.updateAuthState(this.pollKey, state);
+        await context.pryv.updateAuthState(this.pollKey, state);
         this.endPopup(state, this.pollKey);
       },
       async refuse () {
@@ -119,7 +123,7 @@
           message: 'The user refused to give access to the requested permissions',
         };
 
-        [this.err] = await context.pryv.updateAuthState(this.pollKey, state);
+        await context.pryv.updateAuthState(this.pollKey, state);
         this.endPopup(state, this.pollKey);
       },
       endPopup (state, pollKey) {
