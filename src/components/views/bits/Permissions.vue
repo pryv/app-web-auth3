@@ -7,7 +7,7 @@
     </div>
 
     <ul>
-      <li v-for="(permission, index) in JSON.parse(permissionsArray)" :key="index">
+      <li v-for="(permission, index) in permissionsArray" :key="index">
       A permission on stream <b>{{permission.streamId}}</b> with level <b>{{permission.level}}</b>
       </li>
     </ul>

@@ -16,7 +16,7 @@ describe('Permissions.test.js', () => {
   beforeAll(() => {
     wrapper = shallowMount(Permissions, {
       propsData: {
-        permissionsArray: JSON.stringify(permissions),
+        permissionsArray: permissions,
         appId: appId,
         accept: () => {},
         refuse: () => {},

@@ -36,7 +36,7 @@ const authRequestMock = RequestMock()
 
 const checkAppMock = RequestMock()
   .onRequestTo(checkAppEndpoint)
-  .respond({checkedPermissions: fakePermissions}, 200, {'Access-Control-Allow-Origin': '*'});
+  .respond({checkedPermissions: JSON.parse(fakePermissions)}, 200, {'Access-Control-Allow-Origin': '*'});
 
 const usernameForEmailMock = RequestMock()
   .onRequestTo(emailEndpoint)
@@ -48,7 +48,7 @@ const updateStateMock = RequestMock()
 
 const createAccessMock = RequestMock()
   .onRequestTo(createAccessEndpoint)
-  .respond({token: 'appToken'}, 200, {'Access-Control-Allow-Origin': '*'});
+  .respond({access: {token: 'appToken'}}, 200, {'Access-Control-Allow-Origin': '*'});
 
 fixture(`Auth request`)
   .page(`http://localhost:8080/#/auth?requestingAppId=pryv-auth-standalone&key=pollKey&requestedPermissions=${fakePermissions}`)

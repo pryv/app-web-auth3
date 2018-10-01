@@ -96,14 +96,12 @@
           if (checkApp.match) {
             return this.err = 'Matching access already exists: ' + JSON.stringify(checkApp.match);
           }
-
           this.checkedPermissions = checkApp.permissions;
         }
       },
 
       async accept () {
-        const permissions = JSON.parse(this.checkedPermissions);
-        [this.err, this.appToken] = await context.pryv.createAppAccess(this.username, permissions, this.personalToken);
+        [this.err, this.appToken] = await context.pryv.createAppAccess(this.username, this.checkedPermissions, this.personalToken);
 
         const state = {
           status: 'ACCEPTED',
@@ -125,14 +123,14 @@
         this.endPopup(state, this.pollKey);
       },
       endPopup (state, pollKey) {
-        if (context.settings.returnURL) {
-          let href = settings.params.returnURL;
+        let href = context.settings.returnURL;
+        if (href) {
           if(context.settings.oauth) {
-            href += 'state=' + context.settings.oauth +
+            href += '?state=' + context.settings.oauth +
                 '&code=' + pollKey;
           }
           else {
-            href += 'prYvkey=' + pollKey;
+            href += '?prYvkey=' + pollKey;
             Object.keys(state).forEach(function(key) {
               href += '&prYv' + key + '=' + state[key];
             });

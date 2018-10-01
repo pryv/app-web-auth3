@@ -76,7 +76,7 @@ class Pryv {
         headers: { Authorization: personalToken },
       }
     );
-    return [err, res.data.token];
+    return [err, res.data.access.token];
   }
 
   // ---------- REGISTER calls ----------
