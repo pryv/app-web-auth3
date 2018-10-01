@@ -1,4 +1,6 @@
-const config = {
+import Pryv from './components/models/Pryv.js';
+
+const context = {
   settings: {
     appId: 'app-web-auth',
     language: 'en',
@@ -24,7 +26,9 @@ const config = {
     this.setLanguage(params.lang);
     this.setAppId(params.requestingAppId);
     this.setReturnUrl(params.returnURL);
+
+    this.pryv = new Pryv(this.settings.pryvDomain, this.settings.appId);
   },
 };
 
-export default config;
+export default context;

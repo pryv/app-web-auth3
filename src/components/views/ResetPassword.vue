@@ -35,7 +35,7 @@
 <script>
   import Password from './bits/Password';
   import Pryv from '../models/Pryv';
-  import config from '../../config.js';
+  import context from '../../context.js';
 
   export default {
     components: {
@@ -52,22 +52,19 @@
       },
       validForm: false
     }),
-    created() {
-      this.pryv = new Pryv(config.settings.pryvDomain, config.settings.appId);
-    },
     methods: {
       async submit () {
         if (this.$refs.form.validate()) {
 
           if (this.username.search('@') > 0) {
-            [this.err, this.username] = await this.pryv.getUsernameForEmail(this.username);
+            [this.err, this.username] = await context.pryv.getUsernameForEmail(this.username);
           }
 
           if (this.resetToken) {
-            [this.err] = await this.pryv.changePassword(this.username, this.password, this.resetToken);
+            [this.err] = await context.pryv.changePassword(this.username, this.password, this.resetToken);
           }
           else {
-            [this.err, this.resetStatus] = await this.pryv.requestPasswordReset(this.username);
+            [this.err, this.resetStatus] = await context.pryv.requestPasswordReset(this.username);
           }
         }
       }

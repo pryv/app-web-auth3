@@ -3,7 +3,7 @@ import VueRouter from 'vue-router';
 import RegisterUser from '@/components/views/RegisterUser';
 import ResetPassword from '@/components/views/ResetPassword';
 import Authorization from '@/components/views/Authorization';
-import config from '../config.js';
+import context from '../context.js';
 
 Vue.use(VueRouter);
 
@@ -36,7 +36,7 @@ let Router = new VueRouter({
 
 Router.beforeEach((to, from, next) => {
   if (from.name == null) {
-    config.init(to.query);
+    context.init(to.query);
   }
   next();
 });

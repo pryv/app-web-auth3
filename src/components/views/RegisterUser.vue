@@ -58,7 +58,7 @@
 <script>
   import Password from './bits/Password.vue';
   import Pryv from '../models/Pryv.js';
-  import config from '../../config.js';
+  import context from '../../context.js';
 
   export default {
     components: {
@@ -78,13 +78,12 @@
       validForm: false
     }),
     async created() {
-      this.pryv = new Pryv(config.settings.pryvDomain, config.settings.appId);
-      [this.err, this.hosts] = await this.pryv.getAvailableHostings();
+      [this.err, this.hosts] = await context.pryv.getAvailableHostings();
     },
     methods: {
       async submit () {
         if (this.$refs.form.validate()) {
-          [this.err] = await this.pryv.createUser(
+          [this.err] = await context.pryv.createUser(
             this.username,
             this.password,
             this.email,

@@ -53,7 +53,7 @@
   import Password from './bits/Password.vue';
   import Permissions from './bits/Permissions.vue';
   import Pryv from '../models/Pryv.js';
-  import config from '../../config.js'
+  import context from '../../context.js'
 
   export default {
     components: {
@@ -68,29 +68,26 @@
       appToken: '',
       err: '',
       checkedPermissions: null,
-      appId: config.settings.appId,
+      appId: context.settings.appId,
       rules: {
         required: value => !!value || 'This field is required.',
         email: value => /.+@.+/.test(value) || 'E-mail must be valid'
       },
       validForm: false
     }),
-    async created() {
-      this.pryv = new Pryv(config.settings.pryvDomain, config.settings.appId);
-    },
     methods: {
       async submit () {
         if (this.$refs.form.validate()) {
   
           if (this.username.search('@') > 0) {
-            [this.err, this.username] = await this.pryv.getUsernameForEmail(this.username);
+            [this.err, this.username] = await context.pryv.getUsernameForEmail(this.username);
           }
 
-          [this.err, this.personalToken] = await this.pryv.login(this.username, this.password);
+          [this.err, this.personalToken] = await context.pryv.login(this.username, this.password);
 
           let checkApp;
           const permissionsArray = JSON.parse(this.permissionsArray);
-          [this.err, checkApp] = await this.pryv.checkAppAccess(this.username, permissionsArray, this.personalToken);
+          [this.err, checkApp] = await context.pryv.checkAppAccess(this.username, permissionsArray, this.personalToken);
 
           if (checkApp.mismatch) {
             return this.err = 'Mismatching access already exists: ' + JSON.stringify(checkApp.mismatch);
@@ -106,9 +103,9 @@
 
       async accept () {
         const permissions = JSON.parse(this.checkedPermissions);
-        [this.err, this.appToken] = await this.pryv.createAppAccess(this.username, permissions, this.personalToken);
+        [this.err, this.appToken] = await context.pryv.createAppAccess(this.username, permissions, this.personalToken);
 
-        [this.err] = await this.pryv.updateAuthState(this.pollKey, {
+        [this.err] = await context.pryv.updateAuthState(this.pollKey, {
           status: 'ACCEPTED',
           username: this.username,
           token: this.appToken,
@@ -116,7 +113,7 @@
       },
 
       async refuse () {
-        [this.err] = await this.pryv.updateAuthState(this.pollKey, {
+        [this.err] = await context.pryv.updateAuthState(this.pollKey, {
           status: 'REFUSED',
           reasonId: 'REFUSED_BY_USER',
           message: 'The user refused to give access to the requested permissions',
