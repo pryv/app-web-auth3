@@ -105,19 +105,43 @@
         const permissions = JSON.parse(this.checkedPermissions);
         [this.err, this.appToken] = await context.pryv.createAppAccess(this.username, permissions, this.personalToken);
 
-        [this.err] = await context.pryv.updateAuthState(this.pollKey, {
+        const state = {
           status: 'ACCEPTED',
           username: this.username,
           token: this.appToken,
-        });
-      },
+        };
 
+        [this.err] = await context.pryv.updateAuthState(this.pollKey, state);
+        this.endPopup(state, this.pollKey);
+      },
       async refuse () {
-        [this.err] = await context.pryv.updateAuthState(this.pollKey, {
+        const state = {
           status: 'REFUSED',
           reasonId: 'REFUSED_BY_USER',
           message: 'The user refused to give access to the requested permissions',
-        });
+        };
+
+        [this.err] = await context.pryv.updateAuthState(this.pollKey, state);
+        this.endPopup(state, this.pollKey);
+      },
+      endPopup (state, pollKey) {
+        if (context.settings.returnURL) {
+          let href = settings.params.returnURL;
+          if(context.settings.oauth) {
+            href += 'state=' + context.settings.oauth +
+                '&code=' + pollKey;
+          }
+          else {
+            href += 'prYvkey=' + pollKey;
+            Object.keys(state).forEach(function(key) {
+              href += '&prYv' + key + '=' + state[key];
+            });
+          }
+          this.$router.push(href);
+        }
+        else {
+          window.close();
+        }
       }
     }
   }
