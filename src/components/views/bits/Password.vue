@@ -15,9 +15,7 @@
       label="Password confirmation"
       v-if="confirmation"
       v-model="repass"
-      :append-icon="visibleRepass ? 'lock_open' : 'lock'"
-      @click:append="() => (visibleRepass = !visibleRepass)"
-      :type="visibleRepass ? 'text' : 'password'"
+      :type="visiblePass ? 'text' : 'password'"
       :rules="[matchPassword]"
     ></v-text-field>
   </div>
@@ -28,7 +26,6 @@
     props: ['confirmation', 'value'],
     data: () => ({
       visiblePass: false,
-      visibleRepass: false,
       repass: '',
       rules: {
         required: value => !!value || 'Password is required.'

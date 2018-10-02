@@ -75,7 +75,7 @@
       },
       validForm: false
     }),
-    async created() {
+    created() {
       context.pryv.setErrorHandler(err => {
         return this.err = JSON.stringify(err);
       });

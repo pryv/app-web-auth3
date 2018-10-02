@@ -52,7 +52,7 @@
       },
       validForm: false
     }),
-    async created() {
+    created() {
       context.pryv.setErrorHandler(err => {
         return this.err = err;
       });
