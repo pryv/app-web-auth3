@@ -3,12 +3,16 @@ import {RequestMock, RequestLogger} from 'testcafe';
 const resetEndpoint = 'https://tmodoux.pryv.me/account/reset-password';
 const emailEndpoint = 'https://reg.pryv.me/test@test.com/uid';
 
+// ---------- Requests loggers ----------
+
 const resetLogger = RequestLogger(resetEndpoint, {
   logRequestBody: true,
   stringifyRequestBody: true,
 });
 
 const emailLogger = RequestLogger(emailEndpoint);
+
+// ---------- Requests mocks ----------
 
 const resetRequestMock = RequestMock()
   .onRequestTo(resetEndpoint)
@@ -24,14 +28,17 @@ fixture(`Reset password`)
 
 test('Reset password with email conversion', async testController => {
   await testController
+    // Fill password change form
     .typeText('#usernameOrEmail', 'test@test.com')
     .typeText('#password', '123456789')
     .typeText('#passConfirmation', '123456789')
     .click('#submitButton')
+    // Email to username call was performed
     .expect(emailLogger.contains(record =>
       record.request.method === 'get' &&
       record.response.statusCode === 200
     )).ok()
+    // Password change call was performed
     .expect(resetLogger.contains(record =>
       record.request.method === 'post' &&
       record.response.statusCode === 200 &&

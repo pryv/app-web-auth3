@@ -17,8 +17,10 @@ describe('Password.test.js', () => {
   });
 
   it('asks only for password by default', () => {
+    // Renders password
     const password = wrapper.find('#password');
     expect(password.exists()).toBe(true);
+    // Does not render password confirmation
     const confirmation = wrapper.find('#passConfirmation');
     expect(confirmation.exists()).toBe(false);
   });
@@ -27,8 +29,10 @@ describe('Password.test.js', () => {
     wrapper.setProps({
       confirmation: true,
     });
+    // Renders password
     const password = wrapper.find('#password');
     expect(password.exists()).toBe(true);
+    // Also renders password confirmation
     const confirmation = wrapper.find('#passConfirmation');
     expect(confirmation.exists()).toBe(true);
   });
@@ -46,6 +50,7 @@ describe('Password.test.js', () => {
     wrapper.setData({
       repass: '1234',
     });
+    // Password confirmation matches
     expect(wrapper.vm.matchPassword).toBe(true);
     wrapper.setProps({
       value: '1234',
@@ -53,6 +58,7 @@ describe('Password.test.js', () => {
     wrapper.setData({
       repass: '4321',
     });
+    // Password confirmation does not match
     expect(wrapper.vm.matchPassword).toBe('Password confirmation does not match.');
   });
 });

@@ -53,6 +53,7 @@
       validForm: false
     }),
     created() {
+      // Print any error in an alert component
       context.pryv.setErrorHandler(err => {
         return this.err = err;
       });
@@ -61,14 +62,17 @@
       async submit () {
         if (this.$refs.form.validate()) {
 
+          // Convert email to Pryv username if needed
           if (this.username.search('@') > 0) {
             this.username = await context.pryv.getUsernameForEmail(this.username);
           }
 
+          // If we already got a reset token, we can change the password
           if (this.resetToken) {
             await context.pryv.changePassword(this.username, this.password, this.resetToken);
           }
           else {
+            // Ask for a reset token
             this.resetStatus = await context.pryv.requestPasswordReset(this.username);
           }
         }

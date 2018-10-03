@@ -35,6 +35,8 @@ let Router = new VueRouter({
 });
 
 Router.beforeEach((to, from, next) => {
+  // When we first open a page ('from', the origin page, is empty)
+  // init the app context with query parameters ('to' is the target page)
   if (from.name == null) {
     context.init(to.query);
   }

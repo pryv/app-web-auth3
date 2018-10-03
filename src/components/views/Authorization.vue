@@ -76,6 +76,7 @@
       validForm: false
     }),
     created() {
+      // Print any error in an alert component
       context.pryv.setErrorHandler(err => {
         return this.err = JSON.stringify(err);
       });
@@ -84,12 +85,15 @@
       async submit () {
         if (this.$refs.form.validate()) {
   
+          // Convert email to Pryv username if needed
           if (this.username.search('@') > 0) {
             this.username = await context.pryv.getUsernameForEmail(this.username);
           }
 
+          // Login against Pryv
           this.personalToken = await context.pryv.login(this.username, this.password);
 
+          // Check for existing app access
           const permissionsArray = JSON.parse(this.permissionsArray);
           const checkApp = await context.pryv.checkAppAccess(this.username, permissionsArray, this.personalToken);
 
@@ -103,8 +107,9 @@
           this.checkedPermissions = checkApp.permissions;
         }
       },
-
+      // The user accepts the requested permissions
       async accept () {
+        // Create a new app access
         this.appToken = await context.pryv.createAppAccess(this.username, this.checkedPermissions, this.personalToken);
 
         const state = {
@@ -112,22 +117,26 @@
           username: this.username,
           token: this.appToken,
         };
-
+        // Advertise for accepted auth state
         await context.pryv.updateAuthState(this.pollKey, state);
         this.endPopup(state, this.pollKey);
       },
+      // The user refuses the requested permissions
       async refuse () {
         const state = {
           status: 'REFUSED',
           reasonId: 'REFUSED_BY_USER',
           message: 'The user refused to give access to the requested permissions',
         };
-
+        // Advertise for refused auth state
         await context.pryv.updateAuthState(this.pollKey, state);
         this.endPopup(state, this.pollKey);
       },
+      // Closing the auth page
       endPopup (state, pollKey) {
         let href = context.settings.returnURL;
+        // If a return URL was provided, we need to redirect to it,
+        // passing the resulting parameters as querystring
         if (href) {
           if(context.settings.oauth) {
             href += '?state=' + context.settings.oauth +
@@ -141,6 +150,7 @@
           }
           this.$router.push(href);
         }
+        // Otherwise just close the popup
         else {
           window.close();
         }

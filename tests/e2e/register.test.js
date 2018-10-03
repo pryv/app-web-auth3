@@ -26,12 +26,16 @@ const fakeHostings = {
   },
 };
 
+// ---------- Requests loggers ----------
+
 const registerLogger = RequestLogger(registerEndpoint, {
   logRequestBody: true,
   stringifyRequestBody: true,
 });
 
 const hostingsLogger = RequestLogger(hostingsEndpoint);
+
+// ---------- Requests mocks ----------
 
 const registerUserMock = RequestMock()
   .onRequestTo(registerEndpoint)
@@ -47,10 +51,12 @@ fixture(`Register user`)
 
 test('Register new user with hostings retrieval', async testController => {
   await testController
+    // Hostings retrieval call was performed
     .expect(hostingsLogger.contains(record =>
       record.request.method === 'get' &&
       record.response.statusCode === 200
     )).ok()
+    // Fill the new user information
     .typeText('#username', 'tmodoux')
     .typeText('#password', 'mypass')
     .typeText('#passConfirmation', 'mypass')
@@ -59,6 +65,7 @@ test('Register new user with hostings retrieval', async testController => {
     .pressKey('g')
     .pressKey('enter')
     .click('#submitButton')
+    // User creation call was performed
     .expect(registerLogger.contains(record =>
       record.request.method === 'post' &&
       record.response.statusCode === 200 &&

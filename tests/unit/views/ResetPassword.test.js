@@ -40,12 +40,14 @@ describe('ResetPassword.test.js', () => {
   });
 
   it('shows password reset form by default', () => {
+    // Renders password reset form
     const pageTitle = wrapper.find('h1').text();
     expect(pageTitle).toBe('Reset password');
     const submitButton = wrapper.find('#submitButton');
     expect(submitButton.text()).toBe('Request password reset');
     const usernameOrEmail = wrapper.find('#usernameOrEmail');
     expect(usernameOrEmail.exists()).toBe(true);
+    // Does not ask for password
     const password = wrapper.find(Password);
     expect(password.exists()).toBe(false);
   });
@@ -54,12 +56,14 @@ describe('ResetPassword.test.js', () => {
     wrapper.setProps({
       resetToken: 'reset',
     });
+    // Renders password change form
     const pageTitle = wrapper.find('h1').text();
     expect(pageTitle).toBe('Set a new password');
     const submitButton = wrapper.find('#submitButton');
     expect(submitButton.text()).toBe('Change password');
     const usernameOrEmail = wrapper.find('#usernameOrEmail');
     expect(usernameOrEmail.exists()).toBe(true);
+    // Ask for password
     const password = wrapper.find(Password);
     expect(password.exists()).toBe(true);
   });

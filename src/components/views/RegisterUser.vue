@@ -78,20 +78,24 @@
       validForm: false
     }),
     async created() {
+      // Print any error in an alert component
       context.pryv.setErrorHandler(err => {
         return this.err = JSON.stringify(err);
       });
+      // Fill selector with available hostings
       this.hosts = await context.pryv.getAvailableHostings();
     },
     methods: {
       async submit () {
         if (this.$refs.form.validate()) {
+          // Create the new user
           await context.pryv.createUser(
             this.username,
             this.password,
             this.email,
             this.hosting
           );
+          // Go back to auth page
           this.$router.push('auth');
         }
       },

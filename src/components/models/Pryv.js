@@ -11,30 +11,23 @@ class Pryv {
   }
 
   // ---------- AUTH calls ----------
+
+  // GET/reg: polling with according poll key
   async poll (pollKey) {
     return this.asyncCall(axios.get,
       `${this.register}/access/${pollKey}`
     );
   }
 
+  // POST/reg: advertise updated auth state
   async updateAuthState (pollKey, authState) {
-    // TODO: flowtype authState
-    // authState.status === REFUSED
-    // authState.reasonID
-    // authState.message
-    // authState.status === ERROR
-    // authState.id
-    // authState.message
-    // authState.detail
-    // authState.status === ACCEPTED
-    // authState.username
-    // authState.token
     return this.asyncCall(axios.post,
       `${this.register}/access/${pollKey}`,
       {authState}
     );
   }
 
+  // POST/core: login with Pryv credentials
   async login (username, password) {
     const res = await this.asyncCall(axios.post,
       `${this.core(username)}/auth/login`, {
@@ -46,8 +39,12 @@ class Pryv {
     return res.data.token;
   }
 
+  // POST/core: check if requested app access already exists or not,
+  // answering with one of the three:
+  // 1. checkedPermissions: corrected permissions if the access does not exists yet
+  // 2. match: existing access with matching permissions
+  // 3. mismatch: existing access with mismatching permissions
   async checkAppAccess (username, permissions, personalToken, deviceName?) {
-    // TODO: flowtype Permission: streamId/tag, level, defaultName
     const res = await this.asyncCall(axios.post,
       `${this.core(username)}/accesses/check-app`, {
         requestingAppId: this.appId,
@@ -65,6 +62,7 @@ class Pryv {
     };
   }
 
+  // POST/core: create a new app access, returns the according app token
   async createAppAccess (username, permissions, personalToken, appToken?, expireAfter?) {
     const res = await this.asyncCall(axios.post,
       `${this.core(username)}/accesses`, {
@@ -81,6 +79,8 @@ class Pryv {
   }
 
   // ---------- REGISTER calls ----------
+
+  // GET/reg: retrieve all available Pryv hostings
   async getAvailableHostings () {
     const res = await this.asyncCall(axios.get,
       `${this.register}/hostings`
@@ -88,6 +88,7 @@ class Pryv {
     return new Hostings().parse(res);
   }
 
+  // POST/reg: create a new Pryv user
   async createUser (username, password, email, hosting, lang, invitation?, referer?) {
     return this.asyncCall(axios.post,
       `${this.register}/user`, {
@@ -103,6 +104,7 @@ class Pryv {
     );
   }
 
+  // GET/reg: convert email to Pryv username
   async getUsernameForEmail (email) {
     const res = await this.asyncCall(axios.get,
       `${this.register}/${email}/uid`
@@ -111,6 +113,8 @@ class Pryv {
   }
 
   // ---------- RESET calls ----------
+
+  // POST/core: request a password reset
   async requestPasswordReset (username) {
     const res = await this.asyncCall(axios.post,
       `${this.core(username)}/account/request-password-reset`, {
@@ -123,6 +127,7 @@ class Pryv {
     return res.status;
   }
 
+  // POST/core: change Pryv password using a reset token
   async changePassword (username, newPassword, resetToken) {
     return this.asyncCall(axios.post,
       `${this.core(username)}/account/reset-password`, {
@@ -137,15 +142,19 @@ class Pryv {
   }
 
   // ---------- UTILS calls ----------
+
+  // GET/reg: retrieve service information
   async getServiceInfo () {
     return this.asyncCall(axios.get,
       `${this.register}/service/info`);
   }
 
+  // Attach an error handling function for all async calls
   setErrorHandler (next) {
     this.next = next;
   }
 
+  // Perform async calls using await and try/catch mechanisms
   async asyncCall (fun, ...params) {
     try {
       const res = await fun(...params);
