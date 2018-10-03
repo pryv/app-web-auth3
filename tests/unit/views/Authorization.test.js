@@ -4,12 +4,16 @@ import Permissions from '@/components/views/bits/Permissions';
 import Vue from 'vue';
 import Vuetify from 'vuetify';
 import VueRouter from 'vue-router';
+import context from '@/context.js';
 
 Vue.use(Vuetify);
 Vue.use(VueRouter);
 
 describe('Authorization.test.js', () => {
   let wrapper;
+  context.pryv = {
+    setErrorHandler: () => {},
+  };
 
   beforeEach(() => {
     wrapper = shallowMount(Authorization);
