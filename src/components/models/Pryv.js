@@ -23,7 +23,7 @@ class Pryv {
   async updateAuthState (pollKey, authState) {
     return this.asyncCall(axios.post,
       `${this.register}/access/${pollKey}`,
-      {authState}
+      authState.body
     );
   }
 

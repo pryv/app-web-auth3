@@ -58,7 +58,7 @@
 <script>
   import Password from './bits/Password.vue';
   import Pryv from '../models/Pryv.js';
-  import context from '../../context.js';
+  import Context from '../../Context.js';
 
   export default {
     components: {
@@ -79,17 +79,17 @@
     }),
     async created() {
       // Print any error in an alert component
-      context.pryv.setErrorHandler(err => {
+      Context.pryv.setErrorHandler(err => {
         return this.err = JSON.stringify(err);
       });
       // Fill selector with available hostings
-      this.hosts = await context.pryv.getAvailableHostings();
+      this.hosts = await Context.pryv.getAvailableHostings();
     },
     methods: {
       async submit () {
         if (this.$refs.form.validate()) {
           // Create the new user
-          await context.pryv.createUser(
+          await Context.pryv.createUser(
             this.username,
             this.password,
             this.email,

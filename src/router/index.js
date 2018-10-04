@@ -3,7 +3,7 @@ import VueRouter from 'vue-router';
 import RegisterUser from '@/components/views/RegisterUser';
 import ResetPassword from '@/components/views/ResetPassword';
 import Authorization from '@/components/views/Authorization';
-import context from '../context.js';
+import Context from '../Context.js';
 
 Vue.use(VueRouter);
 
@@ -13,10 +13,6 @@ let Router = new VueRouter({
       path: '/auth',
       name: 'Authorization',
       component: Authorization,
-      props: (route) => ({
-        permissionsArray: route.query.requestedPermissions,
-        pollKey: route.query.key,
-      }),
     },
     {
       path: '/register',
@@ -38,7 +34,7 @@ Router.beforeEach((to, from, next) => {
   // When we first open a page ('from', the origin page, is empty)
   // init the app context with query parameters ('to' is the target page)
   if (from.name == null) {
-    context.init(to.query);
+    Context.init(to.query);
   }
   next();
 });

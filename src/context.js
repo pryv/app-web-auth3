@@ -1,37 +1,23 @@
 import Pryv from './components/models/Pryv.js';
+import Permissions from './components/models/Permissions.js';
 
-const context = {
-  settings: {
-    appId: 'app-web-auth',
-    language: 'en',
-    returnURL: null,
-    pryvDomain: 'pryv.me',
-    oauthState: null,
-  },
-  setPryvDomain (domain) {
-    if (domain) this.settings.pryvDomain = domain;
-  },
-  setLanguage (lang) {
-    if (lang) this.settings.language = lang;
-  },
-  setAppId (id) {
-    if (id) this.settings.appId = id;
-  },
-  setReturnUrl (url) {
-    if (url) this.settings.returnURL = url;
-  },
-  setOauthState (oauthState) {
-    if (oauthState) this.settings.oauthState = oauthState;
-  },
-  init (params) {
-    this.setPryvDomain(params.domain);
-    this.setLanguage(params.lang);
-    this.setAppId(params.requestingAppId);
-    this.setReturnUrl(params.returnURL);
-    this.setOauthState(params.oauthState);
+class Context {
+  constructor () {
+    throw new Error('Impossible to instantiate static Context!');
+  }
 
-    this.pryv = new Pryv(this.settings.pryvDomain, this.settings.appId);
-  },
-};
+  static init (params) {
+    const domain = params.domain || 'pryv.me';
+    const appId = params.requestingAppId || 'app-web-auth';
 
-export default context;
+    this.language = params.lang || 'en';
+    this.appId = appId;
+    this.returnURL = params.returnURL;
+    this.oauthState = params.oauthState;
+    this.permissions = new Permissions(params.requestedPermissions);
+    this.pollKey = params.key;
+    this.pryv = new Pryv(domain, appId);
+  }
+}
+
+export default Context;

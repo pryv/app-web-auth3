@@ -7,9 +7,9 @@
     >{{err}}</v-alert>
 
     <Permissions
-      v-if="checkedPermissions"
+      v-if="permissionsList"
       :appId="appId"
-      :permissionsArray="checkedPermissions"
+      :permissionsList="permissionsList"
       :accept="accept"
       :refuse="refuse"
     ></Permissions>
@@ -53,22 +53,22 @@
   import Password from './bits/Password.vue';
   import Permissions from './bits/Permissions.vue';
   import Pryv from '../models/Pryv.js';
-  import context from '../../context.js'
+  import Context from '../../Context.js'
+  import {AcceptedAuthState, RefusedAuthState} from '../models/AuthStates.js';
 
   export default {
     components: {
       Password,
       Permissions,
     },
-    props: ['pollKey', 'permissionsArray'],
     data: () => ({
       username: '',
       password: '',
       personalToken: '',
       appToken: '',
       err: '',
-      checkedPermissions: null,
-      appId: context.settings.appId,
+      permissionsList: null,
+      appId: Context.appId,
       rules: {
         required: value => !!value || 'This field is required.',
         email: value => /.+@.+/.test(value) || 'E-mail must be valid'
@@ -77,7 +77,7 @@
     }),
     created() {
       // Print any error in an alert component
-      context.pryv.setErrorHandler(err => {
+      Context.pryv.setErrorHandler(err => {
         return this.err = JSON.stringify(err);
       });
     },
@@ -87,15 +87,14 @@
   
           // Convert email to Pryv username if needed
           if (this.username.search('@') > 0) {
-            this.username = await context.pryv.getUsernameForEmail(this.username);
+            this.username = await Context.pryv.getUsernameForEmail(this.username);
           }
 
           // Login against Pryv
-          this.personalToken = await context.pryv.login(this.username, this.password);
+          this.personalToken = await Context.pryv.login(this.username, this.password);
 
           // Check for existing app access
-          const permissionsArray = JSON.parse(this.permissionsArray);
-          const checkApp = await context.pryv.checkAppAccess(this.username, permissionsArray, this.personalToken);
+          const checkApp = await Context.pryv.checkAppAccess(this.username, Context.permissions.list, this.personalToken);
 
           if (checkApp.mismatch) {
             return this.err = 'Mismatching access already exists: ' + JSON.stringify(checkApp.mismatch);
@@ -104,47 +103,41 @@
           if (checkApp.match) {
             return this.err = 'Matching access already exists: ' + JSON.stringify(checkApp.match);
           }
-          this.checkedPermissions = checkApp.permissions;
+
+          this.permissionsList = Context.permissions.updateList(checkApp.permissions);
         }
       },
       // The user accepts the requested permissions
       async accept () {
         // Create a new app access
-        this.appToken = await context.pryv.createAppAccess(this.username, this.checkedPermissions, this.personalToken);
+        this.appToken = await Context.pryv.createAppAccess(this.username, Context.permissions.list, this.personalToken);
 
-        const state = {
-          status: 'ACCEPTED',
-          username: this.username,
-          token: this.appToken,
-        };
+        const state = new AcceptedAuthState(this.username, this.appToken);
+
         // Advertise for accepted auth state
-        await context.pryv.updateAuthState(this.pollKey, state);
-        this.endPopup(state, this.pollKey);
+        await Context.pryv.updateAuthState(Context.pollKey, state);
+        this.endPopup(state);
       },
       // The user refuses the requested permissions
       async refuse () {
-        const state = {
-          status: 'REFUSED',
-          reasonId: 'REFUSED_BY_USER',
-          message: 'The user refused to give access to the requested permissions',
-        };
+        const state = new RefusedAuthState();
         // Advertise for refused auth state
-        await context.pryv.updateAuthState(this.pollKey, state);
-        this.endPopup(state, this.pollKey);
+        await Context.pryv.updateAuthState(Context.pollKey, state);
+        this.endPopup(state);
       },
       // Closing the auth page
-      endPopup (state, pollKey) {
-        let href = context.settings.returnURL;
+      endPopup (state) {
+        let href = Context.returnURL;
         // If a return URL was provided, we need to redirect to it,
         // passing the resulting parameters as querystring
         if (href) {
-          if(context.settings.oauth) {
-            href += '?state=' + context.settings.oauth +
-                '&code=' + pollKey;
+          if(Context.oauth) {
+            href += '?state=' + Context.oauth +
+                '&code=' + Context.pollKey;
           }
           else {
-            href += '?prYvkey=' + pollKey;
-            Object.keys(state).forEach(function(key) {
+            href += '?prYvkey=' + Context.pollKey;
+            Object.keys(state.body).forEach(function(key) {
               href += '&prYv' + key + '=' + state[key];
             });
           }

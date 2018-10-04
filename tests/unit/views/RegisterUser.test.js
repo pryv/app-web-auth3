@@ -3,16 +3,14 @@ import RegisterUser from '@/components/views/RegisterUser';
 import Vue from 'vue';
 import Vuetify from 'vuetify';
 import VueRouter from 'vue-router';
-import context from '@/context.js';
+import Context from '@/Context.js';
 
 Vue.use(Vuetify);
 Vue.use(VueRouter);
 
 describe('RegisterUser.test.js', () => {
   let wrapper;
-  context.pryv = {
-    setErrorHandler: () => {},
-  };
+  Context.init({});
 
   beforeEach(() => {
     wrapper = shallowMount(RegisterUser);
