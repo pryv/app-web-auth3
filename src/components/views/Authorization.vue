@@ -96,14 +96,17 @@
           // Check for existing app access
           const checkApp = await Context.pryv.checkAppAccess(this.username, Context.permissions.list, this.personalToken);
 
+          // If a mismatching access exists, show an error
           if (checkApp.mismatch) {
             return this.err = 'Mismatching access already exists: ' + JSON.stringify(checkApp.mismatch);
           }
 
+          // If a matching access exists, just return it
           if (checkApp.match) {
-            return this.err = 'Matching access already exists: ' + JSON.stringify(checkApp.match);
+            return await this.closingFlow(new AcceptedAuthState(this.username, checkApp.match.token));
           }
 
+          // Otherwise, show the requested permissions to the user
           this.permissionsList = Context.permissions.updateList(checkApp.permissions);
         }
       },
@@ -112,40 +115,38 @@
         // Create a new app access
         this.appToken = await Context.pryv.createAppAccess(this.username, Context.permissions.list, this.personalToken);
 
-        const state = new AcceptedAuthState(this.username, this.appToken);
-
-        // Advertise for accepted auth state
-        await Context.pryv.updateAuthState(Context.pollKey, state);
-        this.endPopup(state);
+        await this.closingFlow(new AcceptedAuthState(this.username, this.appToken));
       },
       // The user refuses the requested permissions
       async refuse () {
-        const state = new RefusedAuthState();
-        // Advertise for refused auth state
+        await this.closingFlow(new RefusedAuthState());
+      },
+      // Advertise state and close
+      async closingFlow(state) {
         await Context.pryv.updateAuthState(Context.pollKey, state);
         this.endPopup(state);
       },
       // Closing the auth page
       endPopup (state) {
         let href = Context.returnURL;
-        // If a return URL was provided, we need to redirect to it,
+        // If no return URL was provided, just close the popup
+        if (href == null || !href) {
+          window.close();
+        }
+        // Otherwise, we need to redirect to the return URL,
         // passing the resulting parameters as querystring
-        if (href) {
+        else {
           if(Context.oauth) {
-            href += '?state=' + Context.oauth +
-                '&code=' + Context.pollKey;
+            href += `?state=${Context.oauth}&code=${Context.pollKey}`;
           }
           else {
-            href += '?prYvkey=' + Context.pollKey;
-            Object.keys(state.body).forEach(function(key) {
-              href += '&prYv' + key + '=' + state[key];
+            href += `?prYvkey=${Context.pollKey}`;
+
+            Object.keys(state.body).forEach(key => {
+              href += `&prYv${key}=${state.body[key]}`;
             });
           }
           this.$router.push(href);
-        }
-        // Otherwise just close the popup
-        else {
-          window.close();
         }
       }
     }
