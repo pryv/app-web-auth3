@@ -6,10 +6,12 @@ type Permission = {
   defaultName: ?string,
 };
 
-class Permissions {
-  list: Array<Permission>;
+export type PermissionsList = Array<Permission>;
 
-  constructor (permissionsList: string|Array<Permission>) {
+class Permissions {
+  list: PermissionsList;
+
+  constructor (permissionsList: string|PermissionsList) {
     if (typeof permissionsList === 'string') {
       this.list = JSON.parse(permissionsList);
     } else if (Array.isArray(permissionsList)) {
@@ -17,7 +19,7 @@ class Permissions {
     }
   }
 
-  updateList (newList: Array<Permission>): Array<Permission> {
+  updateList (newList: PermissionsList): PermissionsList {
     this.list = newList;
     return this.list;
   }
