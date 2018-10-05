@@ -136,8 +136,8 @@
         // Otherwise, we need to redirect to the return URL,
         // passing the resulting parameters as querystring
         else {
-          if(Context.oauth) {
-            href += `?state=${Context.oauth}&code=${Context.pollKey}`;
+          if(Context.oauthState) {
+            href += `?state=${Context.oauthState}&code=${Context.pollKey}`;
           }
           else {
             href += `?prYvkey=${Context.pollKey}`;
