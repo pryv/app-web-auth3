@@ -1,5 +1,5 @@
 import axios from 'axios';
-import Hostings from '../controllers/Hostings.js';
+import Hostings from './Hostings.js';
 
 class Pryv {
   constructor (domain, appId, origin) {
@@ -85,7 +85,7 @@ class Pryv {
     const res = await this.asyncCall(axios.get,
       `${this.register}/hostings`
     );
-    return new Hostings().parse(res);
+    return new Hostings().parse(res.data);
   }
 
   // POST/reg: create a new Pryv user
