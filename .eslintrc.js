@@ -24,7 +24,6 @@ module.exports = {
   // required to lint *.vue files
   plugins: [
     'vue',
-    'html',
     'flowtype-errors',
     'testcafe',
     'jest'

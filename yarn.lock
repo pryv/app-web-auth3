@@ -141,7 +141,7 @@ acorn-globals@^4.1.0:
 
 acorn-jsx@^3.0.0:
   version "3.0.1"
-  resolved "https://registry.yarnpkg.com/acorn-jsx/-/acorn-jsx-3.0.1.tgz#afdf9488fb1ecefc8348f6fb22f464e32a58b36b"
+  resolved "http://registry.npmjs.org/acorn-jsx/-/acorn-jsx-3.0.1.tgz#afdf9488fb1ecefc8348f6fb22f464e32a58b36b"
   dependencies:
     acorn "^3.0.4"
 
@@ -153,15 +153,19 @@ acorn-jsx@^4.1.1:
 
 acorn@^3.0.4:
   version "3.3.0"
-  resolved "https://registry.yarnpkg.com/acorn/-/acorn-3.3.0.tgz#45e37fb39e8da3f25baee3ff5369e2bb5f22017a"
+  resolved "http://registry.npmjs.org/acorn/-/acorn-3.3.0.tgz#45e37fb39e8da3f25baee3ff5369e2bb5f22017a"
 
 acorn@^4.0.3:
   version "4.0.13"
   resolved "https://registry.yarnpkg.com/acorn/-/acorn-4.0.13.tgz#105495ae5361d697bd195c825192e1ad7f253787"
 
-acorn@^5.0.0, acorn@^5.0.3, acorn@^5.3.0, acorn@^5.5.0, acorn@^5.5.3, acorn@^5.6.0:
+acorn@^5.0.0, acorn@^5.0.3, acorn@^5.3.0, acorn@^5.5.3, acorn@^5.6.0:
   version "5.7.2"
   resolved "https://registry.yarnpkg.com/acorn/-/acorn-5.7.2.tgz#91fa871883485d06708800318404e72bfb26dcc5"
+
+acorn@^5.5.0:
+  version "5.7.3"
+  resolved "https://registry.yarnpkg.com/acorn/-/acorn-5.7.3.tgz#67aa231bf8812974b85235a96771eb6bd07ea279"
 
 ajv-keywords@^3.0.0, ajv-keywords@^3.1.0:
   version "3.2.0"
