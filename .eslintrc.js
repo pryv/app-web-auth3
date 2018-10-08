@@ -36,6 +36,7 @@ module.exports = {
     'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off',
     'semi': [2, "always"],
     "flowtype-errors/show-errors": 2,
-    "comma-dangle": ["error", "always-multiline"]
+    "comma-dangle": ["error", "always-multiline"],
+    'vue/attribute-hyphenation': [2, 'never', { 'ignore': [] }]
   }
 }

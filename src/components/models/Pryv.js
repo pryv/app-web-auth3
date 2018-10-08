@@ -14,12 +14,12 @@ class Pryv {
   origin: ?string;
   next: ErrorHandler;
 
-  constructor (domain: string, appId: string, origin: ?string) {
+  constructor (domain: string, appId: string, handler: ErrorHandler, origin: ?string) {
     this.core = username => `https://${username}.${domain}`;
     this.register = `https://reg.${domain}`;
     this.appId = appId;
+    this.next = handler;
     this.origin = origin;
-    this.next = () => {};
   }
 
   // ---------- AUTH calls ----------
@@ -162,11 +162,6 @@ class Pryv {
   async getServiceInfo () {
     return this.asyncCall(axios.get,
       `${this.register}/service/info`);
-  }
-
-  // Attach an error handling function for all async calls
-  setErrorHandler (next: ErrorHandler) {
-    this.next = next;
   }
 
   // Perform async calls using await and try/catch mechanisms
