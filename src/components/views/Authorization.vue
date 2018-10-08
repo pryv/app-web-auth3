@@ -115,7 +115,7 @@ export default {
         }
 
         // Otherwise, show the requested permissions to the user
-        this.permissionsList = this.permissions.updateList(checkApp.permissions);
+        this.permissionsList = this.permissionsObj.updateList(checkApp.permissions);
       }
     },
     // The user accepts the requested permissions

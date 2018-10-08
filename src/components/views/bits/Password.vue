@@ -34,7 +34,7 @@ export default {
     },
   }),
   computed: {
-    matchPassword: () => {
+    matchPassword: function () {
       return this.value === this.repass || 'Password confirmation does not match.';
     },
   },

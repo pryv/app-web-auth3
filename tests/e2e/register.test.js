@@ -46,11 +46,12 @@ const hostingsMock = RequestMock()
   .respond(fakeHostings, 200, {'Access-Control-Allow-Origin': '*'});
 
 fixture(`Register user`)
-  .page('http://localhost:8080/#/register?requestingAppId=pryv-reg-standalone')
+  .page('http://localhost:8080/#/access?requestingAppId=pryv-reg-standalone')
   .requestHooks(registerLogger, hostingsLogger, registerUserMock, hostingsMock);
 
 test('Register new user with hostings retrieval', async testController => {
   await testController
+    .click('#goToReg')
     // Hostings retrieval call was performed
     .expect(hostingsLogger.contains(record =>
       record.request.method === 'get' &&

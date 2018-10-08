@@ -22,10 +22,12 @@
 
     <div v-if="currentPage==='auth'">
       <v-btn
+        id="goToReg"
         @click="goTo('reg')"
       >Go to register</v-btn>
 
       <v-btn
+        id="goToReset"
         @click="goTo('reset')"
       >Go to reset</v-btn>
     </div>

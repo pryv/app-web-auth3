@@ -47,22 +47,6 @@ exports[`Authorization.test.js renders correctly (snapshots matching) 1`] = `
       Cancel
     </vbtn-stub>
      
-    <router-link-stub
-      event="click"
-      tag="a"
-      to="[object Object]"
-    >
-      Create an account
-    </router-link-stub>
-     
-    <router-link-stub
-      event="click"
-      tag="a"
-      to="[object Object]"
-    >
-      Forgot password
-    </router-link-stub>
-     
     <div>
       
       Feel free to reach our
@@ -71,6 +55,7 @@ exports[`Authorization.test.js renders correctly (snapshots matching) 1`] = `
         href="https://pryv.com/helpdesk"
         target="_blank"
       >
+        
         helpdesk
       </a>
       

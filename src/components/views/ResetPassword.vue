@@ -60,10 +60,10 @@ export default {
     validForm: false,
   }),
   computed: {
-    pageTitle: () => {
+    pageTitle: function () {
       return this.resetToken ? 'Set a new password' : 'Reset password';
     },
-    buttonText: () => {
+    buttonText: function () {
       return this.resetToken ? 'Change password' : 'Request password reset';
     },
   },

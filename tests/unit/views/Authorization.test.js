@@ -4,14 +4,12 @@ import Permissions from '@/components/views/bits/Permissions';
 import Vue from 'vue';
 import Vuetify from 'vuetify';
 import VueRouter from 'vue-router';
-import Context from '@/Context.js';
 
 Vue.use(Vuetify);
 Vue.use(VueRouter);
 
 describe('Authorization.test.js', () => {
   let wrapper;
-  Context.init({});
 
   beforeEach(() => {
     wrapper = shallowMount(Authorization);
@@ -52,7 +50,7 @@ describe('Authorization.test.js', () => {
 
   it('shows requested permissions when app access check is successful', () => {
     wrapper.setData({
-      permissionsList: '[{streamId: "diary", level: "read"}]',
+      permissionsList: [{streamId: 'diary', level: 'read'}],
     });
     // Does not render auth form
     const authForm = wrapper.find({ref: 'form'});

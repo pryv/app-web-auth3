@@ -10,8 +10,7 @@
       <li
         v-for="(permission, index) in permissionsList"
         :key="index">
-        A permission on stream <b>{ {permission.streamId }} </b>
-        with level <b>{{ permission.level }}</b>
+        A permission on stream <b>{{ permission.streamId }}</b> with level <b>{{ permission.level }}</b>
       </li>
     </ul>
 
@@ -31,7 +30,7 @@
 <script>
 export default {
   props: {
-    permissionsList: {type: Object, default: null},
+    permissionsList: {type: Array, default: null},
     appId: {type: String, default: ''},
     accept: {type: Function, default: null},
     refuse: {type: Function, default: null},
