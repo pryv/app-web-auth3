@@ -69,7 +69,8 @@ exports[`RegisterUser.test.js renders correctly (snapshots matching) 1`] = `
       href="https://pryv.com/terms-of-use/"
       target="_blank"
     >
-      terms of use
+      
+    terms of use
     </a>
     .
   
@@ -95,13 +96,5 @@ exports[`RegisterUser.test.js renders correctly (snapshots matching) 1`] = `
   >
     Clear
   </vbtn-stub>
-   
-  <router-link-stub
-    event="click"
-    tag="a"
-    to="[object Object]"
-  >
-    Already a Pryv user ? Sign in.
-  </router-link-stub>
 </vform-stub>
 `;

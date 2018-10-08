@@ -2,39 +2,41 @@
   <div>
     <v-text-field
       id="password"
-      label="Password"
-      v-bind:value="value"
-      v-on:input="$emit('input', $event)"
-      :append-icon="visiblePass ? 'lock_open' : 'lock'"
-      @click:append="() => (visiblePass = !visiblePass)"
+      :value="value"
+      :appendIcon="visiblePass ? 'lock_open' : 'lock'"
       :type="visiblePass ? 'text' : 'password'"
       :rules="[rules.required]"
-    ></v-text-field>
+      label="Password"
+      @input="$emit('input', $event)"
+      @click:append="() => (visiblePass = !visiblePass)"/>
+
     <v-text-field
-      id="passConfirmation"
-      label="Password confirmation"
       v-if="confirmation"
+      id="passConfirmation"
       v-model="repass"
       :type="visiblePass ? 'text' : 'password'"
       :rules="[matchPassword]"
-    ></v-text-field>
+      label="Password confirmation"/>
   </div>
 </template>
 
 <script>
-  export default {
-    props: ['confirmation', 'value'],
-    data: () => ({
-      visiblePass: false,
-      repass: '',
-      rules: {
-        required: value => !!value || 'Password is required.'
-      }
-    }),
-    computed: {
-      matchPassword: function () {
-        return this.value === this.repass || 'Password confirmation does not match.'
-      }
-    }
-  }
+export default {
+  props: {
+    confirmation: {type: Boolean, default: false},
+    value: {type: String, default: ''},
+  },
+  data: () => ({
+    visiblePass: false,
+    repass: '',
+    rules: {
+      required: value => !!value || 'Password is required.',
+    },
+  }),
+  computed: {
+    matchPassword: function () {
+      return this.value === this.repass || 'Password confirmation does not match.';
+    },
+  },
+};
 </script>

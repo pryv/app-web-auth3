@@ -1,48 +1,56 @@
 <template>
-  <v-form id="registerForm" ref="form" v-model="validForm">
+  <v-form
+    id="registerForm"
+    ref="form"
+    v-model="validForm">
 
     <v-alert
       :value="err"
       type="error"
       transition="scale-transition"
-    >{{err}}</v-alert>
+    >{{ err }}</v-alert>
 
     <h1>Register a new user</h1>
 
     <v-text-field
-      label="E-mail"
       id="email"
       v-model="email"
       :rules="[rules.required, rules.email]"
-    ></v-text-field>
+      label="E-mail"
+    />
 
     <v-text-field
-      label="Username"
       id="username"
       v-model="username"
       :rules="[rules.required]"
-    ></v-text-field>
-    
-    <Password v-model="password" :confirmation="true"></Password>
+      label="Username"
+    />
+
+    <Password
+      v-model="password"
+      :confirmation="true"/>
 
     <v-autocomplete
-      label="Hosting"
       id="hosting"
       v-model="hosting"
       :items="hosts"
-      placeholder="Choose hosting..."
       :rules="[rules.required]"
-    ></v-autocomplete>
+      placeholder="Choose hosting..."
+      label="Hosting"
+    />
 
     <div>
       By registering you agree with our
-      <a target="_blank" href="https://pryv.com/terms-of-use/">terms of use</a>.
+      <a
+        target="_blank"
+        href="https://pryv.com/terms-of-use/">
+      terms of use</a>.
     </div>
-    
+
     <v-btn
       id="submitButton"
-      @click="submit"
       :disabled="!validForm"
+      @click="submit"
     >Submit</v-btn>
 
     <v-btn
@@ -50,58 +58,60 @@
       @click="clear"
     >Clear</v-btn>
 
-    <router-link :to="{ name: 'Authorization' }">Already a Pryv user ? Sign in.</router-link>
-
   </v-form>
 </template>
 
 <script>
-  import Password from './bits/Password.vue';
-  import Pryv from '../models/Pryv.js';
-  import Context from '../../Context.js';
+import Password from './bits/Password.vue';
+import Pryv from '../models/Pryv.js';
 
-  export default {
-    components: {
-      Password,
+export default {
+  components: {
+    Password,
+  },
+  props: {
+    domain: {type: String, default: null},
+    appId: {type: String, default: null},
+    end: {type: Function, default: null},
+  },
+  data: () => ({
+    username: '',
+    password: '',
+    email: '',
+    hosting: '',
+    hosts: [],
+    err: '',
+    rules: {
+      required: value => !!value || 'This field is required.',
+      email: value => /.+@.+/.test(value) || 'E-mail must be valid.',
     },
-    data: () => ({
-      username: '',
-      password: '',
-      email: '',
-      hosting: '',
-      hosts: [],
-      err: '',
-      rules: {
-        required: value => !!value || 'This field is required.',
-        email: value => /.+@.+/.test(value) || 'E-mail must be valid.'
-      },
-      validForm: false
-    }),
-    async created() {
-      // Print any error in an alert component
-      Context.pryv.setErrorHandler(err => {
-        return this.err = JSON.stringify(err);
-      });
-      // Fill selector with available hostings
-      this.hosts = await Context.pryv.getAvailableHostings();
-    },
-    methods: {
-      async submit () {
-        if (this.$refs.form.validate()) {
-          // Create the new user
-          await Context.pryv.createUser(
-            this.username,
-            this.password,
-            this.email,
-            this.hosting
-          );
-          // Go back to auth page
-          this.$router.push('auth');
-        }
-      },
-      clear () {
-        this.$refs.form.reset()
+    validForm: false,
+  }),
+  async created () {
+    this.pryv = new Pryv(this.domain, this.appId, err => {
+      this.err = JSON.stringify(err);
+    });
+
+    // Fill selector with available hostings
+    this.hosts = await this.pryv.getAvailableHostings();
+  },
+  methods: {
+    async submit () {
+      if (this.$refs.form.validate()) {
+        // Create the new user
+        await this.pryv.createUser(
+          this.username,
+          this.password,
+          this.email,
+          this.hosting
+        );
+        // Go back to auth page
+        this.end();
       }
-    }
-  }
+    },
+    clear () {
+      this.$refs.form.reset();
+    },
+  },
+};
 </script>

@@ -21,7 +21,7 @@ exports[`Permissions.test.js renders correctly (snapshots matching) 1`] = `
   <ul>
     <li>
       
-    A permission on stream 
+      A permission on stream 
       <b>
         diary
       </b>
@@ -32,7 +32,7 @@ exports[`Permissions.test.js renders correctly (snapshots matching) 1`] = `
     </li>
     <li>
       
-    A permission on stream 
+      A permission on stream 
       <b>
         work
       </b>
