@@ -72,6 +72,7 @@ export default {
   props: {
     domain: {type: String, default: null},
     appId: {type: String, default: null},
+    end: {type: Function, default: null},
   },
   data: () => ({
     username: '',
@@ -105,7 +106,7 @@ export default {
           this.hosting
         );
         // Go back to auth page
-        this.$router.push('auth');
+        this.end();
       }
     },
     clear () {

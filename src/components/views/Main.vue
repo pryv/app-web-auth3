@@ -12,7 +12,9 @@
     <Register
       v-if="currentPage==='reg'"
       :domain="domain"
-      :appId="requestingAppId"/>
+      :appId="requestingAppId"
+      :page="currentPage"
+      :end="()=>{goTo('auth')}"/>
 
     <Reset
       v-if="currentPage==='reset'"
