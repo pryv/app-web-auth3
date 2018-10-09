@@ -80,6 +80,8 @@ export default {
           this.username = await this.pryv.getUsernameForEmail(this.username);
         }
 
+        if (this.username == null) return;
+
         // If we already got a reset token, we can change the password
         if (this.resetToken) {
           await this.pryv.changePassword(this.username, this.password, this.resetToken);

@@ -80,7 +80,7 @@ export default {
     email: '',
     hosting: '',
     hosts: [],
-    err: '',
+    err: null,
     rules: {
       required: value => !!value || 'This field is required.',
       email: value => /.+@.+/.test(value) || 'E-mail must be valid.',
@@ -94,10 +94,6 @@ export default {
 
     // Fill selector with available hostings
     this.hosts = await this.pryv.getAvailableHostings();
-
-    if (this.hosts == null || this.hosts.length <= 0) {
-      this.err = 'No available hosting';
-    }
   },
   methods: {
     async submit () {
@@ -109,8 +105,11 @@ export default {
           this.email,
           this.hosting
         );
-        // Go back to auth page
-        this.$emit('end', 'auth');
+
+        if (this.err == null) {
+          // Go back to auth page
+          this.$emit('end', 'auth');
+        }
       }
     },
     clear () {

@@ -102,11 +102,17 @@ export default {
           this.username = await this.pryv.getUsernameForEmail(this.username);
         }
 
+        if (this.username == null) return;
+
         // Login against Pryv
         this.personalToken = await this.pryv.login(this.username, this.password);
 
+        if (this.personalToken == null) return;
+
         // Check for existing app access
         const checkApp = await this.pryv.checkAppAccess(this.username, this.permissionsObj.list, this.personalToken);
+
+        if (checkApp == null) return;
 
         // If a mismatching access exists, show an error
         if (checkApp.mismatch) {
@@ -129,6 +135,8 @@ export default {
       // Create a new app access
       this.appToken = await this.pryv.createAppAccess(this.username, this.permissionsList, this.personalToken);
 
+      if (this.appToken == null) return;
+
       await this.closingFlow(new AcceptedAuthState(this.username, this.appToken));
     },
     // The user refuses the requested permissions
@@ -138,7 +146,10 @@ export default {
     // Advertise state and close
     async closingFlow (state) {
       await this.pryv.updateAuthState(this.pollKey, state);
-      this.endPopup(state);
+
+      if (this.err == null) {
+        this.endPopup(state);
+      }
     },
     // Closing the auth page
     endPopup (state) {

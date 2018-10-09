@@ -48,7 +48,7 @@ class Pryv {
         appId: this.appId,
       }
     );
-    return res.data.token;
+    return res ? res.data.token : null;
   }
 
   // POST/core: check if requested app access already exists or not,
@@ -68,11 +68,11 @@ class Pryv {
       }
     );
     const data = res.data;
-    return {
+    return data ? {
       permissions: data.checkedPermissions,
       match: data.matchingAccess,
       mismatch: data.mismatchingAccess,
-    };
+    } : null;
   }
 
   // POST/core: create a new app access, returns the according app token
@@ -89,7 +89,7 @@ class Pryv {
         headers: { Authorization: personalToken },
       }
     );
-    return res.data.access.token;
+    return res ? res.data.access.token : null;
   }
 
   // ---------- REGISTER calls ----------
@@ -99,7 +99,7 @@ class Pryv {
     const res = await this.asyncCall(axios.get,
       `${this.register}/hostings`
     );
-    return new Hostings().parse(res.data);
+    return res ? new Hostings().parse(res.data) : [];
   }
 
   // POST/reg: create a new Pryv user
@@ -124,7 +124,7 @@ class Pryv {
     const res = await this.asyncCall(axios.get,
       `${this.register}/${email}/uid`
     );
-    return res.data.uid;
+    return res ? res.data.uid : null;
   }
 
   // ---------- RESET calls ----------
@@ -139,7 +139,7 @@ class Pryv {
         headers: { Origin: this.origin },
       }
     );
-    return res.status;
+    return res ? res.status : null;
   }
 
   // POST/core: change Pryv password using a reset token
