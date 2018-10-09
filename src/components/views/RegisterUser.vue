@@ -94,6 +94,10 @@ export default {
 
     // Fill selector with available hostings
     this.hosts = await this.pryv.getAvailableHostings();
+
+    if (this.hosts == null || this.hosts.length <= 0) {
+      this.err = 'No available hosting';
+    }
   },
   methods: {
     async submit () {

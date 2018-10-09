@@ -83,6 +83,12 @@ export default {
     validForm: false,
   }),
   created () {
+    if (this.permissionsString == null) {
+      this.err = 'Missing requested permissions!';
+    }
+    if (this.pollKey == null) {
+      this.err = 'Missing poll key!';
+    }
     this.permissionsObj = new PermissionsObj(this.permissionsString);
     this.pryv = new Pryv(this.domain, this.appId, err => {
       this.err = JSON.stringify(err);
