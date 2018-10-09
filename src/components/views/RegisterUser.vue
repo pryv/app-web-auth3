@@ -106,7 +106,7 @@ export default {
           this.hosting
         );
         // Go back to auth page
-        this.end();
+        this.$emit('end', 'auth');
       }
     },
     clear () {

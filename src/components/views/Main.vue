@@ -14,7 +14,7 @@
       :domain="domain"
       :appId="requestingAppId"
       :page="currentPage"
-      :end="()=>{goTo('auth')}"/>
+      @end="goTo"/>
 
     <Reset
       v-if="currentPage==='reset'"
