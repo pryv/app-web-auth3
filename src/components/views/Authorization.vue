@@ -36,6 +36,7 @@
       >Sign In</v-btn>
 
       <v-btn
+        @click="refuse"
       >Cancel</v-btn>
 
       <div v-if="serviceInfos.support">
