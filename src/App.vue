@@ -7,7 +7,9 @@
     </head>
     <v-app>
       <v-content>
-        <router-view/>
+        <v-container>
+          <router-view/>
+        </v-container>
       </v-content>
     </v-app>
   </div>
@@ -25,10 +27,7 @@ export default {
 <style>
     #app {
         font-family: 'Roboto', 'Avenir', Helvetica, Arial, sans-serif;
-        -webkit-font-smoothing: antialiased;
-        -moz-osx-font-smoothing: grayscale;
         text-align: center;
-        color: #2c3e50;
         padding-left: 20px;
         padding-right: 20px;
     }

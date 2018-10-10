@@ -1,5 +1,8 @@
 <template>
   <div>
+
+    <img src="@/assets/main-logo.png">
+
     <Authorization
       v-if="currentPage==='auth'"
       :appId="requestingAppId"
