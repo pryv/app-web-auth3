@@ -156,7 +156,7 @@ export default {
     endPopup (state) {
       let href = this.returnURL;
       // If no return URL was provided, just close the popup
-      if (href == null || !href) {
+      if (href == null || href === 'false') {
         window.close();
       } else {
         // Otherwise, we need to redirect to the return URL,
