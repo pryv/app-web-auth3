@@ -150,10 +150,7 @@ export default {
     // Advertise state and close
     async closingFlow (state) {
       await this.pryv.updateAuthState(this.pollKey, state);
-
-      if (this.err == null) {
-        this.endPopup(state);
-      }
+      this.endPopup(state);
     },
     // Closing the auth page
     endPopup (state) {
