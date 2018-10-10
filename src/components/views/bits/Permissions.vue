@@ -34,11 +34,11 @@
 <script>
 export default {
   props: {
-    permissionsList: {type: Array, default: null},
+    permissionsList: {type: Array, default: () => ([])},
     appId: {type: String, default: ''},
-    accept: {type: Function, default: null},
-    refuse: {type: Function, default: null},
-    clientData: {type: Object, default: () => {}},
+    accept: {type: Function, default: () => {}},
+    refuse: {type: Function, default: () => {}},
+    clientData: {type: Object, default: () => ({})},
   },
 };
 </script>

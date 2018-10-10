@@ -72,7 +72,7 @@ export default {
   props: {
     domain: {type: String, default: null},
     appId: {type: String, default: null},
-    end: {type: Function, default: null},
+    end: {type: Function, default: () => {}},
   },
   data: () => ({
     username: '',
