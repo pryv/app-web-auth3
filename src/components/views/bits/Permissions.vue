@@ -14,6 +14,10 @@
       </li>
     </ul>
 
+    <div v-if="clientData.consentMsg">
+      {{ clientData.consentMsg }}
+    </div>
+
     <v-btn
       id="refusePermissions"
       @click="refuse"
@@ -34,6 +38,7 @@ export default {
     appId: {type: String, default: ''},
     accept: {type: Function, default: null},
     refuse: {type: Function, default: null},
+    clientData: {type: Object, default: () => {}},
   },
 };
 </script>

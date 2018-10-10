@@ -160,8 +160,9 @@ class Pryv {
 
   // GET/reg: retrieve service information
   async getServiceInfo () {
-    return this.asyncCall(axios.get,
-      `${this.register}/service/info`);
+    const res = await this.asyncCall(axios.get,
+      `${this.register}/service/infos`);
+    return res ? res.data : {};
   }
 
   // Perform async calls using await and try/catch mechanisms

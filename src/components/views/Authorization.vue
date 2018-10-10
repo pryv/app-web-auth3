@@ -10,6 +10,7 @@
       v-if="permissionsList"
       :appId="appId"
       :permissionsList="permissionsList"
+      :clientData="serviceInfos.clientData"
       :accept="accept"
       :refuse="refuse"/>
 
@@ -37,11 +38,11 @@
       <v-btn
       >Cancel</v-btn>
 
-      <div>
+      <div v-if="serviceInfos.support">
         Feel free to reach our
         <a
-          target="_blank"
-          href="https://pryv.com/helpdesk">
+          :href="serviceInfos.support"
+          target="_blank">
           helpdesk</a>
         if you have questions.
       </div>
@@ -76,13 +77,14 @@ export default {
     appToken: '',
     err: '',
     permissionsList: null,
+    serviceInfos: {},
     rules: {
       required: value => !!value || 'This field is required.',
       email: value => /.+@.+/.test(value) || 'E-mail must be valid',
     },
     validForm: false,
   }),
-  created () {
+  async created () {
     if (this.permissionsString == null) {
       this.err = 'Missing requested permissions!';
     }
@@ -93,6 +95,7 @@ export default {
     this.pryv = new Pryv(this.domain, this.appId, err => {
       this.err = JSON.stringify(err);
     });
+    this.serviceInfos = await this.pryv.getServiceInfo();
   },
   methods: {
     async submit () {
