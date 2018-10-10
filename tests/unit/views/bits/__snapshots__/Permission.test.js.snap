@@ -43,6 +43,8 @@ exports[`Permissions.test.js renders correctly (snapshots matching) 1`] = `
     </li>
   </ul>
    
+  <!---->
+   
   <vbtn-stub
     activeclass="v-btn--active"
     id="refusePermissions"

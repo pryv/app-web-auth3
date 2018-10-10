@@ -47,21 +47,7 @@ exports[`Authorization.test.js renders correctly (snapshots matching) 1`] = `
       Cancel
     </vbtn-stub>
      
-    <div>
-      
-      Feel free to reach our
-      
-      <a
-        href="https://pryv.com/helpdesk"
-        target="_blank"
-      >
-        
-        helpdesk
-      </a>
-      
-      if you have questions.
-    
-    </div>
+    <!---->
   </vform-stub>
 </div>
 `;
