@@ -2,7 +2,6 @@
   <div>
 
     <img src="@/assets/main-logo.png">
-
     <Authorization
       v-if="currentPage==='auth'"
       :appId="requestingAppId"
@@ -65,10 +64,16 @@ export default {
     key: {type: String, default: null},
     resetToken: {type: String, default: null},
     returnURL: {type: String, default: null},
+    standaloneRegister: {type: Boolean, default: false},
+    standaloneReset: {type: Boolean, default: false},
   },
-  data: () => ({
-    currentPage: 'auth',
-  }),
+  computed: {
+    currentPage: function () {
+      if (this.standaloneRegister) return 'reg';
+      if (this.standaloneReset) return 'reset';
+      return 'auth';
+    },
+  },
   methods: {
     goTo (page) {
       this.currentPage = page;
