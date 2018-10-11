@@ -23,12 +23,11 @@ const usernameForEmailMock = RequestMock()
   .respond({uid: 'tmodoux'}, 200, {'Access-Control-Allow-Origin': '*'});
 
 fixture(`Reset password`)
-  .page('http://localhost:8080/#/access?resetToken=1234&requestingAppId=pryv-reset-standalone')
+  .page('http://localhost:8080/#/access?resetToken=1234&requestingAppId=pryv-reset-standalone&standaloneReset=true')
   .requestHooks(resetLogger, emailLogger, resetRequestMock, usernameForEmailMock);
 
 test('Reset password with email conversion', async testController => {
   await testController
-    .click('#goToReset')
     // Fill password change form
     .typeText('#usernameOrEmail', 'test@test.com')
     .typeText('#password', '123456789')
