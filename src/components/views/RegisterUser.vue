@@ -88,27 +88,30 @@ export default {
     validForm: false,
   }),
   async created () {
-    this.pryv = new Pryv(this.domain, this.appId, err => {
-      this.err = JSON.stringify(err);
-    });
+    this.pryv = new Pryv(this.domain, this.appId);
 
     // Fill selector with available hostings
-    this.hosts = await this.pryv.getAvailableHostings();
+    try {
+      this.hosts = await this.pryv.getAvailableHostings();
+    } catch (err) {
+      this.err = JSON.stringify(err);
+    }
   },
   methods: {
     async submit () {
       if (this.$refs.form.validate()) {
-        // Create the new user
-        await this.pryv.createUser(
-          this.username,
-          this.password,
-          this.email,
-          this.hosting
-        );
-
-        if (this.err == null) {
+        try {
+          // Create the new user
+          await this.pryv.createUser(
+            this.username,
+            this.password,
+            this.email,
+            this.hosting
+          );
           // Go back to auth page
           this.$emit('end', 'auth');
+        } catch (err) {
+          this.err = JSON.stringify(err);
         }
       }
     },

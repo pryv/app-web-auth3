@@ -68,27 +68,25 @@ export default {
     },
   },
   created () {
-    this.pryv = new Pryv(this.domain, this.appId, err => {
-      this.err = err;
-    });
+    this.pryv = new Pryv(this.domain, this.appId);
   },
   methods: {
     async submit () {
-      if (this.$refs.form.validate()) {
-        // Convert email to Pryv username if needed
-        if (this.username.search('@') > 0) {
+      try {
+        if (this.$refs.form.validate()) {
+          // Convert email to Pryv username if needed
           this.username = await this.pryv.getUsernameForEmail(this.username);
-        }
 
-        if (this.username == null) return;
-
-        // If we already got a reset token, we can change the password
-        if (this.resetToken) {
-          await this.pryv.changePassword(this.username, this.password, this.resetToken);
-        } else {
-          // Ask for a reset token
-          this.resetStatus = await this.pryv.requestPasswordReset(this.username);
+          // If we already got a reset token, we can change the password
+          if (this.resetToken) {
+            await this.pryv.changePassword(this.username, this.password, this.resetToken);
+          } else {
+            // Ask for a reset token
+            this.resetStatus = await this.pryv.requestPasswordReset(this.username);
+          }
         }
+      } catch (err) {
+        this.err = JSON.stringify(err);
       }
     },
   },

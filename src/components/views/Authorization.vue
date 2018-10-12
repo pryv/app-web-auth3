@@ -93,59 +93,59 @@ export default {
       this.err = 'Missing poll key!';
     }
     this.permissionsObj = new PermissionsObj(this.permissionsString);
-    this.pryv = new Pryv(this.domain, this.appId, err => {
-      this.err = JSON.stringify(err);
-    });
+    this.pryv = new Pryv(this.domain, this.appId);
     this.serviceInfos = await this.pryv.getServiceInfo();
   },
   methods: {
     async submit () {
       if (this.$refs.form.validate()) {
-        // Convert email to Pryv username if needed
-        if (this.username.search('@') > 0) {
+        try {
+          // Convert email to Pryv username if needed
           this.username = await this.pryv.getUsernameForEmail(this.username);
+
+          // Login against Pryv
+          this.personalToken = await this.pryv.login(this.username, this.password);
+
+          // Check for existing app access
+          const checkApp = await this.pryv.checkAppAccess(this.username, this.permissionsObj.list, this.personalToken);
+
+          // If a mismatching access exists, show an error
+          if (checkApp.mismatch) {
+            this.err = 'Mismatching access already exists: ' + JSON.stringify(checkApp.mismatch);
+            return;
+          }
+
+          // If a matching access exists, just return it
+          if (checkApp.match) {
+            await this.closingFlow(new AcceptedAuthState(this.username, checkApp.match.token));
+            return;
+          }
+
+          // Otherwise, show the requested permissions to the user
+          this.permissionsList = this.permissionsObj.updateList(checkApp.permissions);
+        } catch (err) {
+          this.err = JSON.stringify(err);
         }
-
-        if (this.username == null) return;
-
-        // Login against Pryv
-        this.personalToken = await this.pryv.login(this.username, this.password);
-
-        if (this.personalToken == null) return;
-
-        // Check for existing app access
-        const checkApp = await this.pryv.checkAppAccess(this.username, this.permissionsObj.list, this.personalToken);
-
-        if (checkApp == null) return;
-
-        // If a mismatching access exists, show an error
-        if (checkApp.mismatch) {
-          this.err = 'Mismatching access already exists: ' + JSON.stringify(checkApp.mismatch);
-          return;
-        }
-
-        // If a matching access exists, just return it
-        if (checkApp.match) {
-          await this.closingFlow(new AcceptedAuthState(this.username, checkApp.match.token));
-          return;
-        }
-
-        // Otherwise, show the requested permissions to the user
-        this.permissionsList = this.permissionsObj.updateList(checkApp.permissions);
       }
     },
     // The user accepts the requested permissions
     async accept () {
-      // Create a new app access
-      this.appToken = await this.pryv.createAppAccess(this.username, this.permissionsList, this.personalToken);
+      try {
+        // Create a new app access
+        this.appToken = await this.pryv.createAppAccess(this.username, this.permissionsList, this.personalToken);
 
-      if (this.appToken == null) return;
-
-      await this.closingFlow(new AcceptedAuthState(this.username, this.appToken));
+        await this.closingFlow(new AcceptedAuthState(this.username, this.appToken));
+      } catch (err) {
+        this.err = JSON.stringify(err);
+      }
     },
     // The user refuses the requested permissions
     async refuse () {
-      await this.closingFlow(new RefusedAuthState());
+      try {
+        await this.closingFlow(new RefusedAuthState());
+      } catch (err) {
+        this.err = JSON.stringify(err);
+      }
     },
     // Advertise state and close
     async closingFlow (state) {

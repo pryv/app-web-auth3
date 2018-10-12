@@ -10,6 +10,8 @@ type Hosting = {
   available: ?boolean
 };
 
+export type HostingArray = Array<string>;
+
 type HostingList = {
   [hostingName: string]: Hosting
 };
@@ -51,7 +53,7 @@ class Hostings {
     this.regions = this.zones = this.hostings = {};
   }
 
-  parse (hostingsData: HostingDefinition): Array<string> {
+  parse (hostingsData: HostingDefinition): HostingArray {
     const regions = this.regions = hostingsData.regions;
     Object.keys(regions).forEach(region => {
       const zones = this.zones = regions[region].zones;
@@ -73,7 +75,7 @@ class Hostings {
     return this.zones;
   }
 
-  getHostings (): Array<string> {
+  getHostings (): HostingArray {
     return Object.keys(this.hostings);
   }
 }
