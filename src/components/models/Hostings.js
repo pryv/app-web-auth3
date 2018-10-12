@@ -56,8 +56,10 @@ class Hostings {
   parse (hostingsData: HostingDefinition): HostingArray {
     const regions = this.regions = hostingsData.regions;
     Object.keys(regions).forEach(region => {
+      this.regions[region] = regions[region];
       const zones = this.zones = regions[region].zones;
       Object.keys(zones).forEach(zone => {
+        this.zones[zone] = zones[zone];
         const hostings = zones[zone].hostings;
         Object.keys(hostings).forEach(hosting => {
           this.hostings[hosting] = hostings[hosting];
