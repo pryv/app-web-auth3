@@ -14,7 +14,7 @@ class Permissions {
   constructor (permissionsList: string|PermissionsList) {
     if (typeof permissionsList === 'string') {
       this.list = JSON.parse(permissionsList);
-    } else if (Array.isArray(permissionsList)) {
+    } else {
       this.list = permissionsList;
     }
   }
