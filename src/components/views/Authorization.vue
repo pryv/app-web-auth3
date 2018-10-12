@@ -47,6 +47,11 @@
           helpdesk</a>
         if you have questions.
       </div>
+
+      <router-link :to="{ name: 'RegisterUser' }">Create an account</router-link>
+
+      <router-link :to="{ name: 'ResetPassword' }">Forgot password</router-link>
+
     </v-form>
   </div>
 </template>
@@ -54,28 +59,20 @@
 <script>
 import Password from './bits/Password.vue';
 import Permissions from './bits/Permissions.vue';
-import Pryv from '../models/Pryv.js';
-import PermissionsObj from '../models/Permissions.js';
 import {AcceptedAuthState, RefusedAuthState} from '../models/AuthStates.js';
+import Context from '../../Context.js';
 
 export default {
   components: {
     Password,
     Permissions,
   },
-  props: {
-    appId: {type: String, default: null},
-    domain: {type: String, default: null},
-    permissionsString: {type: String, default: null},
-    pollKey: {type: String, default: null},
-    returnURL: {type: String, default: null},
-    oauthState: {type: String, default: null},
-  },
   data: () => ({
     username: '',
     password: '',
     personalToken: '',
     appToken: '',
+    appId: Context.appId,
     err: '',
     permissionsList: null,
     serviceInfos: {},
@@ -86,28 +83,24 @@ export default {
     validForm: false,
   }),
   async created () {
-    if (this.permissionsString == null) {
-      this.err = 'Missing requested permissions!';
+    try {
+      this.serviceInfos = await Context.pryv.getServiceInfo();
+    } catch (err) {
+      this.err = JSON.stringify(err);
     }
-    if (this.pollKey == null) {
-      this.err = 'Missing poll key!';
-    }
-    this.permissionsObj = new PermissionsObj(this.permissionsString);
-    this.pryv = new Pryv(this.domain, this.appId);
-    this.serviceInfos = await this.pryv.getServiceInfo();
   },
   methods: {
     async submit () {
       if (this.$refs.form.validate()) {
         try {
           // Convert email to Pryv username if needed
-          this.username = await this.pryv.getUsernameForEmail(this.username);
+          this.username = await Context.pryv.getUsernameForEmail(this.username);
 
           // Login against Pryv
-          this.personalToken = await this.pryv.login(this.username, this.password);
+          this.personalToken = await Context.pryv.login(this.username, this.password);
 
           // Check for existing app access
-          const checkApp = await this.pryv.checkAppAccess(this.username, this.permissionsObj.list, this.personalToken);
+          const checkApp = await Context.pryv.checkAppAccess(this.username, Context.permissions.list, this.personalToken);
 
           // If a mismatching access exists, show an error
           if (checkApp.mismatch) {
@@ -122,7 +115,7 @@ export default {
           }
 
           // Otherwise, show the requested permissions to the user
-          this.permissionsList = this.permissionsObj.updateList(checkApp.permissions);
+          this.permissionsList = Context.permissions.updateList(checkApp.permissions);
         } catch (err) {
           this.err = JSON.stringify(err);
         }
@@ -132,7 +125,7 @@ export default {
     async accept () {
       try {
         // Create a new app access
-        this.appToken = await this.pryv.createAppAccess(this.username, this.permissionsList, this.personalToken);
+        this.appToken = await Context.pryv.createAppAccess(this.username, this.permissionsList, this.personalToken);
 
         await this.closingFlow(new AcceptedAuthState(this.username, this.appToken));
       } catch (err) {
@@ -149,22 +142,22 @@ export default {
     },
     // Advertise state and close
     async closingFlow (state) {
-      await this.pryv.updateAuthState(this.pollKey, state);
+      await Context.pryv.updateAuthState(Context.pollKey, state);
       this.endPopup(state);
     },
     // Closing the auth page
     endPopup (state) {
-      let href = this.returnURL;
+      let href = Context.returnURL;
       // If no return URL was provided, just close the popup
       if (href == null || href === 'false') {
         window.close();
       } else {
         // Otherwise, we need to redirect to the return URL,
         // passing the resulting parameters as querystring
-        if (this.oauthState) {
-          href += `?state=${this.oauthState}&code=${this.pollKey}`;
+        if (Context.oauthState) {
+          href += `?state=${Context.oauthState}&code=${Context.pollKey}`;
         } else {
-          href += `?prYvkey=${this.pollKey}`;
+          href += `?prYvkey=${Context.pollKey}`;
 
           Object.keys(state.body).forEach(key => {
             href += `&prYv${key}=${state.body[key]}`;

@@ -33,12 +33,14 @@
       @click="submit"
     >{{ buttonText }}</v-btn>
 
+    <router-link :to="{ name: 'Authorization' }">Go back to Sign in.</router-link>
+
   </v-form>
 </template>
 
 <script>
 import Password from './bits/Password';
-import Pryv from '../models/Pryv.js';
+import Context from '../../Context.js';
 
 export default {
   components: {
@@ -46,8 +48,6 @@ export default {
   },
   props: {
     resetToken: {type: String, default: null},
-    domain: {type: String, default: null},
-    appId: {type: String, default: null},
   },
   data: () => ({
     username: '',
@@ -67,22 +67,19 @@ export default {
       return this.resetToken ? 'Change password' : 'Request password reset';
     },
   },
-  created () {
-    this.pryv = new Pryv(this.domain, this.appId);
-  },
   methods: {
     async submit () {
       try {
         if (this.$refs.form.validate()) {
           // Convert email to Pryv username if needed
-          this.username = await this.pryv.getUsernameForEmail(this.username);
+          this.username = await Context.pryv.getUsernameForEmail(this.username);
 
           // If we already got a reset token, we can change the password
           if (this.resetToken) {
-            await this.pryv.changePassword(this.username, this.password, this.resetToken);
+            await Context.pryv.changePassword(this.username, this.password, this.resetToken);
           } else {
             // Ask for a reset token
-            this.resetStatus = await this.pryv.requestPasswordReset(this.username);
+            this.resetStatus = await Context.pryv.requestPasswordReset(this.username);
           }
         }
       } catch (err) {

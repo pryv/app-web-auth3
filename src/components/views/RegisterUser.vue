@@ -58,21 +58,18 @@
       @click="clear"
     >Clear</v-btn>
 
+    <router-link :to="{ name: 'Authorization' }">Go back to Sign in.</router-link>
+
   </v-form>
 </template>
 
 <script>
 import Password from './bits/Password.vue';
-import Pryv from '../models/Pryv.js';
+import Context from '../../Context.js';
 
 export default {
   components: {
     Password,
-  },
-  props: {
-    domain: {type: String, default: null},
-    appId: {type: String, default: null},
-    end: {type: Function, default: () => {}},
   },
   data: () => ({
     username: '',
@@ -88,11 +85,9 @@ export default {
     validForm: false,
   }),
   async created () {
-    this.pryv = new Pryv(this.domain, this.appId);
-
     // Fill selector with available hostings
     try {
-      this.hosts = await this.pryv.getAvailableHostings();
+      this.hosts = await Context.pryv.getAvailableHostings();
     } catch (err) {
       this.err = JSON.stringify(err);
     }
@@ -102,14 +97,14 @@ export default {
       if (this.$refs.form.validate()) {
         try {
           // Create the new user
-          await this.pryv.createUser(
+          await Context.pryv.createUser(
             this.username,
             this.password,
             this.email,
             this.hosting
           );
           // Go back to auth page
-          this.$emit('end', 'auth');
+          this.$router.push('auth');
         } catch (err) {
           this.err = JSON.stringify(err);
         }
