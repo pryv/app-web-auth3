@@ -10,6 +10,18 @@ Vue.use(VueRouter);
 let Router = new VueRouter({
   routes: [
     {
+      path: '*/access.html',
+      redirect: {name: 'Authorization'},
+    },
+    {
+      path: '*/register.html',
+      redirect: {name: 'RegisterUser'},
+    },
+    {
+      path: '*/reset-password.html',
+      redirect: {name: 'ResetPassword'},
+    },
+    {
       path: '/auth',
       name: 'Authorization',
       component: Authorization,
@@ -31,8 +43,11 @@ let Router = new VueRouter({
 });
 
 Router.beforeEach((to, from, next) => {
-  // When we first open a page init the app context with query parameters
-  Context.init(to.query);
+  // When we first open a page ('from', the origin page, is empty)
+  // init the app context with query parameters ('to' is the target page)
+  if (from.name == null) {
+    Context.init(to.query);
+  }
   next();
 });
 
