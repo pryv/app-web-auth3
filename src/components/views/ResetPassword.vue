@@ -74,12 +74,12 @@ export default {
           // Convert email to Pryv username if needed
           this.username = await Context.pryv.getUsernameForEmail(this.username);
 
-          // If we already got a reset token, we can change the password
-          if (this.resetToken) {
-            await Context.pryv.changePassword(this.username, this.password, this.resetToken);
-          } else {
-            // Ask for a reset token
+          // Ask for a reset token
+          if (this.resetToken == null) {
             this.resetStatus = await Context.pryv.requestPasswordReset(this.username);
+          } else {
+            // If we already got a reset token, we can change the password
+            await Context.pryv.changePassword(this.username, this.password, this.resetToken);
           }
         }
       } catch (err) {

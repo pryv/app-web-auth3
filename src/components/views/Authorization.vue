@@ -105,17 +105,17 @@ export default {
           // If a mismatching access exists, show an error
           if (checkApp.mismatch) {
             this.err = 'Mismatching access already exists: ' + JSON.stringify(checkApp.mismatch);
-            return;
           }
 
           // If a matching access exists, just return it
           if (checkApp.match) {
             await this.closingFlow(new AcceptedAuthState(this.username, checkApp.match.token));
-            return;
           }
 
           // Otherwise, show the requested permissions to the user
-          this.permissionsList = Context.permissions.updateList(checkApp.permissions);
+          if (checkApp.permissions) {
+            this.permissionsList = Context.permissions.updateList(checkApp.permissions);
+          }
         } catch (err) {
           this.err = JSON.stringify(err);
         }
