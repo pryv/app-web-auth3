@@ -5,9 +5,9 @@ exports[`Authorization.test.js renders correctly (snapshots matching) 1`] = `
   <valert-stub
     transition="scale-transition"
     type="error"
-    value="Missing poll key!"
+    value="{}"
   >
-    Missing poll key!
+    {}
   </valert-stub>
    
   <vform-stub>
@@ -48,6 +48,22 @@ exports[`Authorization.test.js renders correctly (snapshots matching) 1`] = `
     </vbtn-stub>
      
     <!---->
+     
+    <router-link-stub
+      event="click"
+      tag="a"
+      to="[object Object]"
+    >
+      Create an account
+    </router-link-stub>
+     
+    <router-link-stub
+      event="click"
+      tag="a"
+      to="[object Object]"
+    >
+      Forgot password
+    </router-link-stub>
   </vform-stub>
 </div>
 `;

@@ -7,8 +7,9 @@ exports[`RegisterUser.test.js renders correctly (snapshots matching) 1`] = `
   <valert-stub
     transition="scale-transition"
     type="error"
+    value="{}"
   >
-    
+    {}
   </valert-stub>
    
   <h1>
@@ -95,5 +96,13 @@ exports[`RegisterUser.test.js renders correctly (snapshots matching) 1`] = `
   >
     Clear
   </vbtn-stub>
+   
+  <router-link-stub
+    event="click"
+    tag="a"
+    to="[object Object]"
+  >
+    Go back to Sign in.
+  </router-link-stub>
 </vform-stub>
 `;
