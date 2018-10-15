@@ -1,7 +1,10 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Permissions.test.js renders correctly (snapshots matching) 1`] = `
-<vform-stub>
+<vform-stub
+  accept="function accept() {}"
+  refuse="function refuse() {}"
+>
   <h1>
     Permissions
   </h1>

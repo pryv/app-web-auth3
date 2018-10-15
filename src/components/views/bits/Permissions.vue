@@ -20,12 +20,12 @@
 
     <v-btn
       id="refusePermissions"
-      @click="refuse"
+      @click="()=>this.$emit('refused')"
     >Reject</v-btn>
 
     <v-btn
       id="acceptPermissions"
-      @click="accept"
+      @click="()=>this.$emit('accepted')"
     >Accept</v-btn>
 
   </v-form>
@@ -36,8 +36,6 @@ export default {
   props: {
     permissionsList: {type: Array, default: () => ([])},
     appId: {type: String, default: ''},
-    accept: {type: Function, default: () => {}},
-    refuse: {type: Function, default: () => {}},
     clientData: {type: Object, default: () => ({})},
   },
 };

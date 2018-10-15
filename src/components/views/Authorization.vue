@@ -11,8 +11,8 @@
       :appId="appId"
       :permissionsList="permissionsList"
       :clientData="serviceInfos.clientData"
-      :accept="accept"
-      :refuse="refuse"/>
+      @accepted="accept"
+      @refused="refuse"/>
 
     <v-form
       v-else
