@@ -4,7 +4,6 @@ import axios from 'axios';
 import Hostings from './Hostings.js';
 import type {AcceptedAuthState, RefusedAuthState, ErrorAuthState} from './AuthStates.js';
 import type PermissionsList from './Permissions.js';
-import type {HostingArray} from './Hostings.js';
 
 type AuthState = AcceptedAuthState|RefusedAuthState|ErrorAuthState;
 
@@ -47,7 +46,8 @@ class Pryv {
 
   // GET/reg: polling with according poll key
   async poll (pollKey: string): Promise<AuthState> {
-    return axios.get(`${this.register}/access/${pollKey}`);
+    const res = await axios.get(`${this.register}/access/${pollKey}`);
+    return res.data;
   }
 
   // POST/reg: advertise updated auth state
