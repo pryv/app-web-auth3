@@ -33,7 +33,7 @@
     <v-autocomplete
       id="hosting"
       v-model="hosting"
-      :items="hosts"
+      :items="hostingsSelection"
       :rules="[rules.required]"
       placeholder="Choose hosting..."
       label="Hosting"
@@ -76,8 +76,8 @@ export default {
     password: '',
     email: '',
     hosting: '',
-    hosts: [],
-    err: null,
+    hostingsSelection: [],
+    err: '',
     rules: {
       required: value => !!value || 'This field is required.',
       email: value => /.+@.+/.test(value) || 'E-mail must be valid.',
@@ -87,7 +87,8 @@ export default {
   async created () {
     // Fill selector with available hostings
     try {
-      this.hosts = await Context.pryv.getAvailableHostings();
+      const hostings = await Context.pryv.getAvailableHostings();
+      this.hostingsSelection = hostings.getSelection();
     } catch (err) {
       this.err = JSON.stringify(err);
     }

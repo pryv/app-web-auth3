@@ -10,8 +10,6 @@ type Hosting = {
   available: ?boolean
 };
 
-export type HostingArray = Array<string>;
-
 type HostingList = {
   [hostingName: string]: Hosting
 };
@@ -44,41 +42,43 @@ type HostingDefinition = {
   regions: HostingRegionList
 };
 
+type HostingSelectionItem = {
+  value: string,
+  text: string,
+  description: string,
+};
+
+type HostingSelection = Array<HostingSelectionItem>;
+
 class Hostings {
   regions: HostingRegionList;
   zones : HostingZoneList;
   hostings : HostingList;
+  selection: HostingSelection;
 
-  constructor () {
-    this.regions = this.zones = this.hostings = {};
-  }
-
-  parse (hostingsData: HostingDefinition): HostingArray {
-    const regions = this.regions = hostingsData.regions;
-    Object.keys(regions).forEach(region => {
-      this.regions[region] = regions[region];
-      const zones = this.zones = regions[region].zones;
-      Object.keys(zones).forEach(zone => {
-        this.zones[zone] = zones[zone];
-        const hostings = zones[zone].hostings;
-        Object.keys(hostings).forEach(hosting => {
-          this.hostings[hosting] = hostings[hosting];
+  constructor (hostingsData: HostingDefinition) {
+    this.selection = [];
+    const regions = hostingsData.regions;
+    Object.keys(regions).forEach(regionKey => {
+      const region = regions[regionKey];
+      const zones = region.zones;
+      Object.keys(zones).forEach(zoneKey => {
+        const zone = zones[zoneKey];
+        const hostings = zone.hostings;
+        Object.keys(hostings).forEach(hostingKey => {
+          const hosting = hostings[hostingKey];
+          this.selection.push({
+            value: hostingKey,
+            text: `${hosting.name} (${region.name} - ${zone.name})`,
+            description: hosting.description,
+          });
         });
       });
     });
-    return this.getHostings();
   }
 
-  getRegions (): HostingRegionList {
-    return this.regions;
-  }
-
-  getZones (): HostingZoneList {
-    return this.zones;
-  }
-
-  getHostings (): HostingArray {
-    return Object.keys(this.hostings);
+  getSelection (): HostingSelection {
+    return this.selection;
   }
 }
 

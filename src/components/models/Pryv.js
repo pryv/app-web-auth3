@@ -115,11 +115,11 @@ class Pryv {
   // ---------- REGISTER calls ----------
 
   // GET/reg: retrieve all available Pryv hostings
-  async getAvailableHostings (): Promise<HostingArray> {
+  async getAvailableHostings (): Promise<Hostings> {
     const res = await axios.get(
       `${this.register}/hostings`
     );
-    return new Hostings().parse(res.data);
+    return new Hostings(res.data);
   }
 
   // POST/reg: create a new Pryv user

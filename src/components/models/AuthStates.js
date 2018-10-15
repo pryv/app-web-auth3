@@ -1,8 +1,11 @@
 // @flow
 
+import Permissions from './Permissions.js';
+
 const ACCEPTED_STATUS = 'ACCEPTED';
 const REFUSED_STATUS = 'REFUSED';
 const ERROR_STATUS = 'ERROR';
+const NEED_SIGNIN_STATUS = 'NEED_SIGNIN';
 
 export class AcceptedAuthState {
   body : {
@@ -39,9 +42,9 @@ export class RefusedAuthState {
 export class ErrorAuthState {
   body: {
     status: string,
-    id: number;
-    message: string;
-    detail: string;
+    id: number,
+    message: string,
+    detail: string,
   }
 
   constructor (id: number, message: string, detail: string) {
@@ -50,6 +53,32 @@ export class ErrorAuthState {
       id: id,
       message: message,
       detail: detail,
+    };
+  }
+}
+
+export class NeedSigninState {
+  body: {
+    status: string,
+    code: number,
+    pollKey: string,
+    appId: string,
+    permissions: Permissions,
+    returnUrl: string,
+    oauthState: string,
+    pollRateMs: number,
+  }
+
+  constructor (data: Object) {
+    this.body = {
+      status: NEED_SIGNIN_STATUS,
+      code: data.code,
+      pollKey: data.key,
+      appId: data.requestingAppId,
+      permissions: new Permissions(data.requestedPermissions),
+      returnUrl: data.returnUrl,
+      oauthState: data.oauthState,
+      pollRateMs: data.poll_rate_ms,
     };
   }
 }
