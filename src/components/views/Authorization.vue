@@ -1,11 +1,5 @@
 <template>
   <div>
-    <v-alert
-      :value="err"
-      type="error"
-      transition="scale-transition"
-    >{{ err }}</v-alert>
-
     <Permissions
       v-if="permissionsList"
       :appId="appId"
@@ -52,6 +46,11 @@
 
       <router-link :to="{ name: 'ResetPassword' }">Forgot password</router-link>
 
+      <v-alert
+        :value="err"
+        type="error"
+        transition="scale-transition"
+      >{{ err }}</v-alert>
     </v-form>
   </div>
 </template>

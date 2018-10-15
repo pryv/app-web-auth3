@@ -8,12 +8,6 @@
     ref="form"
     v-model="validForm">
 
-    <v-alert
-      :value="err"
-      type="error"
-      transition="scale-transition"
-    >{{ err }}</v-alert>
-
     <h1>{{ pageTitle }}</h1>
 
     <v-text-field
@@ -34,6 +28,12 @@
     >{{ buttonText }}</v-btn>
 
     <router-link :to="{ name: 'Authorization' }">Go back to Sign in.</router-link>
+
+    <v-alert
+      :value="err"
+      type="error"
+      transition="scale-transition"
+    >{{ err }}</v-alert>
 
   </v-form>
 </template>
