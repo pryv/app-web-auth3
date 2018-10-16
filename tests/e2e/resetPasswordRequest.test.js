@@ -43,5 +43,5 @@ test('Reset request with email-username conversion', async testController => {
       record.request.body.includes('"appId":"pryv-reset-standalone"') &&
       record.request.body.includes('"username":"tmodoux"')
     )).ok()
-    .expect(Selector('body').textContent).contains('We have sent you a reset link by email');
+    .expect(Selector('body').textContent).contains('We have sent password reset instructions to your e-mail address.');
 });

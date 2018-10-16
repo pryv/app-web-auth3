@@ -2,13 +2,13 @@
 
 exports[`Authorization.test.js renders correctly (snapshots matching) 1`] = `
 <div>
+  <h1>
+    Sign in
+  </h1>
+   
   <!---->
    
   <vform-stub>
-    <h1>
-      Sign in
-    </h1>
-     
     <vtextfield-stub
       id="usernameOrEmail"
       label="Username or email"
@@ -42,30 +42,42 @@ exports[`Authorization.test.js renders correctly (snapshots matching) 1`] = `
     </vbtn-stub>
      
     <!---->
-     
-    <router-link-stub
-      event="click"
-      tag="a"
-      to="[object Object]"
-    >
-      Create an account
-    </router-link-stub>
-     
-    <router-link-stub
-      event="click"
-      tag="a"
-      to="[object Object]"
-    >
-      Forgot password
-    </router-link-stub>
-     
-    <valert-stub
-      transition="scale-transition"
-      type="error"
-      value="{}"
-    >
-      {}
-    </valert-stub>
   </vform-stub>
+   
+  <vdivider-stub
+    class="mt-3 mb-2"
+  />
+   
+  <router-link-stub
+    event="click"
+    tag="a"
+    to="[object Object]"
+  >
+    <h3>
+      Create an account
+    </h3>
+  </router-link-stub>
+   
+  <router-link-stub
+    event="click"
+    tag="a"
+    to="[object Object]"
+  >
+    <h3>
+      Forgot password
+    </h3>
+  </router-link-stub>
+   
+  <vdivider-stub
+    class="mt-3 mb-2"
+  />
+   
+  <valert-stub
+    transition="scale-transition"
+    type="error"
+    value=""
+  >
+    
+  </valert-stub>
 </div>
 `;
