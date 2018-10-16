@@ -26,10 +26,14 @@ export default {
 </script>
 
 <style>
-    #app {
-        font-family: 'Roboto', 'Avenir', Helvetica, Arial, sans-serif;
-        text-align: center;
-        padding-left: 20px;
-        padding-right: 20px;
-    }
+  #app {
+      font-family: 'Roboto', 'Avenir', Helvetica, Arial, sans-serif;
+      text-align: center;
+      padding-left: 20px;
+      padding-right: 20px;
+  }
+  h3 {
+    margin: 8px;
+    display: inline;
+  }
 </style>

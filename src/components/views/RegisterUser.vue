@@ -1,66 +1,70 @@
 <template>
-  <v-form
-    id="registerForm"
-    ref="form"
-    v-model="validForm">
-
+  <div>
     <h1>Register a new user</h1>
 
-    <v-text-field
-      id="email"
-      v-model="email"
-      :rules="[rules.required, rules.email]"
-      label="E-mail"
-    />
+    <v-form
+      id="registerForm"
+      ref="form"
+      v-model="validForm">
 
-    <v-text-field
-      id="username"
-      v-model="username"
-      :rules="[rules.required]"
-      label="Username"
-    />
+      <v-text-field
+        id="email"
+        v-model="email"
+        :rules="[rules.required, rules.email]"
+        label="E-mail"
+      />
 
-    <Password
-      v-model="password"
-      :confirmation="true"/>
+      <v-text-field
+        id="username"
+        v-model="username"
+        :rules="[rules.required]"
+        label="Username"
+      />
 
-    <v-autocomplete
-      id="hosting"
-      v-model="hosting"
-      :items="hostingsSelection"
-      :rules="[rules.required]"
-      placeholder="Choose hosting..."
-      label="Hosting"
-    />
+      <Password
+        v-model="password"
+        :confirmation="true"/>
 
-    <div>
-      By registering you agree with our
-      <a
-        target="_blank"
-        href="https://pryv.com/terms-of-use/">
-      terms of use</a>.
-    </div>
+      <v-autocomplete
+        id="hosting"
+        v-model="hosting"
+        :items="hostingsSelection"
+        :rules="[rules.required]"
+        placeholder="Choose hosting..."
+        label="Hosting"
+      />
 
-    <v-btn
-      id="submitButton"
-      :disabled="!validForm"
-      @click="submit"
-    >Submit</v-btn>
+      <v-btn
+        id="submitButton"
+        :disabled="!validForm"
+        @click="submit"
+      >Create</v-btn>
 
-    <v-btn
-      id="clearButton"
-      @click="clear"
-    >Clear</v-btn>
+      <v-btn
+        id="clearButton"
+        @click="clear"
+      >Clear</v-btn>
 
-    <router-link :to="{ name: 'Authorization' }">Go back to Sign in.</router-link>
+      <div>
+        By registering you agree with our
+        <a
+          target="_blank"
+          href="https://pryv.com/terms-of-use/">
+        terms of use</a>.
+      </div>
+    </v-form>
+
+    <v-divider class="mt-3 mb-2"/>
+    <router-link :to="{ name: 'Authorization' }"><h3>Go back to Sign in</h3></router-link>
+
+    <v-divider class="mt-3 mb-2"/>
 
     <v-alert
-      :value="err"
-      type="error"
+      :value="alert.msg"
+      :type="alert.type"
       transition="scale-transition"
-    >{{ err }}</v-alert>
-
-  </v-form>
+    >{{ alert.msg }}</v-alert>
+  </div>
 </template>
 
 <script>
@@ -77,7 +81,10 @@ export default {
     email: '',
     hosting: '',
     hostingsSelection: [],
-    err: '',
+    alert: {
+      msg: '',
+      type: 'error',
+    },
     rules: {
       required: value => !!value || 'This field is required.',
       email: value => /.+@.+/.test(value) || 'E-mail must be valid.',
@@ -90,7 +97,7 @@ export default {
       const hostings = await Context.pryv.getAvailableHostings();
       this.hostingsSelection = hostings.getSelection();
     } catch (err) {
-      this.err = JSON.stringify(err);
+      this.throwError(err);
     }
   },
   methods: {
@@ -98,21 +105,26 @@ export default {
       if (this.$refs.form.validate()) {
         try {
           // Create the new user
-          await Context.pryv.createUser(
+          const newUser = await Context.pryv.createUser(
             this.username,
             this.password,
             this.email,
             this.hosting
           );
           // Go back to auth page
-          this.$router.push('auth');
+          this.$router.push({name: 'Authorization', params: { user: newUser }});
         } catch (err) {
-          this.err = JSON.stringify(err);
+          this.throwError(err);
         }
       }
     },
     clear () {
       this.$refs.form.reset();
+    },
+    throwError (error) {
+      this.alert.type = 'error';
+      this.alert.msg = JSON.stringify(error);
+      console.log(error);
     },
   },
 };

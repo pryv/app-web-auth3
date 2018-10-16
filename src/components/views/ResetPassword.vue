@@ -1,41 +1,42 @@
 <template>
-  <div v-if="resetStatus===200">
-    We have sent you a reset link by email.
-  </div>
-
-  <v-form
-    v-else
-    ref="form"
-    v-model="validForm">
-
+  <div>
     <h1>{{ pageTitle }}</h1>
 
-    <v-text-field
-      id="usernameOrEmail"
-      v-model="username"
-      :rules="[rules.required]"
-      label="Username or email"/>
+    <v-form
+      v-if="resetStatus!==200"
+      ref="form"
+      v-model="validForm">
 
-    <Password
-      v-if="resetToken"
-      v-model="password"
-      :confirmation="true"/>
+      <v-text-field
+        id="usernameOrEmail"
+        v-model="username"
+        :rules="[rules.required]"
+        label="Username or email"/>
 
-    <v-btn
-      id="submitButton"
-      :disabled="!validForm"
-      @click="submit"
-    >{{ buttonText }}</v-btn>
+      <Password
+        v-if="resetToken"
+        v-model="password"
+        :confirmation="true"/>
 
-    <router-link :to="{ name: 'Authorization' }">Go back to Sign in.</router-link>
+      <v-btn
+        id="submitButton"
+        :disabled="!validForm"
+        @click="submit"
+      >{{ buttonText }}</v-btn>
+    </v-form>
+
+    <v-divider class="mt-3 mb-2"/>
+
+    <router-link :to="{ name: 'Authorization' }"><h3>Go back to Sign in</h3></router-link>
+
+    <v-divider class="mt-3 mb-2"/>
 
     <v-alert
-      :value="err"
-      type="error"
+      :value="alert.msg"
+      :type="alert.type"
       transition="scale-transition"
-    >{{ err }}</v-alert>
-
-  </v-form>
+    >{{ alert.msg }}</v-alert>
+  </div>
 </template>
 
 <script>
@@ -52,7 +53,10 @@ export default {
   data: () => ({
     username: '',
     password: '',
-    err: '',
+    alert: {
+      msg: '',
+      type: 'error',
+    },
     resetStatus: null,
     rules: {
       required: value => !!value || 'This field is required.',
@@ -77,14 +81,23 @@ export default {
           // Ask for a reset token
           if (this.resetToken == null) {
             this.resetStatus = await Context.pryv.requestPasswordReset(this.username);
+            if (this.resetStatus === 200) {
+              this.alert.type = 'success';
+              this.alert.msg = `We have sent password reset instructions to your e-mail address.`;
+            }
           } else {
             // If we already got a reset token, we can change the password
             await Context.pryv.changePassword(this.username, this.password, this.resetToken);
           }
         }
       } catch (err) {
-        this.err = JSON.stringify(err);
+        this.throwError(err);
       }
+    },
+    throwError (error) {
+      this.alert.type = 'error';
+      this.alert.msg = JSON.stringify(error);
+      console.log(error);
     },
   },
 };

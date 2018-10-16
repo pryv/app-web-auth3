@@ -1,5 +1,7 @@
 <template>
   <div>
+    <h1>Sign in</h1>
+
     <Permissions
       v-if="permissionsList!=null"
       :appId="appId"
@@ -11,8 +13,6 @@
     <v-form
       ref="form"
       v-model="validForm">
-
-      <h1>Sign in</h1>
 
       <v-text-field
         id="usernameOrEmail"
@@ -40,17 +40,22 @@
           helpdesk</a>
         if you have questions.
       </div>
-
-      <router-link :to="{ name: 'RegisterUser' }">Create an account</router-link>
-
-      <router-link :to="{ name: 'ResetPassword' }">Forgot password</router-link>
-
-      <v-alert
-        :value="err"
-        type="error"
-        transition="scale-transition"
-      >{{ err }}</v-alert>
     </v-form>
+
+    <v-divider class="mt-3 mb-2"/>
+
+    <router-link :to="{ name: 'RegisterUser' }"><h3>Create an account</h3></router-link>
+
+    <router-link :to="{ name: 'ResetPassword' }"><h3>Forgot password</h3></router-link>
+
+    <v-divider class="mt-3 mb-2"/>
+
+    <v-alert
+      :value="alert.msg"
+      :type="alert.type"
+      transition="scale-transition"
+    >{{ alert.msg }}</v-alert>
+
   </div>
 </template>
 
@@ -71,7 +76,10 @@ export default {
     personalToken: '',
     appToken: '',
     appId: Context.appId,
-    err: '',
+    alert: {
+      msg: '',
+      type: 'error',
+    },
     permissionsList: null,
     serviceInfos: {},
     rules: {
@@ -81,10 +89,15 @@ export default {
     validForm: false,
   }),
   async created () {
+    const newUser = this.$route.params.user;
+    if (newUser) {
+      this.alert.type = 'success';
+      this.alert.msg = `User successfully created: ${newUser.username}`;
+    }
     try {
       this.serviceInfos = await Context.pryv.getServiceInfo();
     } catch (err) {
-      this.err = JSON.stringify(err);
+      this.throwError(err);
     }
   },
   methods: {
@@ -115,7 +128,7 @@ export default {
             this.permissionsList = Context.permissions.updateList(checkApp.permissions);
           }
         } catch (err) {
-          this.err = JSON.stringify(err);
+          this.throwError(err);
         }
       }
     },
@@ -127,7 +140,7 @@ export default {
 
         await this.closingFlow(new AcceptedAuthState(this.username, this.appToken));
       } catch (err) {
-        this.err = JSON.stringify(err);
+        this.throwError(err);
       }
     },
     // The user refuses the requested permissions
@@ -135,7 +148,7 @@ export default {
       try {
         await this.closingFlow(new RefusedAuthState());
       } catch (err) {
-        this.err = JSON.stringify(err);
+        this.throwError(err);
       }
     },
     // Advertise state and close
@@ -145,6 +158,9 @@ export default {
     },
     // Closing the auth page
     endPopup (state) {
+      this.alert.type = 'success';
+      this.alert.msg = 'App authorization successfull!';
+
       let href = Context.returnURL;
       // If no return URL was provided, just close the popup
       if (href == null || href === 'false') {
@@ -163,6 +179,11 @@ export default {
         }
         this.$router.push(href);
       }
+    },
+    throwError (error) {
+      this.alert.type = 'error';
+      this.alert.msg = JSON.stringify(error);
+      console.log(error);
     },
   },
 };
