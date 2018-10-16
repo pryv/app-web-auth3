@@ -58,7 +58,7 @@ fixture(`Auth request`)
   .requestHooks(authLogger, checkAppLogger, emailLogger, updateStateLogger, createAccessLogger,
     authRequestMock, checkAppMock, usernameForEmailMock, updateStateMock, createAccessMock);
 
-test('Auth request, app access check, refuse permissions and then accept', async testController => {
+test('Auth request, app access check and then accept permissions', async testController => {
   await testController
     // Fill the auth form
     .typeText('#usernameOrEmail', 'test@test.com')
@@ -85,17 +85,8 @@ test('Auth request, app access check, refuse permissions and then accept', async
       record.request.body.includes(`"requestedPermissions":${fakePermissions}`)
     )).ok()
     // Requested permissions are printed to the user
-    .expect(Selector('#appIdText').innerText).contains('App pryv-auth-standalone is requesting:')
+    .expect(Selector('#appIdText').innerText).contains('App pryv-auth-standalone is requesting :')
     .expect(Selector('ul').textContent).contains('A permission on stream diary with level read')
-    // If the user refuses them, update call is performed with refused state
-    .click('#refusePermissions')
-    .expect(updateStateLogger.contains(record =>
-      record.request.method === 'post' &&
-      record.response.statusCode === 200 &&
-      record.request.body.includes('"status":"REFUSED"') &&
-      record.request.body.includes('"reasonId":"REFUSED_BY_USER"') &&
-      record.request.body.includes('"message":"The user refused to give access to the requested permissions"')
-    )).ok()
     // If the user accepts them
     .click('#acceptPermissions')
     // Access creation call is performed

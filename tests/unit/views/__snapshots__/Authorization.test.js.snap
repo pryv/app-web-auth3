@@ -2,13 +2,7 @@
 
 exports[`Authorization.test.js renders correctly (snapshots matching) 1`] = `
 <div>
-  <valert-stub
-    transition="scale-transition"
-    type="error"
-    value="{}"
-  >
-    {}
-  </valert-stub>
+  <!---->
    
   <vform-stub>
     <h1>
@@ -64,6 +58,14 @@ exports[`Authorization.test.js renders correctly (snapshots matching) 1`] = `
     >
       Forgot password
     </router-link-stub>
+     
+    <valert-stub
+      transition="scale-transition"
+      type="error"
+      value="{}"
+    >
+      {}
+    </valert-stub>
   </vform-stub>
 </div>
 `;

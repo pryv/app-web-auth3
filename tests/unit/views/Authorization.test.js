@@ -52,9 +52,6 @@ describe('Authorization.test.js', () => {
     wrapper.setData({
       permissionsList: [{streamId: 'diary', level: 'read'}],
     });
-    // Does not render auth form
-    const authForm = wrapper.find({ref: 'form'});
-    expect(authForm.exists()).toBe(false);
     // Renders permissions instead
     const permissions = wrapper.find(Permissions);
     expect(permissions.exists()).toBe(true);

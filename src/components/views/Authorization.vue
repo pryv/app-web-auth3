@@ -1,7 +1,7 @@
 <template>
   <div>
     <Permissions
-      v-if="permissionsList"
+      v-if="permissionsList!=null"
       :appId="appId"
       :permissionsList="permissionsList"
       :clientData="serviceInfos.clientData"
@@ -9,7 +9,6 @@
       @refused="refuse"/>
 
     <v-form
-      v-else
       ref="form"
       v-model="validForm">
 

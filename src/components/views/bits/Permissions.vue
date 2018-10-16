@@ -1,34 +1,40 @@
 <template>
-  <v-form>
-    <h1>Permissions</h1>
-
-    <div id="appIdText">
-      App <b>{{ appId }}</b> is requesting:
-    </div>
-
-    <ul>
-      <li
-        v-for="(permission, index) in permissionsList"
-        :key="index">
-        A permission on stream <b>{{ permission.streamId }}</b> with level <b>{{ permission.level }}</b>
-      </li>
-    </ul>
-
-    <div v-if="clientData.consentMsg">
-      {{ clientData.consentMsg }}
-    </div>
-
-    <v-btn
-      id="refusePermissions"
-      @click="()=>this.$emit('refused')"
-    >Reject</v-btn>
-
-    <v-btn
-      id="acceptPermissions"
-      @click="()=>this.$emit('accepted')"
-    >Accept</v-btn>
-
-  </v-form>
+  <v-dialog
+    v-model="dialog"
+    width="600"
+    persistent>
+    <v-card>
+      <v-card-title
+        id="appIdText"
+        class="headline grey lighten-2">
+        <span>App <b>{{ appId }}</b> is requesting : </span>
+      </v-card-title>
+      <v-card-text>
+        <ul>
+          <li
+            v-for="(permission, index) in permissionsList"
+            :key="index">
+            A permission on stream <b>{{ permission.streamId }}</b> with level <b>{{ permission.level }}</b>
+          </li>
+        </ul>
+      </v-card-text>
+      <v-card-text v-if="clientData.consentMsg">
+        {{ clientData.consentMsg }}
+      </v-card-text>
+      <v-divider/>
+      <v-card-actions>
+        <v-spacer/>
+        <v-btn
+          id="refusePermissions"
+          @click="closeDialog('refused')"
+        >Reject</v-btn>
+        <v-btn
+          id="acceptPermissions"
+          @click="closeDialog('accepted')"
+        >Accept</v-btn>
+      </v-card-actions>
+    </v-card>
+  </v-dialog>
 </template>
 
 <script>
@@ -37,6 +43,15 @@ export default {
     permissionsList: {type: Array, default: () => ([])},
     appId: {type: String, default: ''},
     clientData: {type: Object, default: () => ({})},
+  },
+  data: () => ({
+    dialog: true,
+  }),
+  methods: {
+    closeDialog (acceptOrReject) {
+      this.dialog = false;
+      this.$emit(acceptOrReject);
+    },
   },
 };
 </script>

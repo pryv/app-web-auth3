@@ -4,14 +4,6 @@ exports[`RegisterUser.test.js renders correctly (snapshots matching) 1`] = `
 <vform-stub
   id="registerForm"
 >
-  <valert-stub
-    transition="scale-transition"
-    type="error"
-    value="{}"
-  >
-    {}
-  </valert-stub>
-   
   <h1>
     Register a new user
   </h1>
@@ -104,5 +96,13 @@ exports[`RegisterUser.test.js renders correctly (snapshots matching) 1`] = `
   >
     Go back to Sign in.
   </router-link-stub>
+   
+  <valert-stub
+    transition="scale-transition"
+    type="error"
+    value="{}"
+  >
+    {}
+  </valert-stub>
 </vform-stub>
 `;
