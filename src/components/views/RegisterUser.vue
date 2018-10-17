@@ -3,6 +3,7 @@
     <h1>Register a new user</h1>
 
     <v-form
+      v-if="user==null"
       id="registerForm"
       ref="form"
       v-model="validForm">
@@ -59,21 +60,21 @@
 
     <v-divider class="mt-3 mb-2"/>
 
-    <v-alert
-      :value="alert.msg"
-      :type="alert.type"
-      transition="scale-transition"
-    >{{ alert.msg }}</v-alert>
+    <Alerts
+      :successMsg="success"
+      :errorMsg="error"/>
   </div>
 </template>
 
 <script>
 import Password from './bits/Password.vue';
+import Alerts from './bits/Alerts.vue';
 import Context from '../../Context.js';
 
 export default {
   components: {
     Password,
+    Alerts,
   },
   data: () => ({
     username: '',
@@ -81,10 +82,9 @@ export default {
     email: '',
     hosting: '',
     hostingsSelection: [],
-    alert: {
-      msg: '',
-      type: 'error',
-    },
+    newUser: null,
+    error: '',
+    success: '',
     rules: {
       required: value => !!value || 'This field is required.',
       email: value => /.+@.+/.test(value) || 'E-mail must be valid.',
@@ -105,14 +105,14 @@ export default {
       if (this.$refs.form.validate()) {
         try {
           // Create the new user
-          const newUser = await Context.pryv.createUser(
+          this.newUser = await Context.pryv.createUser(
             this.username,
             this.password,
             this.email,
             this.hosting
           );
           // Go back to auth page
-          this.$router.push({name: 'Authorization', params: { user: newUser }});
+          this.success = `New user successfully created: ${this.newUser.username}.`;
         } catch (err) {
           this.throwError(err);
         }
@@ -122,8 +122,7 @@ export default {
       this.$refs.form.reset();
     },
     throwError (error) {
-      this.alert.type = 'error';
-      this.alert.msg = JSON.stringify(error);
+      this.error = JSON.stringify(error);
       console.log(error);
     },
   },

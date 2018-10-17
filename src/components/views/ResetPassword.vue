@@ -3,7 +3,7 @@
     <h1>{{ pageTitle }}</h1>
 
     <v-form
-      v-if="resetStatus!==200"
+      v-if="resetStatus!==200 && changeStatus!==200"
       ref="form"
       v-model="validForm">
 
@@ -14,7 +14,7 @@
         label="Username or email"/>
 
       <Password
-        v-if="resetToken"
+        v-if="resetToken!=null"
         v-model="password"
         :confirmation="true"/>
 
@@ -31,21 +31,21 @@
 
     <v-divider class="mt-3 mb-2"/>
 
-    <v-alert
-      :value="alert.msg"
-      :type="alert.type"
-      transition="scale-transition"
-    >{{ alert.msg }}</v-alert>
+    <Alerts
+      :successMsg="success"
+      :errorMsg="error"/>
   </div>
 </template>
 
 <script>
 import Password from './bits/Password';
+import Alerts from './bits/Alerts';
 import Context from '../../Context.js';
 
 export default {
   components: {
     Password,
+    Alerts,
   },
   props: {
     resetToken: {type: String, default: null},
@@ -53,11 +53,10 @@ export default {
   data: () => ({
     username: '',
     password: '',
-    alert: {
-      msg: '',
-      type: 'error',
-    },
+    error: '',
+    success: '',
     resetStatus: null,
+    changeStatus: null,
     rules: {
       required: value => !!value || 'This field is required.',
     },
@@ -82,12 +81,14 @@ export default {
           if (this.resetToken == null) {
             this.resetStatus = await Context.pryv.requestPasswordReset(this.username);
             if (this.resetStatus === 200) {
-              this.alert.type = 'success';
-              this.alert.msg = `We have sent password reset instructions to your e-mail address.`;
+              this.success = 'We have sent password reset instructions to your e-mail address.';
             }
           } else {
             // If we already got a reset token, we can change the password
-            await Context.pryv.changePassword(this.username, this.password, this.resetToken);
+            this.changeStatus = await Context.pryv.changePassword(this.username, this.password, this.resetToken);
+            if (this.changeStatus === 200) {
+              this.success = 'Your password have been successfully changed.';
+            }
           }
         }
       } catch (err) {
@@ -95,8 +96,7 @@ export default {
       }
     },
     throwError (error) {
-      this.alert.type = 'error';
-      this.alert.msg = JSON.stringify(error);
+      this.error = JSON.stringify(error);
       console.log(error);
     },
   },

@@ -50,18 +50,16 @@
 
     <v-divider class="mt-3 mb-2"/>
 
-    <v-alert
-      :value="alert.msg"
-      :type="alert.type"
-      transition="scale-transition"
-    >{{ alert.msg }}</v-alert>
-
+    <Alerts
+      :successMsg="success"
+      :errorMsg="error"/>
   </div>
 </template>
 
 <script>
 import Password from './bits/Password.vue';
 import Permissions from './bits/Permissions.vue';
+import Alerts from './bits/Alerts.vue';
 import {AcceptedAuthState, RefusedAuthState} from '../models/AuthStates.js';
 import Context from '../../Context.js';
 
@@ -69,6 +67,7 @@ export default {
   components: {
     Password,
     Permissions,
+    Alerts,
   },
   data: () => ({
     username: '',
@@ -76,10 +75,8 @@ export default {
     personalToken: '',
     appToken: '',
     appId: Context.appId,
-    alert: {
-      msg: '',
-      type: 'error',
-    },
+    error: '',
+    success: '',
     permissionsList: null,
     serviceInfos: {},
     rules: {
@@ -89,11 +86,6 @@ export default {
     validForm: false,
   }),
   async created () {
-    const newUser = this.$route.params.user;
-    if (newUser) {
-      this.alert.type = 'success';
-      this.alert.msg = `User successfully created: ${newUser.username}`;
-    }
     try {
       this.serviceInfos = await Context.pryv.getServiceInfo();
     } catch (err) {
@@ -158,8 +150,7 @@ export default {
     },
     // Closing the auth page
     endPopup (state) {
-      this.alert.type = 'success';
-      this.alert.msg = 'App authorization successfull!';
+      this.success = 'App authorization successfully completed!';
 
       let href = Context.returnURL;
       // If no return URL was provided, just close the popup
@@ -181,8 +172,7 @@ export default {
       }
     },
     throwError (error) {
-      this.alert.type = 'error';
-      this.alert.msg = JSON.stringify(error);
+      this.error = JSON.stringify(error);
       console.log(error);
     },
   },
