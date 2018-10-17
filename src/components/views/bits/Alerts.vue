@@ -1,10 +1,13 @@
 <template>
   <div>
+    <v-divider class="mt-3 mb-2"/>
+
     <v-alert
       :value="errorMsg"
       type="error"
       transition="scale-transition"
     >{{ errorMsg }}</v-alert>
+
     <v-alert
       :value="successMsg"
       type="success"

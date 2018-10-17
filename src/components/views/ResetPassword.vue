@@ -29,8 +29,6 @@
 
     <router-link :to="{ name: 'Authorization' }"><h3>Go back to Sign in</h3></router-link>
 
-    <v-divider class="mt-3 mb-2"/>
-
     <Alerts
       :successMsg="success"
       :errorMsg="error"/>
