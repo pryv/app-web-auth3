@@ -28,5 +28,5 @@ Setting up 'dist' folder for publishing to GitHub pages...
 fi
 
 echo "
-Setup is complete, you can proceed with publishing.
+Setup is complete, you can proceed with building and publishing.
 "
