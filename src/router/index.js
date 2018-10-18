@@ -16,6 +16,10 @@ let Router = new VueRouter({
       component: Authorization,
     },
     {
+      path: '*/index.html',
+      redirect: {name: 'Authorization'},
+    },
+    {
       path: '*/access.html',
       redirect: {name: 'Authorization'},
     },
