@@ -12,23 +12,18 @@ let Router = new VueRouter({
   routes: [
     {
       path: '/',
-      name: 'Home',
-      component: Authorization,
-    },
-    {
-      path: '*/index.html',
       redirect: {name: 'Authorization'},
     },
     {
-      path: '*/access.html',
+      path: '/access.html',
       redirect: {name: 'Authorization'},
     },
     {
-      path: '*/register.html',
+      path: '/register.html',
       redirect: {name: 'RegisterUser'},
     },
     {
-      path: '*/reset-password.html',
+      path: '/reset-password.html',
       redirect: {name: 'ResetPassword'},
     },
     {
