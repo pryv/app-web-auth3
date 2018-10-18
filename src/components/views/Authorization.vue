@@ -60,6 +60,7 @@ import Permissions from './bits/Permissions.vue';
 import Alerts from './bits/Alerts.vue';
 import {AcceptedAuthState, RefusedAuthState} from '../models/AuthStates.js';
 import Context from '../../Context.js';
+import AppError from '../models/AppError.js';
 
 export default {
   components: {
@@ -94,8 +95,9 @@ export default {
     async submit () {
       if (this.$refs.form.validate()) {
         try {
-          // Convert email to Pryv username if needed
+          // Convert email to Pryv username if needed, check existence
           this.username = await Context.pryv.getUsernameForEmail(this.username);
+          await Context.pryv.checkUsernameExistence(this.username);
 
           // Login against Pryv
           this.personalToken = await Context.pryv.login(this.username, this.password);
@@ -170,8 +172,7 @@ export default {
       }
     },
     throwError (error) {
-      this.error = JSON.stringify(error);
-      console.log(error);
+      this.error = new AppError(error).msg;
     },
   },
 };

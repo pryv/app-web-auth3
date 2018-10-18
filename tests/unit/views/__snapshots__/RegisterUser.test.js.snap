@@ -105,16 +105,9 @@ exports[`RegisterUser.test.js renders correctly (snapshots matching) 1`] = `
     </h3>
   </router-link-stub>
    
-  <vdivider-stub
-    class="mt-3 mb-2"
+  <alerts-stub
+    errormsg=<b>Unexpected error</b>
+    successmsg=""
   />
-   
-  <valert-stub
-    transition="scale-transition"
-    type="error"
-    value="{}"
-  >
-    {}
-  </valert-stub>
 </div>
 `;

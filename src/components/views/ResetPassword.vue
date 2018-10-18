@@ -39,6 +39,7 @@
 import Password from './bits/Password';
 import Alerts from './bits/Alerts';
 import Context from '../../Context.js';
+import AppError from '../models/AppError.js';
 
 export default {
   components: {
@@ -72,8 +73,9 @@ export default {
     async submit () {
       try {
         if (this.$refs.form.validate()) {
-          // Convert email to Pryv username if needed
+          // Convert email to Pryv username if needed, check existence
           this.username = await Context.pryv.getUsernameForEmail(this.username);
+          await Context.pryv.checkUsernameExistence(this.username);
 
           // Ask for a reset token
           if (this.resetToken == null) {
@@ -94,8 +96,7 @@ export default {
       }
     },
     throwError (error) {
-      this.error = JSON.stringify(error);
-      console.log(error);
+      this.error = new AppError(error).msg;
     },
   },
 };

@@ -140,6 +140,13 @@ class Pryv {
     return res.data;
   }
 
+  async checkUsernameExistence (username: string): Promise<number> {
+    const res = await axios.post(
+      `${this.register}/${username}/server`
+    );
+    return res.status;
+  }
+
   // GET/reg: convert email to Pryv username
   async getUsernameForEmail (usernameOrEmail: string): Promise<string> {
     if (usernameOrEmail.search('@') < 0) {

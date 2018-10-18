@@ -3,7 +3,7 @@
     <h1>Register a new user</h1>
 
     <v-form
-      v-if="user==null"
+      v-if="newUser==null"
       id="registerForm"
       ref="form"
       v-model="validForm">
@@ -68,6 +68,7 @@
 import Password from './bits/Password.vue';
 import Alerts from './bits/Alerts.vue';
 import Context from '../../Context.js';
+import AppError from '../models/AppError.js';
 
 export default {
   components: {
@@ -120,8 +121,7 @@ export default {
       this.$refs.form.reset();
     },
     throwError (error) {
-      this.error = JSON.stringify(error);
-      console.log(error);
+      this.error = new AppError(error).msg;
     },
   },
 };
