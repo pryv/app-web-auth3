@@ -54,7 +54,7 @@ const createAccessMock = RequestMock()
   .respond({access: {token: 'appToken'}}, 200, {'Access-Control-Allow-Origin': '*'});
 
 fixture(`Auth request`)
-  .page(`http://localhost:8080/#/auth?requestingAppId=pryv-auth-standalone&key=pollKey&requestedPermissions=${fakePermissions}`)
+  .page(`http://localhost:8080/auth?requestingAppId=pryv-auth-standalone&key=pollKey&requestedPermissions=${fakePermissions}`)
   .requestHooks(authLogger, checkAppLogger, emailLogger, updateStateLogger, createAccessLogger,
     authRequestMock, checkAppMock, usernameForEmailMock, updateStateMock, createAccessMock);
 

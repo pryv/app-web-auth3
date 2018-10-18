@@ -23,7 +23,7 @@ const usernameForEmailMock = RequestMock()
   .respond({uid: 'tmodoux'}, 200, {'Access-Control-Allow-Origin': '*'});
 
 fixture(`Reset password request`)
-  .page('http://localhost:8080/#/reset?requestingAppId=pryv-reset-standalone&standaloneReset=true')
+  .page('http://localhost:8080/reset?requestingAppId=pryv-reset-standalone&standaloneReset=true')
   .requestHooks(resetLogger, emailLogger, resetRequestMock, usernameForEmailMock);
 
 test('Reset request with email-username conversion', async testController => {

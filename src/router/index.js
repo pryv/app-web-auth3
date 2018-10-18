@@ -8,7 +8,13 @@ import Context from '../Context.js';
 Vue.use(VueRouter);
 
 let Router = new VueRouter({
+  mode: 'history',
   routes: [
+    {
+      path: '/',
+      name: 'Home',
+      component: Authorization,
+    },
     {
       path: '*/access.html',
       redirect: {name: 'Authorization'},
