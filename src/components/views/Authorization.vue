@@ -168,7 +168,7 @@ export default {
             href += `&prYv${key}=${state.body[key]}`;
           });
         }
-        this.$router.push(href);
+        location.href = href;
       }
     },
     throwError (error) {
