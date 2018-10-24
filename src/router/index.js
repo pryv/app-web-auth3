@@ -9,32 +9,23 @@ Vue.use(VueRouter);
 
 let Router = new VueRouter({
   mode: 'history',
+  base: 'access',
   routes: [
     {
       path: '/',
       redirect: {name: 'Authorization'},
     },
     {
-      path: '/access.html',
-      redirect: {name: 'Authorization'},
-    },
-    {
-      path: '/register.html',
-      redirect: {name: 'RegisterUser'},
-    },
-    {
-      path: '/reset-password.html',
-      redirect: {name: 'ResetPassword'},
-    },
-    {
       path: '/auth',
       name: 'Authorization',
       component: Authorization,
+      alias: '/access.html',
     },
     {
       path: '/register',
       name: 'RegisterUser',
       component: RegisterUser,
+      alias: '/register.html',
     },
     {
       path: '/reset',
@@ -43,6 +34,7 @@ let Router = new VueRouter({
       props: (route) => ({
         resetToken: route.query.resetToken,
       }),
+      alias: '/reset-password.html',
     },
   ],
 });
