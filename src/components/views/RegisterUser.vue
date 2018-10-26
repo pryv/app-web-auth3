@@ -110,8 +110,15 @@ export default {
             this.email,
             this.hosting
           );
-          // Go back to auth page
-          this.success = `New user successfully created: ${this.newUser.username}.`;
+
+          const newUsername = this.newUser.username;
+          this.success = `New user successfully created: ${newUsername}.`;
+
+          // If the goal was only to register a new user (no requested permissions)
+          // then we just redirect the new user to its pryv core
+          if (Context.permissions.list == null) {
+            location.href = Context.pryv.core(newUsername);
+          }
         } catch (err) {
           this.throwError(err);
         }
