@@ -95,6 +95,9 @@ export default {
     try {
       const hostings = await Context.pryv.getAvailableHostings();
       this.hostingsSelection = hostings.getSelection();
+      if (this.hostingsSelection.length > 0) {
+        this.hosting = this.hostingsSelection[0];
+      }
     } catch (err) {
       this.throwError(err);
     }
