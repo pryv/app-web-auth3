@@ -126,31 +126,35 @@ export default {
     },
     // The user accepts the requested permissions
     async accept () {
+      const acceptedState = new AcceptedAuthState(this.username, this.appToken);
       try {
         // Create a new app access
         this.appToken = await Context.pryv.createAppAccess(this.username, this.permissionsList, this.personalToken);
-
-        await this.closingFlow(new AcceptedAuthState(this.username, this.appToken));
+        // Notify register about accepted state
+        await Context.pryv.updateAuthState(Context.pollKey, acceptedState);
+        this.endPopup(acceptedState);
       } catch (err) {
         this.throwError(err);
       }
     },
     // The user refuses the requested permissions
     async refuse () {
+      const refusedState = new RefusedAuthState();
       try {
-        await this.closingFlow(new RefusedAuthState());
+        // Notify register about refused state
+        await Context.pryv.updateAuthState(Context.pollKey, refusedState);
       } catch (err) {
         this.throwError(err);
+      } finally {
+        // Close the page anyway (the auth state update may answer 403)
+        this.endPopup(refusedState);
       }
-    },
-    // Advertise state and close
-    async closingFlow (state) {
-      await Context.pryv.updateAuthState(Context.pollKey, state);
-      this.endPopup(state);
     },
     // Closing the auth page
     endPopup (state) {
-      this.success = 'App authorization successfully completed!';
+      if (state instanceof AcceptedAuthState) {
+        this.success = 'App authorization successfully completed!';
+      }
 
       let href = Context.returnURL;
       // If no return URL was provided, just close the popup

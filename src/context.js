@@ -8,10 +8,9 @@ class Context {
 
   static init (params) {
     const domain = domainFromUrl() || params.domain || 'pryv.me';
-    const appId = params.requestingAppId || 'app-web-auth';
-
+    const appId = params.requestingAppId || 'pryv-app-web-auth-3';
     this.language = params.lang || 'en';
-    this.appId = appId || 'pryv-app-web-auth-3';
+    this.appId = appId;
     this.returnURL = params.returnURL;
     this.oauthState = params.oauthState;
     this.permissions = new Permissions(params.requestedPermissions);
