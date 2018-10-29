@@ -6,7 +6,6 @@
       v-if="permissionsList!=null"
       :appId="appId"
       :permissionsList="permissionsList"
-      :clientData="serviceInfos.clientData"
       @accepted="accept"
       @refused="refuse"/>
 
