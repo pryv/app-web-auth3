@@ -2,15 +2,20 @@
 
 import axios from 'axios';
 import Hostings from './Hostings.js';
-import type {AcceptedAuthState, RefusedAuthState, ErrorAuthState} from './AuthStates.js';
+import type {AuthState} from './AuthStates.js';
 import type PermissionsList from './Permissions.js';
 
-type AuthState = AcceptedAuthState|RefusedAuthState|ErrorAuthState;
+type AppAccess = {
+  type: 'app',
+  permissions: PermissionsList,
+  expires: ?number,
+  token: string,
+};
 
 type AppCheck = {
-  permissions: {},
-  match: {},
-  mismatch: {},
+  permissions: PermissionsList,
+  match: AppAccess,
+  mismatch: AppAccess,
 };
 
 type NewUser = {
@@ -97,7 +102,7 @@ class Pryv {
 
   // POST/core: create a new app access, returns the according app token
   async createAppAccess (username: string, permissions: PermissionsList,
-    personalToken: string, appToken: ?string, expireAfter: ?number): Promise<string> {
+    personalToken: string, appToken: ?string, expireAfter: ?number): Promise<AppAccess> {
     const res = await axios.post(
       `${this.core(username)}/accesses`, {
         name: this.appId,
@@ -109,7 +114,7 @@ class Pryv {
         headers: { Authorization: personalToken },
       }
     );
-    return res.data.access.token;
+    return res.data.access;
   }
 
   // ---------- REGISTER calls ----------

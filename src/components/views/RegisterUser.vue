@@ -96,7 +96,7 @@ export default {
       const hostings = await Context.pryv.getAvailableHostings();
       this.hostingsSelection = hostings.getSelection();
       if (this.hostingsSelection.length > 0) {
-        this.hosting = this.hostingsSelection[0];
+        this.hosting = this.hostingsSelection[0].value;
       }
     } catch (err) {
       this.throwError(err);
@@ -107,20 +107,19 @@ export default {
       if (this.$refs.form.validate()) {
         try {
           // Create the new user
-          this.newUser = await Context.pryv.createUser(
+          const newUser = await Context.pryv.createUser(
             this.username,
             this.password,
             this.email,
             this.hosting
           );
 
-          const newUsername = this.newUser.username;
-          this.success = `New user successfully created: ${newUsername}.`;
+          this.success = `New user successfully created: ${newUser.username}.`;
 
           // If the goal was only to register a new user (no requested permissions)
           // then we just redirect the new user to its pryv core
           if (Context.permissions.list == null) {
-            location.href = Context.pryv.core(newUsername);
+            location.href = Context.pryv.core(newUser.username);
           }
         } catch (err) {
           this.throwError(err);

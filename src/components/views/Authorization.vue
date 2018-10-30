@@ -48,7 +48,6 @@
     <router-link :to="{ name: 'ResetPassword' }"><h3>Forgot password</h3></router-link>
 
     <Alerts
-      :successMsg="success"
       :errorMsg="error"/>
   </div>
 </template>
@@ -57,9 +56,12 @@
 import Password from './bits/Password.vue';
 import Permissions from './bits/Permissions.vue';
 import Alerts from './bits/Alerts.vue';
-import {AcceptedAuthState, RefusedAuthState} from '../models/AuthStates.js';
 import Context from '../../Context.js';
 import AppError from '../models/AppError.js';
+import login from '../controller/ops/login.js';
+import checkAccess from '../controller/ops/check_access.js';
+import acceptAccess from '../controller/ops/accept_access.js';
+import refuseAccess from '../controller/ops/refuse_access.js';
 
 export default {
   components: {
@@ -71,10 +73,8 @@ export default {
     username: '',
     password: '',
     personalToken: '',
-    appToken: '',
     appId: Context.appId,
     error: '',
-    success: '',
     permissionsList: null,
     serviceInfos: {},
     rules: {
@@ -94,85 +94,30 @@ export default {
     async submit () {
       if (this.$refs.form.validate()) {
         try {
-          // Convert email to Pryv username if needed, check existence
-          this.username = await Context.pryv.getUsernameForEmail(this.username);
-          await Context.pryv.checkUsernameExistence(this.username);
-
           // Login against Pryv
-          this.personalToken = await Context.pryv.login(this.username, this.password);
-
+          [this.username, this.personalToken] = await login(this.username, this.password);
           // Check for existing app access
-          const checkApp = await Context.pryv.checkAppAccess(this.username, Context.permissions.list, this.personalToken);
-
-          // If a mismatching access exists, show an error
-          if (checkApp.mismatch) {
-            this.err = 'Mismatching access already exists: ' + JSON.stringify(checkApp.mismatch);
-          }
-
-          // If a matching access exists, just return it
-          if (checkApp.match) {
-            await this.closingFlow(new AcceptedAuthState(this.username, checkApp.match.token));
-          }
-
-          // Otherwise, show the requested permissions to the user
-          if (checkApp.permissions) {
-            this.permissionsList = Context.permissions.updateList(checkApp.permissions);
-          }
+          await checkAccess(this.username, this.personalToken, this.showPermissions);
         } catch (err) {
           this.throwError(err);
         }
       }
     },
+    // Print requested permissions to the user
+    showPermissions (permissions) {
+      this.permissionsList = permissions;
+    },
     // The user accepts the requested permissions
     async accept () {
-      const acceptedState = new AcceptedAuthState(this.username, this.appToken);
       try {
-        // Create a new app access
-        this.appToken = await Context.pryv.createAppAccess(this.username, this.permissionsList, this.personalToken);
-        // Notify register about accepted state
-        await Context.pryv.updateAuthState(Context.pollKey, acceptedState);
-        this.endPopup(acceptedState);
+        await acceptAccess(this.username, this.permissionsList, this.personalToken);
       } catch (err) {
         this.throwError(err);
       }
     },
     // The user refuses the requested permissions
     async refuse () {
-      const refusedState = new RefusedAuthState();
-      try {
-        // Notify register about refused state
-        await Context.pryv.updateAuthState(Context.pollKey, refusedState);
-      } catch (err) {
-        this.throwError(err);
-      } finally {
-        // Close the page anyway (the auth state update may answer 403)
-        this.endPopup(refusedState);
-      }
-    },
-    // Closing the auth page
-    endPopup (state) {
-      if (state instanceof AcceptedAuthState) {
-        this.success = 'App authorization successfully completed!';
-      }
-
-      let href = Context.returnURL;
-      // If no return URL was provided, just close the popup
-      if (href == null || href === 'false') {
-        window.close();
-      } else {
-        // Otherwise, we need to redirect to the return URL,
-        // passing the resulting parameters as querystring
-        if (Context.oauthState) {
-          href += `?state=${Context.oauthState}&code=${Context.pollKey}`;
-        } else {
-          href += `?prYvkey=${Context.pollKey}`;
-
-          Object.keys(state.body).forEach(key => {
-            href += `&prYv${key}=${state.body[key]}`;
-          });
-        }
-        location.href = href;
-      }
+      await refuseAccess();
     },
     throwError (error) {
       this.error = new AppError(error).msg;

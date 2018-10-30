@@ -53,8 +53,6 @@ exports[`Permissions.test.js renders correctly (snapshots matching) 1`] = `
       </ul>
     </vcardtext-stub>
      
-    <!---->
-     
     <vdivider-stub />
      
     <vcardactions-stub>

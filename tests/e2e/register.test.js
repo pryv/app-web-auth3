@@ -2,6 +2,7 @@ import {RequestMock, RequestLogger} from 'testcafe';
 
 const registerEndpoint = 'https://reg.pryv.me/user';
 const hostingsEndpoint = 'https://reg.pryv.me/hostings';
+const redirectEndpoint = 'https://tmodoux.pryv.me';
 const fakeHostings = {
   'regions': {
     'europe': {
@@ -39,15 +40,19 @@ const hostingsLogger = RequestLogger(hostingsEndpoint);
 
 const registerUserMock = RequestMock()
   .onRequestTo(registerEndpoint)
-  .respond(null, 200, {'Access-Control-Allow-Origin': '*'});
+  .respond({username: 'tmodoux'}, 200, {'Access-Control-Allow-Origin': '*'});
 
 const hostingsMock = RequestMock()
   .onRequestTo(hostingsEndpoint)
   .respond(fakeHostings, 200, {'Access-Control-Allow-Origin': '*'});
 
+const redirectMock = RequestMock()
+  .onRequestTo(redirectEndpoint)
+  .respond(null, 200, {'Access-Control-Allow-Origin': '*'});
+
 fixture(`Register user`)
   .page('http://localhost:8080/register?requestingAppId=pryv-reg-standalone&standaloneRegister=true')
-  .requestHooks(registerLogger, hostingsLogger, registerUserMock, hostingsMock);
+  .requestHooks(registerLogger, hostingsLogger, registerUserMock, hostingsMock, redirectMock);
 
 test('Register new user with hostings retrieval', async testController => {
   await testController
@@ -61,9 +66,6 @@ test('Register new user with hostings retrieval', async testController => {
     .typeText('#password', 'mypass')
     .typeText('#passConfirmation', 'mypass')
     .typeText('#email', 'test@test.com')
-    .click('#hosting')
-    .pressKey('g')
-    .pressKey('enter')
     .click('#submitButton')
     // User creation call was performed
     .expect(registerLogger.contains(record =>
@@ -74,7 +76,6 @@ test('Register new user with hostings retrieval', async testController => {
       record.request.body.includes('"password":"mypass"') &&
       record.request.body.includes('"email":"test@test.com"') &&
       record.request.body.includes('"hosting":"gandi.net-fr"') &&
-      record.request.body.includes('"username":"tmodoux"') &&
       record.request.body.includes('"languageCode":"en"') &&
       record.request.body.includes('"invitationtoken":"enjoy"')
     )).ok();

@@ -82,3 +82,5 @@ export class NeedSigninState {
     };
   }
 }
+
+export type AuthState = AcceptedAuthState|RefusedAuthState|ErrorAuthState|NeedSigninState;

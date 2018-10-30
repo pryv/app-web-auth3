@@ -3,6 +3,7 @@ import {Selector, RequestMock, RequestLogger} from 'testcafe';
 const authEndpoint = 'https://tmodoux.pryv.me/auth/login';
 const checkAppEndpoint = 'https://tmodoux.pryv.me/accesses/check-app';
 const emailEndpoint = 'https://reg.pryv.me/test@test.com/uid';
+const userEndpoint = 'https://reg.pryv.me/tmodoux/server';
 const updateStateEndpoint = 'https://reg.pryv.me/access/pollKey';
 const createAccessEndpoint = 'https://tmodoux.pryv.me/accesses';
 const fakePermissions = '[{"streamId":"diary","level":"read","name":"Diary"}]';
@@ -20,6 +21,8 @@ const checkAppLogger = RequestLogger(checkAppEndpoint, {
 });
 
 const emailLogger = RequestLogger(emailEndpoint);
+
+const userLogger = RequestLogger(userEndpoint);
 
 const updateStateLogger = RequestLogger(updateStateEndpoint, {
   logRequestBody: true,
@@ -45,6 +48,10 @@ const usernameForEmailMock = RequestMock()
   .onRequestTo(emailEndpoint)
   .respond({uid: 'tmodoux'}, 200, {'Access-Control-Allow-Origin': '*'});
 
+const userExistenceMock = RequestMock()
+  .onRequestTo(userEndpoint)
+  .respond(null, 200, {'Access-Control-Allow-Origin': '*'});
+
 const updateStateMock = RequestMock()
   .onRequestTo(updateStateEndpoint)
   .respond(null, 200, {'Access-Control-Allow-Origin': '*'});
@@ -55,8 +62,8 @@ const createAccessMock = RequestMock()
 
 fixture(`Auth request`)
   .page(`http://localhost:8080/auth?requestingAppId=pryv-auth-standalone&key=pollKey&requestedPermissions=${fakePermissions}`)
-  .requestHooks(authLogger, checkAppLogger, emailLogger, updateStateLogger, createAccessLogger,
-    authRequestMock, checkAppMock, usernameForEmailMock, updateStateMock, createAccessMock);
+  .requestHooks(authLogger, checkAppLogger, emailLogger, userLogger, updateStateLogger, createAccessLogger,
+    authRequestMock, checkAppMock, usernameForEmailMock, userExistenceMock, updateStateMock, createAccessMock);
 
 test('Auth request, app access check and then accept permissions', async testController => {
   await testController
@@ -67,6 +74,11 @@ test('Auth request, app access check and then accept permissions', async testCon
     // Email to username call was performed
     .expect(emailLogger.contains(record =>
       record.request.method === 'get' &&
+      record.response.statusCode === 200
+    )).ok()
+    // Check user existence call was performed
+    .expect(userLogger.contains(record =>
+      record.request.method === 'post' &&
       record.response.statusCode === 200
     )).ok()
     // Login call was performed
