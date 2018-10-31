@@ -18,7 +18,7 @@ type AppCheck = {
   mismatch: AppAccess,
 };
 
-type NewUser = {
+export type NewUser = {
   username: string,
   server: string,
 };

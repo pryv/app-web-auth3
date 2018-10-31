@@ -67,8 +67,9 @@
 <script>
 import Password from './bits/Password.vue';
 import Alerts from './bits/Alerts.vue';
-import Context from '../../Context.js';
 import AppError from '../models/AppError.js';
+import loadHostings from '../controller/ops/load_hostings.js';
+import createUser from '../controller/ops/create_user.js';
 
 export default {
   components: {
@@ -93,11 +94,7 @@ export default {
   async created () {
     // Fill selector with available hostings
     try {
-      const hostings = await Context.pryv.getAvailableHostings();
-      this.hostingsSelection = hostings.getSelection();
-      if (this.hostingsSelection.length > 0) {
-        this.hosting = this.hostingsSelection[0].value;
-      }
+      [this.hostingsSelection, this.hosting] = await loadHostings();
     } catch (err) {
       this.throwError(err);
     }
@@ -106,21 +103,8 @@ export default {
     async submit () {
       if (this.$refs.form.validate()) {
         try {
-          // Create the new user
-          const newUser = await Context.pryv.createUser(
-            this.username,
-            this.password,
-            this.email,
-            this.hosting
-          );
-
+          const newUser = await createUser(this.username, this.password, this.email, this.hosting);
           this.success = `New user successfully created: ${newUser.username}.`;
-
-          // If the goal was only to register a new user (no requested permissions)
-          // then we just redirect the new user to its pryv core
-          if (Context.permissions.list == null) {
-            location.href = Context.pryv.core(newUser.username);
-          }
         } catch (err) {
           this.throwError(err);
         }

@@ -48,7 +48,7 @@ type HostingSelectionItem = {
   description: string,
 };
 
-type HostingSelection = Array<HostingSelectionItem>;
+export type HostingSelection = Array<HostingSelectionItem>;
 
 class Hostings {
   regions: HostingRegionList;
