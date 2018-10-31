@@ -6,7 +6,7 @@ const emailEndpoint = 'https://reg.pryv.me/test@test.com/uid';
 const userEndpoint = 'https://reg.pryv.me/tmodoux/server';
 const updateStateEndpoint = 'https://reg.pryv.me/access/pollKey';
 const createAccessEndpoint = 'https://tmodoux.pryv.me/accesses';
-const fakePermissions = '[{"streamId":"diary","level":"read","name":"Diary"}]';
+const fakePermissions = '[{"streamId":"diary","level":"read"}]';
 
 // ---------- Requests loggers ----------
 

@@ -117,6 +117,23 @@ class Pryv {
     return res.data.access;
   }
 
+  // PUT/core: update an existing app access, returns the according app token
+  async updateAppAccess (accessId: string, username: string, permissions: PermissionsList,
+    personalToken: string, appToken: ?string, expireAfter: ?number): Promise<AppAccess> {
+    const res = await axios.put(
+      `${this.core(username)}/accesses/${accessId}`, {
+        name: this.appId,
+        type: 'app',
+        permissions: permissions,
+        token: appToken,
+        expireAfter: expireAfter,
+      }, {
+        headers: { Authorization: personalToken },
+      }
+    );
+    return res.data.access;
+  }
+
   // ---------- REGISTER calls ----------
 
   // GET/reg: retrieve all available Pryv hostings

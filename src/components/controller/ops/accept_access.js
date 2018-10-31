@@ -8,9 +8,17 @@ import closeOrRedirect from './close_or_redirect.js';
 async function acceptAccess (
   username: string,
   permissions: PermissionsList,
-  personalToken: string): void {
-  // Create a new app access
-  const appAccess = await Context.pryv.createAppAccess(username, permissions, personalToken);
+  personalToken: string,
+  updateId: ?string): void {
+  let appAccess;
+
+  if (updateId != null) {
+    // Update existing app access
+    appAccess = await Context.pryv.updateAppAccess(updateId, username, permissions, personalToken);
+  } else {
+    // Create a new app access
+    appAccess = await Context.pryv.createAppAccess(username, permissions, personalToken);
+  }
 
   // Notify register about accepted state
   const acceptedState = new AcceptedAuthState(username, appAccess.token);

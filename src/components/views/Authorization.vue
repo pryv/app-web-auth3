@@ -76,6 +76,7 @@ export default {
     appId: Context.appId,
     error: '',
     permissionsList: null,
+    updateId: null,
     serviceInfos: {},
     rules: {
       required: value => !!value || 'This field is required.',
@@ -104,13 +105,14 @@ export default {
       }
     },
     // Print requested permissions to the user
-    showPermissions (permissions) {
+    showPermissions (permissions, updateId) {
       this.permissionsList = permissions;
+      this.updateId = updateId;
     },
     // The user accepts the requested permissions
     async accept () {
       try {
-        await acceptAccess(this.username, this.permissionsList, this.personalToken);
+        await acceptAccess(this.username, this.permissionsList, this.personalToken, this.updateId);
       } catch (err) {
         this.throwError(err);
       }
