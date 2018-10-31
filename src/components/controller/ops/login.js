@@ -1,13 +1,12 @@
 // @ flow
 
 import Context from '../../../Context.js';
+import checkUsername from './check_username.js';
 
 async function login (
   usernameOrEmail: string,
   password: string): [string, string] {
-  // Convert email to Pryv username if needed, check existence
-  const username = await Context.pryv.getUsernameForEmail(usernameOrEmail);
-  await Context.pryv.checkUsernameExistence(username);
+  const username = await checkUsername(usernameOrEmail);
 
   // Login against Pryv
   const personalToken = await Context.pryv.login(username, password);

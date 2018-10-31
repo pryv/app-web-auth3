@@ -38,8 +38,9 @@
 <script>
 import Password from './bits/Password';
 import Alerts from './bits/Alerts';
-import Context from '../../Context.js';
 import AppError from '../models/AppError.js';
+import resetPassword from '../controller/ops/reset_password.js';
+import changePassword from '../controller/ops/change_password.js';
 
 export default {
   components: {
@@ -73,19 +74,15 @@ export default {
     async submit () {
       try {
         if (this.$refs.form.validate()) {
-          // Convert email to Pryv username if needed, check existence
-          this.username = await Context.pryv.getUsernameForEmail(this.username);
-          await Context.pryv.checkUsernameExistence(this.username);
-
           // Ask for a reset token
           if (this.resetToken == null) {
-            this.resetStatus = await Context.pryv.requestPasswordReset(this.username);
+            [this.username, this.resetStatus] = await resetPassword(this.username);
             if (this.resetStatus === 200) {
               this.success = 'We have sent password reset instructions to your e-mail address.';
-            }
+            };
           } else {
             // If we already got a reset token, we can change the password
-            this.changeStatus = await Context.pryv.changePassword(this.username, this.password, this.resetToken);
+            [this.username, this.changeStatus] = await changePassword(this.username, this.password, this.resetToken);
             if (this.changeStatus === 200) {
               this.success = 'Your password have been successfully changed.';
             }
