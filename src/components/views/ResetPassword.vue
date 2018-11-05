@@ -38,9 +38,7 @@
 <script>
 import Password from './bits/Password';
 import Alerts from './bits/Alerts';
-import AppError from '../models/AppError.js';
-import resetPassword from '../controller/ops/reset_password.js';
-import changePassword from '../controller/ops/change_password.js';
+import controllerFactory from '../controller/controller.js';
 
 export default {
   components: {
@@ -57,6 +55,7 @@ export default {
     success: '',
     resetStatus: null,
     changeStatus: null,
+    c: null,
     rules: {
       required: value => !!value || 'This field is required.',
     },
@@ -70,30 +69,29 @@ export default {
       return this.resetToken ? 'Change password' : 'Request password reset';
     },
   },
+  async created () {
+    this.c = controllerFactory({}, this.showError);
+  },
   methods: {
     async submit () {
-      try {
-        if (this.$refs.form.validate()) {
-          // Ask for a reset token
-          if (this.resetToken == null) {
-            [this.username, this.resetStatus] = await resetPassword(this.username);
-            if (this.resetStatus === 200) {
-              this.success = 'We have sent password reset instructions to your e-mail address.';
-            };
-          } else {
-            // If we already got a reset token, we can change the password
-            [this.username, this.changeStatus] = await changePassword(this.username, this.password, this.resetToken);
-            if (this.changeStatus === 200) {
-              this.success = 'Your password have been successfully changed.';
-            }
+      if (this.$refs.form.validate()) {
+        // Ask for a reset token
+        if (this.resetToken == null) {
+          this.resetStatus = await this.c.resetPassword(this.username);
+          if (this.resetStatus === 200) {
+            this.success = 'We have sent password reset instructions to your e-mail address.';
+          };
+        } else {
+          // If we already got a reset token, we can change the password
+          this.changeStatus = await this.c.changePassword(this.username, this.password, this.resetToken);
+          if (this.changeStatus === 200) {
+            this.success = 'Your password have been successfully changed.';
           }
         }
-      } catch (err) {
-        this.throwError(err);
       }
     },
-    throwError (error) {
-      this.error = new AppError(error).msg;
+    showError (error) {
+      this.error = error;
     },
   },
 };

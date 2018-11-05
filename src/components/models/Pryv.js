@@ -23,7 +23,7 @@ export type NewUser = {
   server: string,
 };
 
-type ServiceInfos = {
+export type ServiceInfos = {
   version: string,
   register: string,
   access: string,

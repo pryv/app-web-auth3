@@ -57,11 +57,7 @@ import Password from './bits/Password.vue';
 import Permissions from './bits/Permissions.vue';
 import Alerts from './bits/Alerts.vue';
 import Context from '../../Context.js';
-import AppError from '../models/AppError.js';
-import login from '../controller/ops/login.js';
-import checkAccess from '../controller/ops/check_access.js';
-import acceptAccess from '../controller/ops/accept_access.js';
-import refuseAccess from '../controller/ops/refuse_access.js';
+import controllerFactory from '../controller/controller.js';
 
 export default {
   components: {
@@ -78,6 +74,7 @@ export default {
     permissionsList: null,
     updateId: null,
     serviceInfos: {},
+    c: null,
     rules: {
       required: value => !!value || 'This field is required.',
       email: value => /.+@.+/.test(value) || 'E-mail must be valid',
@@ -85,23 +82,16 @@ export default {
     validForm: false,
   }),
   async created () {
-    try {
-      this.serviceInfos = await Context.pryv.getServiceInfo();
-    } catch (err) {
-      this.throwError(err);
-    }
+    this.c = controllerFactory({}, this.showError);
+    this.serviceInfos = this.c.getServiceInfo();
   },
   methods: {
     async submit () {
       if (this.$refs.form.validate()) {
-        try {
-          // Login against Pryv
-          [this.username, this.personalToken] = await login(this.username, this.password);
-          // Check for existing app access
-          await checkAccess(this.username, this.personalToken, this.showPermissions);
-        } catch (err) {
-          this.throwError(err);
-        }
+        // Login against Pryv
+        this.personalToken = await this.c.login(this.username, this.password);
+        // Check for existing app access
+        await this.c.checkAccess(this.username, this.personalToken, this.showPermissions);
       }
     },
     // Print requested permissions to the user
@@ -111,18 +101,14 @@ export default {
     },
     // The user accepts the requested permissions
     async accept () {
-      try {
-        await acceptAccess(this.username, this.permissionsList, this.personalToken, this.updateId);
-      } catch (err) {
-        this.throwError(err);
-      }
+      await this.c.acceptAccess(this.username, this.permissionsList, this.personalToken, this.updateId);
     },
     // The user refuses the requested permissions
     async refuse () {
-      await refuseAccess();
+      await this.c.refuseAccess();
     },
-    throwError (error) {
-      this.error = new AppError(error).msg;
+    showError (error) {
+      this.error = error;
     },
   },
 };
