@@ -2,16 +2,19 @@ import { shallowMount } from '@vue/test-utils';
 import RegisterUser from '@/components/views/RegisterUser';
 import Vue from 'vue';
 import Vuetify from 'vuetify';
-import VueRouter from 'vue-router';
 
 Vue.use(Vuetify);
-Vue.use(VueRouter);
 
 describe('RegisterUser.test.js', () => {
   let wrapper;
 
   beforeEach(() => {
-    wrapper = shallowMount(RegisterUser);
+    wrapper = shallowMount(RegisterUser, {
+      mocks: {
+        $route: {query: {}},
+      },
+      stubs: ['router-link'],
+    });
   });
 
   it('renders correctly (snapshots matching)', () => {

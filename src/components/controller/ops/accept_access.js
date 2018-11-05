@@ -1,11 +1,12 @@
 // @ flow
 
-import Context from '../../../Context.js';
 import {AcceptedAuthState} from '../../models/AuthStates.js';
 import type PermissionsList from '../../../models/Permissions.js';
 import closeOrRedirect from './close_or_redirect.js';
+import type Context from '../../../context.js';
 
 async function acceptAccess (
+  ctx: Context,
   username: string,
   permissions: PermissionsList,
   personalToken: string,
@@ -14,17 +15,17 @@ async function acceptAccess (
 
   if (updateId != null) {
     // Update existing app access
-    appAccess = await Context.pryv.updateAppAccess(updateId, username, permissions, personalToken);
+    appAccess = await ctx.pryv.updateAppAccess(updateId, username, permissions, personalToken);
   } else {
     // Create a new app access
-    appAccess = await Context.pryv.createAppAccess(username, permissions, personalToken);
+    appAccess = await ctx.pryv.createAppAccess(username, permissions, personalToken);
   }
 
   // Notify register about accepted state
   const acceptedState = new AcceptedAuthState(username, appAccess.token);
-  await Context.pryv.updateAuthState(Context.pollKey, acceptedState);
+  await ctx.pryv.updateAuthState(ctx.pollKey, acceptedState);
 
-  closeOrRedirect(acceptedState);
+  closeOrRedirect(ctx, acceptedState);
 }
 
 export default acceptAccess;

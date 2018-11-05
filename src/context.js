@@ -2,19 +2,15 @@ import Pryv from './components/models/Pryv.js';
 import Permissions from './components/models/Permissions.js';
 
 class Context {
-  constructor () {
-    throw new Error('Impossible to instantiate static Context!');
-  }
-
-  static init (params) {
-    const domain = domainFromUrl() || params.domain || 'pryv.me';
-    const appId = params.requestingAppId || 'pryv-app-web-auth-3';
-    this.language = params.lang || 'en';
+  constructor (queryParams) {
+    const domain = domainFromUrl() || queryParams.domain || 'pryv.me';
+    const appId = queryParams.requestingAppId || 'pryv-app-web-auth-3';
+    this.language = queryParams.lang || 'en';
     this.appId = appId;
-    this.returnURL = params.returnURL;
-    this.oauthState = params.oauthState;
-    this.permissions = new Permissions(params.requestedPermissions);
-    this.pollKey = params.key;
+    this.returnURL = queryParams.returnURL;
+    this.oauthState = queryParams.oauthState;
+    this.permissions = new Permissions(queryParams.requestedPermissions);
+    this.pollKey = queryParams.key;
     this.pryv = new Pryv(domain, appId);
   }
 }

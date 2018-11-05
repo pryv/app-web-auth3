@@ -1,12 +1,12 @@
 // @ flow
 
-import Context from '../../../Context.js';
+import type Context from '../../../Context.js';
 
-async function checkUsername (usernameOrEmail: string): string {
+async function checkUsername (ctx: Context, usernameOrEmail: string): string {
   // Convert email to Pryv username if needed
-  const username = await Context.pryv.getUsernameForEmail(usernameOrEmail);
+  const username = await ctx.pryv.getUsernameForEmail(usernameOrEmail);
   // Check if username exists
-  await Context.pryv.checkUsernameExistence(username);
+  await ctx.pryv.checkUsernameExistence(username);
   return username;
 }
 

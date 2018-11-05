@@ -3,16 +3,19 @@ import ResetPassword from '@/components/views/ResetPassword';
 import Password from '@/components/views/bits/Password';
 import Vue from 'vue';
 import Vuetify from 'vuetify';
-import VueRouter from 'vue-router';
 
 Vue.use(Vuetify);
-Vue.use(VueRouter);
 
 describe('ResetPassword.test.js', () => {
   let wrapper;
 
   beforeEach(() => {
-    wrapper = shallowMount(ResetPassword);
+    wrapper = shallowMount(ResetPassword, {
+      mocks: {
+        $route: {query: {}},
+      },
+      stubs: ['router-link'],
+    });
   });
 
   it('renders correctly (snapshots matching)', () => {

@@ -96,8 +96,6 @@ exports[`RegisterUser.test.js renders correctly (snapshots matching) 1`] = `
   />
    
   <router-link-stub
-    event="click"
-    tag="a"
     to="[object Object]"
   >
     <h3>
@@ -106,7 +104,7 @@ exports[`RegisterUser.test.js renders correctly (snapshots matching) 1`] = `
   </router-link-stub>
    
   <alerts-stub
-    errormsg=<b>Unexpected error</b>
+    errormsg=""
     successmsg=""
   />
 </div>

@@ -4,7 +4,6 @@ import RegisterUser from '@/components/views/RegisterUser';
 import ResetPassword from '@/components/views/ResetPassword';
 import Authorization from '@/components/views/Authorization';
 import PageNotFound from '@/components/views/PageNotFound';
-import Context from '../Context.js';
 
 Vue.use(VueRouter);
 
@@ -44,13 +43,17 @@ let Router = new VueRouter({
   ],
 });
 
+function hasQueryParams (route) {
+  return !!Object.keys(route.query).length;
+}
+
 Router.beforeEach((to, from, next) => {
-  // When we first open a page ('from', the origin page, is empty)
-  // init the app context with query parameters ('to' is the target page)
-  if (from.name == null) {
-    Context.init(to.query);
+  if (!hasQueryParams(to) && hasQueryParams(from)) {
+    // Persist query parameters between pages
+    next({name: to.name, query: from.query});
+  } else {
+    next();
   }
-  next();
 });
 
 export default Router;

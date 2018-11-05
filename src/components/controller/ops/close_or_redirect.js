@@ -1,20 +1,20 @@
 // @ flow
 
-import Context from '../../../Context.js';
+import type Context from '../../../Context.js';
 import type {AuthState} from '../../models/AuthStates.js';
 
-function closeOrRedirect (state: AuthState): void {
-  let href = Context.returnURL;
+function closeOrRedirect (ctx: Context, state: AuthState): void {
+  let href = ctx.returnURL;
   // If no return URL was provided, just close the popup
   if (href == null || href === 'false') {
     window.close();
   } else {
     // Otherwise, we need to redirect to the return URL,
     // passing the resulting parameters as querystring
-    if (Context.oauthState) {
-      href += `?state=${Context.oauthState}&code=${Context.pollKey}`;
+    if (ctx.oauthState) {
+      href += `?state=${ctx.oauthState}&code=${ctx.pollKey}`;
     } else {
-      href += `?prYvkey=${Context.pollKey}`;
+      href += `?prYvkey=${ctx.pollKey}`;
 
       Object.keys(state.body).forEach(key => {
         href += `&prYv${key}=${state.body[key]}`;

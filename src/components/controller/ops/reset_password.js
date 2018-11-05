@@ -1,11 +1,11 @@
 // @ flow
 
-import Context from '../../../Context.js';
+import type Context from '../../../Context.js';
 import checkUsername from './check_username.js';
 
-async function resetPassword (usernameOrEmail: string): number {
-  const username = await checkUsername(usernameOrEmail);
-  const status = await Context.pryv.requestPasswordReset(username);
+async function resetPassword (ctx: Context, usernameOrEmail: string): number {
+  const username = await checkUsername(ctx, usernameOrEmail);
+  const status = await ctx.pryv.requestPasswordReset(username);
   return status;
 }
 

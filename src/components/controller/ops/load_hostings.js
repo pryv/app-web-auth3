@@ -1,10 +1,10 @@
 // @ flow
 
-import Context from '../../../Context.js';
+import type Context from '../../../Context.js';
 import type HostingSelection from '../../models/Hostings.js';
 
-async function loadHostings (): HostingSelection {
-  const hostings = await Context.pryv.getAvailableHostings();
+async function loadHostings (ctx: Context): HostingSelection {
+  const hostings = await ctx.pryv.getAvailableHostings();
   const hostingsSelection = hostings.getSelection();
   return hostingsSelection;
 }

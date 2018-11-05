@@ -1,16 +1,17 @@
 // @ flow
 
-import Context from '../../../Context.js';
+import type Context from '../../../Context.js';
 import checkUsername from './check_username.js';
 
 async function login (
+  ctx: Context,
   usernameOrEmail: string,
-  password: string): string {
-  const username = await checkUsername(usernameOrEmail);
+  password: string): [string, string] {
+  const username = await checkUsername(ctx, usernameOrEmail);
 
   // Login against Pryv
-  const personalToken = await Context.pryv.login(username, password);
-  return personalToken;
+  const personalToken = await ctx.pryv.login(username, password);
+  return [username, personalToken];
 }
 
 export default login;

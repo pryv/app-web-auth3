@@ -38,6 +38,7 @@
 <script>
 import Password from './bits/Password';
 import Alerts from './bits/Alerts';
+import Context from '../../context.js';
 import controllerFactory from '../controller/controller.js';
 
 export default {
@@ -55,6 +56,7 @@ export default {
     success: '',
     resetStatus: null,
     changeStatus: null,
+    ctx: {},
     c: null,
     rules: {
       required: value => !!value || 'This field is required.',
@@ -70,7 +72,8 @@ export default {
     },
   },
   async created () {
-    this.c = controllerFactory({}, this.showError);
+    this.ctx = new Context(this.$route.query);
+    this.c = controllerFactory(this.ctx, this.showError);
   },
   methods: {
     async submit () {

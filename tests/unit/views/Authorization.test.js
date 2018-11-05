@@ -3,16 +3,19 @@ import Authorization from '@/components/views/Authorization';
 import Permissions from '@/components/views/bits/Permissions';
 import Vue from 'vue';
 import Vuetify from 'vuetify';
-import VueRouter from 'vue-router';
 
 Vue.use(Vuetify);
-Vue.use(VueRouter);
 
 describe('Authorization.test.js', () => {
   let wrapper;
 
   beforeEach(() => {
-    wrapper = shallowMount(Authorization);
+    wrapper = shallowMount(Authorization, {
+      mocks: {
+        $route: {query: {}},
+      },
+      stubs: ['router-link'],
+    });
   });
 
   it('renders correctly (snapshots matching)', () => {

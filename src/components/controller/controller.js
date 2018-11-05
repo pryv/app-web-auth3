@@ -13,7 +13,7 @@ import getServiceInfo from './ops/get_service_info.js';
 function tryAndCatch (ctx, errorCb, fun) {
   return async (...args) => {
     try {
-      return await fun(...args);
+      return await fun(ctx, ...args);
     } catch (err) {
       errorCb(new AppError(err).msg);
     }

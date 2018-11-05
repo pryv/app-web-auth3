@@ -4,7 +4,7 @@
 
     <Permissions
       v-if="permissionsList!=null"
-      :appId="appId"
+      :appId="ctx.appId"
       :permissionsList="permissionsList"
       @accepted="accept"
       @refused="refuse"/>
@@ -56,7 +56,7 @@
 import Password from './bits/Password.vue';
 import Permissions from './bits/Permissions.vue';
 import Alerts from './bits/Alerts.vue';
-import Context from '../../Context.js';
+import Context from '../../context.js';
 import controllerFactory from '../controller/controller.js';
 
 export default {
@@ -69,12 +69,12 @@ export default {
     username: '',
     password: '',
     personalToken: '',
-    appId: Context.appId,
     error: '',
     permissionsList: null,
     updateId: null,
     serviceInfos: {},
     c: null,
+    ctx: {},
     rules: {
       required: value => !!value || 'This field is required.',
       email: value => /.+@.+/.test(value) || 'E-mail must be valid',
@@ -82,16 +82,20 @@ export default {
     validForm: false,
   }),
   async created () {
-    this.c = controllerFactory({}, this.showError);
-    this.serviceInfos = this.c.getServiceInfo();
+    this.ctx = new Context(this.$route.query);
+    this.c = controllerFactory(this.ctx, this.showError);
+    this.serviceInfos = await this.c.getServiceInfo();
   },
   methods: {
     async submit () {
       if (this.$refs.form.validate()) {
         // Login against Pryv
-        this.personalToken = await this.c.login(this.username, this.password);
-        // Check for existing app access
-        await this.c.checkAccess(this.username, this.personalToken, this.showPermissions);
+        const loggedUser = await this.c.login(this.username, this.password);
+        if (loggedUser) {
+          // Check for existing app access
+          [this.username, this.personalToken] = loggedUser;
+          await this.c.checkAccess(this.username, this.personalToken, this.showPermissions);
+        }
       }
     },
     // Print requested permissions to the user
