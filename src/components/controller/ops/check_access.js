@@ -7,7 +7,8 @@ import login from './login.js';
 
 async function checkAccess (
   ctx: Context,
-  password: string): Promise<?string> {
+  password: string,
+  showPermissions: (?string) => void): Promise<void> {
   // Login against Pryv
   await login(ctx, password);
 
@@ -32,7 +33,7 @@ async function checkAccess (
     matchingAccessId = checkApp.mismatch.id;
   }
 
-  return matchingAccessId;
+  showPermissions(matchingAccessId);
 }
 
 export default checkAccess;

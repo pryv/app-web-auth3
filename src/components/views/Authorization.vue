@@ -93,8 +93,7 @@ export default {
       if (this.$refs.form.validate()) {
         this.submitting = true;
         // Check for existing app access
-        this.c.checkAccess(this.password)
-          .then(this.showPermissions)
+        this.c.checkAccess(this.password, this.showPermissions)
           .catch(this.showError)
           .finally(() => { this.submitting = false; });
       }
