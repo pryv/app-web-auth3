@@ -53,7 +53,7 @@ describe('Authorization.test.js', () => {
 
   it('shows requested permissions when app access check is successful', () => {
     wrapper.setData({
-      permissionsList: [{streamId: 'diary', level: 'read'}],
+      checkedPermissions: [{streamId: 'diary', level: 'read'}],
     });
     // Renders permissions instead
     const permissions = wrapper.find(Permissions);

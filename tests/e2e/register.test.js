@@ -56,6 +56,10 @@ fixture(`Register user`)
 
 test('Register new user with hostings retrieval', async testController => {
   await testController
+    // Catch eventual unexpected errors that pop as window.alert
+    .setNativeDialogHandler((type, text, url) => {
+      throw new Error(text);
+    })
     // Hostings retrieval call was performed
     .expect(hostingsLogger.contains(record =>
       record.request.method === 'get' &&

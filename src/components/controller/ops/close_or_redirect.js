@@ -1,4 +1,4 @@
-// @ flow
+// @flow
 
 import type Context from '../../../Context.js';
 import type {AuthState} from '../../models/AuthStates.js';
@@ -17,6 +17,7 @@ function closeOrRedirect (ctx: Context, state: AuthState): void {
       href += `?prYvkey=${ctx.pollKey}`;
 
       Object.keys(state.body).forEach(key => {
+        // $FlowFixMe
         href += `&prYv${key}=${state.body[key]}`;
       });
     }

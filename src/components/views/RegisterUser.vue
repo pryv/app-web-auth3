@@ -17,7 +17,7 @@
 
       <v-text-field
         id="username"
-        v-model="username"
+        v-model="ctx.user.username"
         :rules="[rules.required]"
         label="Username"
       />
@@ -76,7 +76,6 @@ export default {
     Alerts,
   },
   data: () => ({
-    username: '',
     password: '',
     email: '',
     hosting: '',
@@ -92,27 +91,41 @@ export default {
     },
     validForm: false,
   }),
-  async created () {
+  created () {
     this.ctx = new Context(this.$route.query);
-    this.c = controllerFactory(this.ctx, this.showError);
+    this.c = controllerFactory(this.ctx);
     // Fill selector with available hostings, preselect first one
-    this.hostingsSelection = await this.c.loadHostings();
-    if (this.hostingsSelection.length > 0) {
-      this.hosting = this.hostingsSelection[0].value;
-    }
+    this.c.loadHostings()
+      .then(this.initHostings)
+      .catch(this.showError);
   },
   methods: {
-    async submit () {
+    submit () {
       if (this.$refs.form.validate()) {
-        const newUser = await this.c.createUser(this.username, this.password, this.email, this.hosting);
-        this.success = `New user successfully created: ${newUser.username}.`;
+        this.c.createUser(this.password, this.email, this.hosting)
+          .then((newUser) => {
+            this.newUser = newUser;
+            // If the goal was only to register a new user (no requested permissions)
+            // then we just redirect the new user to its pryv core
+            if (this.ctx.permissions.list == null) {
+              location.href = this.ctx.pryv.core(newUser.username);
+            }
+            this.success = `New user successfully created: ${newUser.username}.`;
+          })
+          .catch(this.showError);
       }
     },
     clear () {
       this.$refs.form.reset();
     },
+    initHostings (hostings) {
+      this.hostingsSelection = hostings;
+      if (this.hostingsSelection.length > 0) {
+        this.hosting = this.hostingsSelection[0].value;
+      }
+    },
     showError (error) {
-      this.error = error;
+      this.error = error.msg;
     },
   },
 };

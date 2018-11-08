@@ -3,13 +3,13 @@
     <h1>{{ pageTitle }}</h1>
 
     <v-form
-      v-if="resetStatus!==200 && changeStatus!==200"
+      v-if="showForm"
       ref="form"
       v-model="validForm">
 
       <v-text-field
         id="usernameOrEmail"
-        v-model="username"
+        v-model="ctx.user.username"
         :rules="[rules.required]"
         label="Username or email"/>
 
@@ -50,12 +50,10 @@ export default {
     resetToken: {type: String, default: null},
   },
   data: () => ({
-    username: '',
     password: '',
     error: '',
     success: '',
-    resetStatus: null,
-    changeStatus: null,
+    showForm: true,
     ctx: {},
     c: null,
     rules: {
@@ -71,30 +69,34 @@ export default {
       return this.resetToken ? 'Change password' : 'Request password reset';
     },
   },
-  async created () {
+  created () {
     this.ctx = new Context(this.$route.query);
-    this.c = controllerFactory(this.ctx, this.showError);
+    this.c = controllerFactory(this.ctx);
   },
   methods: {
-    async submit () {
+    submit () {
       if (this.$refs.form.validate()) {
         // Ask for a reset token
         if (this.resetToken == null) {
-          this.resetStatus = await this.c.resetPassword(this.username);
-          if (this.resetStatus === 200) {
-            this.success = 'We have sent password reset instructions to your e-mail address.';
-          };
+          this.c.resetPassword()
+            .then(() => {
+              this.showForm = false;
+              this.success = 'We have sent password reset instructions to your e-mail address.';
+            })
+            .catch(this.showError);
         } else {
           // If we already got a reset token, we can change the password
-          this.changeStatus = await this.c.changePassword(this.username, this.password, this.resetToken);
-          if (this.changeStatus === 200) {
-            this.success = 'Your password have been successfully changed.';
-          }
+          this.c.changePassword(this.password, this.resetToken)
+            .then(() => {
+              this.showForm = false;
+              this.success = 'Your password have been successfully changed.';
+            })
+            .catch(this.showError);
         }
       }
     },
     showError (error) {
-      this.error = error;
+      this.error = error.msg;
     },
   },
 };

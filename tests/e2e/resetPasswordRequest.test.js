@@ -28,6 +28,10 @@ fixture(`Reset password request`)
 
 test('Reset request with email-username conversion', async testController => {
   await testController
+    // Catch eventual unexpected errors that pop as window.alert
+    .setNativeDialogHandler((type, text, url) => {
+      throw new Error(text);
+    })
     // Fill password reset form
     .typeText('#usernameOrEmail', 'test@test.com')
     .click('#submitButton')

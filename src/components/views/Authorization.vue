@@ -3,9 +3,9 @@
     <h1>Sign in</h1>
 
     <Permissions
-      v-if="permissionsList!=null"
+      v-if="checkedPermissions!=null"
       :appId="ctx.appId"
-      :permissionsList="permissionsList"
+      :permissionsList="checkedPermissions"
       @accepted="accept"
       @refused="refuse"/>
 
@@ -15,7 +15,7 @@
 
       <v-text-field
         id="usernameOrEmail"
-        v-model="username"
+        v-model="ctx.user.username"
         :rules="[rules.required]"
         label="Username or email"/>
 
@@ -66,12 +66,11 @@ export default {
     Alerts,
   },
   data: () => ({
-    username: '',
     password: '',
     personalToken: '',
     error: '',
-    permissionsList: null,
-    updateId: null,
+    checkedPermissions: null,
+    accessId: null,
     serviceInfos: {},
     c: null,
     ctx: {},
@@ -81,38 +80,42 @@ export default {
     },
     validForm: false,
   }),
-  async created () {
+  created () {
     this.ctx = new Context(this.$route.query);
-    this.c = controllerFactory(this.ctx, this.showError);
-    this.serviceInfos = await this.c.getServiceInfo();
+    this.c = controllerFactory(this.ctx);
+    this.c.getServiceInfo()
+      .then(this.showInfos)
+      .catch(this.showError);
   },
   methods: {
-    async submit () {
+    submit () {
       if (this.$refs.form.validate()) {
-        // Login against Pryv
-        const loggedUser = await this.c.login(this.username, this.password);
-        if (loggedUser) {
-          // Check for existing app access
-          [this.username, this.personalToken] = loggedUser;
-          await this.c.checkAccess(this.username, this.personalToken, this.showPermissions);
-        }
+        // Check for existing app access
+        this.c.checkAccess(this.password)
+          .then(this.showPermissions)
+          .catch(this.showError);
       }
     },
     // Print requested permissions to the user
-    showPermissions (permissions, updateId) {
-      this.permissionsList = permissions;
-      this.updateId = updateId;
+    showPermissions (accessId) {
+      this.checkedPermissions = this.ctx.permissions.list;
+      this.accessId = accessId;
     },
     // The user accepts the requested permissions
-    async accept () {
-      await this.c.acceptAccess(this.username, this.permissionsList, this.personalToken, this.updateId);
+    accept () {
+      this.c.acceptAccess(this.accessId)
+        .catch(this.showError);
     },
     // The user refuses the requested permissions
-    async refuse () {
-      await this.c.refuseAccess();
+    refuse () {
+      this.c.refuseAccess()
+        .catch(this.showError);
     },
     showError (error) {
-      this.error = error;
+      this.error = error.msg;
+    },
+    showInfos (infos) {
+      this.serviceInfos = infos;
     },
   },
 };

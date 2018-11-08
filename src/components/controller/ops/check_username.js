@@ -1,13 +1,12 @@
-// @ flow
+// @flow
 
 import type Context from '../../../Context.js';
 
-async function checkUsername (ctx: Context, usernameOrEmail: string): string {
+async function checkUsername (ctx: Context): Promise<void> {
   // Convert email to Pryv username if needed
-  const username = await ctx.pryv.getUsernameForEmail(usernameOrEmail);
+  const username = ctx.user.username = await ctx.pryv.getUsernameForEmail(ctx.user.username);
   // Check if username exists
   await ctx.pryv.checkUsernameExistence(username);
-  return username;
 }
 
 export default checkUsername;

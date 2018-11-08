@@ -12,6 +12,10 @@ class Context {
     this.permissions = new Permissions(queryParams.requestedPermissions);
     this.pollKey = queryParams.key;
     this.pryv = new Pryv(domain, appId);
+    this.user = {
+      username: '',
+      personalToken: '',
+    };
   }
 }
 

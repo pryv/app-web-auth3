@@ -67,6 +67,10 @@ fixture(`Auth request`)
 
 test('Auth request, app access check and then accept permissions', async testController => {
   await testController
+    // Catch eventual unexpected errors that pop as window.alert
+    .setNativeDialogHandler((type, text, url) => {
+      throw new Error(text);
+    })
     // Fill the auth form
     .typeText('#usernameOrEmail', 'test@test.com')
     .typeText('#password', 'mypass')

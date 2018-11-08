@@ -1,10 +1,10 @@
-// @ flow
+// @flow
 
 import type Context from '../../../Context.js';
 import {RefusedAuthState} from '../../models/AuthStates.js';
 import closeOrRedirect from './close_or_redirect.js';
 
-async function refuseAccess (ctx: Context): void {
+async function refuseAccess (ctx: Context): Promise<void> {
   const refusedState = new RefusedAuthState();
   try {
     // Notify register about refused state

@@ -22,6 +22,10 @@ export default {
   data: () => ({
     title: 'App-web-auth3',
   }),
+  errorCaptured (err, vm, info) {
+    alert(`[Vue warn]: Unexpected error in ${info}:
+      ${err}`);
+  },
 };
 </script>
 

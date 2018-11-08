@@ -1,21 +1,22 @@
-// @ flow
+// @flow
 
 import type Context from '../../../Context.js';
 import {AcceptedAuthState} from '../../models/AuthStates.js';
-import type PermissionsList from '../../../models/Permissions.js';
 import closeOrRedirect from './close_or_redirect.js';
+import login from './login.js';
 
 async function checkAccess (
   ctx: Context,
-  username: string,
-  personalToken: string,
-  cb: (permissions: PermissionsList) => void): void {
+  password: string): Promise<?string> {
+  // Login against Pryv
+  await login(ctx, password);
+
   // Check for existing app access
-  const checkApp = await ctx.pryv.checkAppAccess(username, ctx.permissions.list, personalToken);
+  const checkApp = await ctx.pryv.checkAppAccess(ctx.user.username, ctx.permissions.list, ctx.user.personalToken);
 
   // A matching access exists, returning it alongside with accepted state
   if (checkApp.match) {
-    const acceptedState = new AcceptedAuthState(username, checkApp.match.token);
+    const acceptedState = new AcceptedAuthState(ctx.user.username, checkApp.match.token);
     await ctx.pryv.updateAuthState(ctx.pollKey, acceptedState);
     return closeOrRedirect(ctx, acceptedState);
   }
@@ -31,7 +32,7 @@ async function checkAccess (
     matchingAccessId = checkApp.mismatch.id;
   }
 
-  cb(ctx.permissions.list, matchingAccessId);
+  return matchingAccessId;
 }
 
 export default checkAccess;

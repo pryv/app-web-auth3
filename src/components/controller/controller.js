@@ -1,3 +1,4 @@
+// @ flow
 
 import AppError from '../models/AppError.js';
 import acceptAccess from './ops/accept_access.js';
@@ -10,27 +11,27 @@ import refuseAccess from './ops/refuse_access.js';
 import resetPassword from './ops/reset_password.js';
 import getServiceInfo from './ops/get_service_info.js';
 
-function tryAndCatch (ctx, errorCb, fun) {
+function tryAndCatch (ctx, fun) {
   return async (...args) => {
     try {
       return await fun(ctx, ...args);
     } catch (err) {
-      errorCb(new AppError(err).msg);
+      throw new AppError(err);
     }
   };
 }
 
-function controllerFactory (ctx, errorCb) {
+function controllerFactory (ctx) {
   return {
-    acceptAccess: tryAndCatch(ctx, errorCb, acceptAccess),
-    changePassword: tryAndCatch(ctx, errorCb, changePassword),
-    checkAccess: tryAndCatch(ctx, errorCb, checkAccess),
-    createUser: tryAndCatch(ctx, errorCb, createUser),
-    loadHostings: tryAndCatch(ctx, errorCb, loadHostings),
-    login: tryAndCatch(ctx, errorCb, login),
-    refuseAccess: tryAndCatch(ctx, errorCb, refuseAccess),
-    resetPassword: tryAndCatch(ctx, errorCb, resetPassword),
-    getServiceInfo: tryAndCatch(ctx, errorCb, getServiceInfo),
+    acceptAccess: tryAndCatch(ctx, acceptAccess),
+    changePassword: tryAndCatch(ctx, changePassword),
+    checkAccess: tryAndCatch(ctx, checkAccess),
+    createUser: tryAndCatch(ctx, createUser),
+    loadHostings: tryAndCatch(ctx, loadHostings),
+    login: tryAndCatch(ctx, login),
+    refuseAccess: tryAndCatch(ctx, refuseAccess),
+    resetPassword: tryAndCatch(ctx, resetPassword),
+    getServiceInfo: tryAndCatch(ctx, getServiceInfo),
   };
 }
 
