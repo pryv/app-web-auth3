@@ -14,7 +14,8 @@ import resetPassword from './ops/reset_password.js';
 import getServiceInfo from './ops/get_service_info.js';
 
 function tryAndCatch (ctx, fun) {
-  return async (...args: string[]) => {
+  // $FlowFixMe
+  return async (...args) => {
     try {
       return await fun(ctx, ...args);
     } catch (err) {

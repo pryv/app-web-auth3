@@ -9,8 +9,8 @@ describe('Permissions.test.js', () => {
   let wrapper;
   const appId = 'testApp';
   const permissions = [
-    {streamId: 'diary', level: 'read'},
-    {streamId: 'work', level: 'manage'},
+    {name: 'Diary', level: 'read'},
+    {defaultName: 'Work', level: 'manage'},
   ];
 
   beforeAll(() => {
@@ -35,8 +35,7 @@ describe('Permissions.test.js', () => {
 
   it('shows a list of all requested permissions', () => {
     const list = wrapper.find('ul').html();
-    permissions.forEach(permission => {
-      expect(list).toContain(`A permission on stream <b>${permission.streamId}</b> with level <b>${permission.level}</b></li>`);
-    });
+    expect(list).toContain(`A permission on stream <b>Diary</b> with level <b>READ</b></li>`);
+    expect(list).toContain(`A permission on stream <b>Work</b> with level <b>MANAGE</b></li>`);
   });
 });

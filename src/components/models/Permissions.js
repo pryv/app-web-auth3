@@ -22,12 +22,6 @@ class Permissions {
 
   updateList (newList: PermissionsList): PermissionsList {
     this.list = newList;
-    // Permissions may contain 'name' or 'defaultName' attributes
-    // These fields make sense for auth request but not for access creation/update
-    this.list.forEach(permission => {
-      if (permission.name) delete permission.name;
-      if (permission.defaultName) delete permission.defaultName;
-    });
     return this.list;
   }
 }

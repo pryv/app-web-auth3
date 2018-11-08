@@ -32,22 +32,22 @@ exports[`Permissions.test.js renders correctly (snapshots matching) 1`] = `
           
           A permission on stream 
           <b>
-            diary
+            Diary
           </b>
            with level 
           <b>
-            read
+            READ
           </b>
         </li>
         <li>
           
           A permission on stream 
           <b>
-            work
+            Work
           </b>
            with level 
           <b>
-            manage
+            MANAGE
           </b>
         </li>
       </ul>
