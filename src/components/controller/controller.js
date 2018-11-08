@@ -1,4 +1,6 @@
-// @ flow
+// @flow
+
+import type Context from '../../Context.js';
 
 import AppError from '../models/AppError.js';
 import acceptAccess from './ops/accept_access.js';
@@ -12,7 +14,7 @@ import resetPassword from './ops/reset_password.js';
 import getServiceInfo from './ops/get_service_info.js';
 
 function tryAndCatch (ctx, fun) {
-  return async (...args) => {
+  return async (...args: string[]) => {
     try {
       return await fun(ctx, ...args);
     } catch (err) {
@@ -21,7 +23,7 @@ function tryAndCatch (ctx, fun) {
   };
 }
 
-function controllerFactory (ctx) {
+function controllerFactory (ctx: Context) {
   return {
     acceptAccess: tryAndCatch(ctx, acceptAccess),
     changePassword: tryAndCatch(ctx, changePassword),
