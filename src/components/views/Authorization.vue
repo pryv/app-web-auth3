@@ -23,7 +23,7 @@
 
       <v-btn
         id="submitButton"
-        :disabled="!validForm"
+        :disabled="!validForm||submitting"
         @click="submit"
       >Sign In</v-btn>
 
@@ -72,6 +72,7 @@ export default {
     checkedPermissions: null,
     accessId: null,
     serviceInfos: {},
+    submitting: false,
     c: null,
     ctx: {},
     rules: {
@@ -90,10 +91,12 @@ export default {
   methods: {
     submit () {
       if (this.$refs.form.validate()) {
+        this.submitting = true;
         // Check for existing app access
         this.c.checkAccess(this.password)
           .then(this.showPermissions)
-          .catch(this.showError);
+          .catch(this.showError)
+          .finally(() => { this.submitting = false; });
       }
     },
     // Print requested permissions to the user

@@ -20,14 +20,15 @@
 
       <v-btn
         id="submitButton"
-        :disabled="!validForm"
+        :disabled="!validForm||submitting"
         @click="submit"
       >{{ buttonText }}</v-btn>
     </v-form>
 
-    <v-divider class="mt-3 mb-2"/>
-
-    <router-link :to="{ name: 'Authorization' }"><h3>Go back to Sign in</h3></router-link>
+    <div v-if="ctx.permissions.list != null">
+      <v-divider class="mt-3 mb-2"/>
+      <router-link :to="{ name: 'Authorization' }"><h3>Go back to Sign in</h3></router-link>
+    </div>
 
     <Alerts
       :successMsg="success"
@@ -54,6 +55,7 @@ export default {
     error: '',
     success: '',
     showForm: true,
+    submitting: false,
     ctx: {},
     c: null,
     rules: {
@@ -76,6 +78,7 @@ export default {
   methods: {
     submit () {
       if (this.$refs.form.validate()) {
+        this.submitting = true;
         // Ask for a reset token
         if (this.resetToken == null) {
           this.c.resetPassword()
@@ -83,7 +86,8 @@ export default {
               this.showForm = false;
               this.success = 'We have sent password reset instructions to your e-mail address.';
             })
-            .catch(this.showError);
+            .catch(this.showError)
+            .finally(() => { this.submitting = false; });
         } else {
           // If we already got a reset token, we can change the password
           this.c.changePassword(this.password, this.resetToken)
@@ -91,7 +95,8 @@ export default {
               this.showForm = false;
               this.success = 'Your password have been successfully changed.';
             })
-            .catch(this.showError);
+            .catch(this.showError)
+            .finally(() => { this.submitting = false; });
         }
       }
     },

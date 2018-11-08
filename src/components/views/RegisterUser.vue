@@ -37,7 +37,7 @@
 
       <v-btn
         id="submitButton"
-        :disabled="!validForm"
+        :disabled="!validForm||submitting"
         @click="submit"
       >Create</v-btn>
 
@@ -55,8 +55,10 @@
       </div>
     </v-form>
 
-    <v-divider class="mt-3 mb-2"/>
-    <router-link :to="{ name: 'Authorization' }"><h3>Go back to Sign in</h3></router-link>
+    <div v-if="ctx.permissions.list != null">
+      <v-divider class="mt-3 mb-2"/>
+      <router-link :to="{ name: 'Authorization' }"><h3>Go back to Sign in</h3></router-link>
+    </div>
 
     <Alerts
       :successMsg="success"
@@ -81,6 +83,7 @@ export default {
     hosting: '',
     hostingsSelection: [],
     newUser: null,
+    submitting: false,
     ctx: {},
     c: null,
     error: '',
@@ -102,6 +105,7 @@ export default {
   methods: {
     submit () {
       if (this.$refs.form.validate()) {
+        this.submitting = true;
         this.c.createUser(this.password, this.email, this.hosting)
           .then((newUser) => {
             this.newUser = newUser;
@@ -112,7 +116,8 @@ export default {
             }
             this.success = `New user successfully created: ${newUser.username}.`;
           })
-          .catch(this.showError);
+          .catch(this.showError)
+          .finally(() => { this.submitting = false; });
       }
     },
     clear () {
