@@ -12,6 +12,7 @@ import login from './ops/login.js';
 import refuseAccess from './ops/refuse_access.js';
 import resetPassword from './ops/reset_password.js';
 import getServiceInfo from './ops/get_service_info.js';
+import checkUsername from './ops/check_username.js';
 
 function tryAndCatch (ctx, fun) {
   // $FlowFixMe
@@ -35,6 +36,7 @@ function controllerFactory (ctx: Context) {
     refuseAccess: tryAndCatch(ctx, refuseAccess),
     resetPassword: tryAndCatch(ctx, resetPassword),
     getServiceInfo: tryAndCatch(ctx, getServiceInfo),
+    checkUsername: tryAndCatch(ctx, checkUsername),
   };
 }
 

@@ -4,6 +4,7 @@ import RegisterUser from '@/components/views/RegisterUser';
 import ResetPassword from '@/components/views/ResetPassword';
 import Authorization from '@/components/views/Authorization';
 import PageNotFound from '@/components/views/PageNotFound';
+import SigninHub from '@/components/views/SigninHub';
 
 Vue.use(VueRouter);
 
@@ -35,6 +36,12 @@ let Router = new VueRouter({
         resetToken: route.query.resetToken,
       }),
       alias: '/reset-password.html',
+    },
+    {
+      path: '/signin',
+      name: 'SigninHub',
+      component: SigninHub,
+      alias: '/signinhub.html',
     },
     {
       path: '*',
