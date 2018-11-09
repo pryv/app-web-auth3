@@ -14,7 +14,7 @@
           <li
             v-for="(permission, index) in permissionsList"
             :key="index">
-            A permission on stream <b>{{ permission.name || permission.defaultName }}</b> with level <b>{{ permission.level.toUpperCase() }}</b>
+            A permission on stream <b>{{ permission.streamId === '*' ? '* (all my Pryv)' : permission.name || permission.defaultName }}</b> with level <b>{{ permission.level.toUpperCase() }}</b>
           </li>
         </ul>
       </v-card-text>
