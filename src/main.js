@@ -5,6 +5,7 @@ import App from './App';
 import router from './router';
 import Vuetify from 'vuetify';
 import 'vuetify/dist/vuetify.min.css';
+import {i18n} from './locals/i18n.js';
 
 Vue.use(Vuetify);
 
@@ -14,6 +15,7 @@ Vue.config.productionTip = false;
 new Vue({
   el: '#app',
   router,
+  i18n,
   components: { App },
   template: '<App/>',
 });

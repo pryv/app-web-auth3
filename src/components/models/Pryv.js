@@ -146,7 +146,7 @@ class Pryv {
 
   // POST/reg: create a new Pryv user
   async createUser (username: string, password: string, email: string,
-    hosting: string, lang: string, invitation: ?string, referer: ?string): Promise<NewUser> {
+    hosting: string, lang: ?string, invitation: ?string, referer: ?string): Promise<NewUser> {
     const res = await axios.post(
       `${this.register}/user`, {
         appid: this.appId,
