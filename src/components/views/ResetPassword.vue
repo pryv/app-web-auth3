@@ -5,7 +5,8 @@
     <v-form
       v-if="showForm"
       ref="form"
-      v-model="validForm">
+      v-model="validForm"
+      @submit.prevent>
 
       <v-text-field
         id="usernameOrEmail"
