@@ -3,7 +3,7 @@
 import axios from 'axios';
 import Hostings from './Hostings.js';
 import type {AuthState} from './AuthStates.js';
-import type PermissionsList from './Permissions.js';
+import type {PermissionsList} from './Permissions.js';
 
 type AppAccess = {
   type: 'app',
@@ -59,7 +59,7 @@ class Pryv {
   async updateAuthState (pollKey: string, authState: AuthState): Promise<number> {
     const res = await axios.post(
       `${this.register}/access/${pollKey}`,
-      authState.body
+      authState
     );
     return res.status;
   }

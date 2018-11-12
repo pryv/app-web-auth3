@@ -56,7 +56,7 @@
       </div>
     </v-form>
 
-    <div v-if="ctx.permissions.list != null">
+    <div v-if="ctx.permissions != null">
       <v-divider class="mt-3 mb-2"/>
       <router-link :to="{ name: 'Authorization' }"><h3>Go back to Sign in</h3></router-link>
     </div>
@@ -112,7 +112,7 @@ export default {
             this.newUser = newUser;
             // If the goal was only to register a new user (no requested permissions)
             // then we just redirect the new user to its pryv core
-            if (this.ctx.permissions.list == null) {
+            if (this.ctx.permissions == null) {
               location.href = this.ctx.pryv.core(newUser.username);
             }
             this.success = `New user successfully created: ${newUser.username}.`;

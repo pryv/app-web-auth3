@@ -1,7 +1,8 @@
 // @flow
 
 import type Context from '../../../Context.js';
-import {AcceptedAuthState} from '../../models/AuthStates.js';
+import type {AcceptedAuthState, NeedSigninState} from '../../models/AuthStates.js';
+import {ACCEPTED_STATUS, NEED_SIGNIN_STATUS} from '../../models/AuthStates.js';
 import closeOrRedirect from './close_or_redirect.js';
 import login from './login.js';
 
@@ -9,6 +10,18 @@ async function checkAccess (
   ctx: Context,
   password: string,
   showPermissions: (?string) => void): Promise<void> {
+  // Retrieve auth request parameters
+  const authState = await ctx.pryv.poll(ctx.pollKey);
+  switch (authState.status) {
+    case NEED_SIGNIN_STATUS:
+      // Auth request is pending
+      const pendingAuthState: NeedSigninState = authState;
+      ctx.syncFromAuthState(pendingAuthState);
+      break;
+    default:
+      // Auth request was already accepted or terminated (error/refused)
+      return closeOrRedirect(ctx, authState);
+  }
   // Login against Pryv
   await login(ctx, password);
 
@@ -17,7 +30,11 @@ async function checkAccess (
 
   // A matching access exists, returning it alongside with accepted state
   if (checkApp.match) {
-    const acceptedState = new AcceptedAuthState(ctx.user.username, checkApp.match.token);
+    const acceptedState: AcceptedAuthState = {
+      status: ACCEPTED_STATUS,
+      username: ctx.user.username,
+      token: checkApp.match.token,
+    };
     await ctx.pryv.updateAuthState(ctx.pollKey, acceptedState);
     return closeOrRedirect(ctx, acceptedState);
   }

@@ -10,7 +10,7 @@ async function createUser (
   hosting: string,
 ): Promise<NewUser> {
   // Create the new user
-  const newUser = await ctx.pryv.createUser(ctx.user.username, password, email, hosting);
+  const newUser = await ctx.pryv.createUser(ctx.user.username, password, email, hosting, ctx.language);
   return newUser;
 }
 
