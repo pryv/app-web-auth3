@@ -3,7 +3,7 @@
 exports[`RegisterUser.test.js renders correctly (snapshots matching) 1`] = `
 <div>
   <h1>
-    Register a new user
+    register
   </h1>
    
   <vform-stub
@@ -11,20 +11,20 @@ exports[`RegisterUser.test.js renders correctly (snapshots matching) 1`] = `
   >
     <vtextfield-stub
       id="email"
-      label="E-mail"
+      label="email"
       rules="function required(value) {
-          return !!value || 'This field is required.';
+          return !!value || _i18n.i18n.t('requireField');
         },function email(value) {
-          return (/.+@.+/.test(value) || 'E-mail must be valid.'
+          return (/.+@.+/.test(value) || _i18n.i18n.t('invalidEmail')
           );
         }"
     />
      
     <vtextfield-stub
       id="username"
-      label="Username"
+      label="username"
       rules="function required(value) {
-          return !!value || 'This field is required.';
+          return !!value || _i18n.i18n.t('requireField');
         }"
     />
      
@@ -46,11 +46,11 @@ exports[`RegisterUser.test.js renders correctly (snapshots matching) 1`] = `
             }"
       id="hosting"
       items=""
-      label="Hosting"
+      label="hosting"
       menuprops="[object Object]"
-      placeholder="Choose hosting..."
+      placeholder="chooseHosting"
       rules="function required(value) {
-          return !!value || 'This field is required.';
+          return !!value || _i18n.i18n.t('requireField');
         }"
     />
      
@@ -62,7 +62,7 @@ exports[`RegisterUser.test.js renders correctly (snapshots matching) 1`] = `
       tag="button"
       type="button"
     >
-      Create
+      createUser
     </vbtn-stub>
      
     <vbtn-stub
@@ -72,19 +72,19 @@ exports[`RegisterUser.test.js renders correctly (snapshots matching) 1`] = `
       tag="button"
       type="button"
     >
-      Clear
+      clear
     </vbtn-stub>
      
     <div>
       
-      By registering you agree with our
+      terms1
       
       <a
         href="https://pryv.com/terms-of-use/"
         target="_blank"
       >
         
-      terms of use
+      terms2
       </a>
       .
     

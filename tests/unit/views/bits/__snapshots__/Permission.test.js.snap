@@ -15,21 +15,21 @@ exports[`Permissions.test.js renders correctly (snapshots matching) 1`] = `
   >
     <vcardtitle-stub
       class="headline grey lighten-2"
-      id="appIdText"
     >
-      <span>
+      <span
+        id="appIdText"
+      >
         App 
         <b>
           testApp
         </b>
-         is requesting : 
+         is requesting :
       </span>
     </vcardtitle-stub>
      
     <vcardtext-stub>
       <ul>
         <li>
-          
           A permission on stream 
           <b>
             Diary
@@ -38,9 +38,9 @@ exports[`Permissions.test.js renders correctly (snapshots matching) 1`] = `
           <b>
             READ
           </b>
+          .
         </li>
         <li>
-          
           A permission on stream 
           <b>
             Work
@@ -49,6 +49,7 @@ exports[`Permissions.test.js renders correctly (snapshots matching) 1`] = `
           <b>
             MANAGE
           </b>
+          .
         </li>
       </ul>
     </vcardtext-stub>

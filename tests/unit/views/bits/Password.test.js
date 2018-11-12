@@ -9,7 +9,11 @@ describe('Password.test.js', () => {
   let wrapper;
 
   beforeEach(() => {
-    wrapper = shallowMount(Password);
+    wrapper = shallowMount(Password, {
+      mocks: {
+        $t: (key) => key,
+      },
+    });
   });
 
   it('renders correctly (snapshots matching)', () => {
@@ -39,7 +43,7 @@ describe('Password.test.js', () => {
 
   it('validates password correctly', () => {
     const requiredRule = wrapper.vm.rules.required;
-    expect(requiredRule()).toBe('Password is required.');
+    expect(requiredRule()).toBe('Password is required');
     expect(requiredRule('notEmpty')).toBe(true);
   });
 
@@ -59,6 +63,6 @@ describe('Password.test.js', () => {
       repass: '4321',
     });
     // Password confirmation does not match
-    expect(wrapper.vm.matchPassword).toBe('Password confirmation does not match.');
+    expect(wrapper.vm.matchPassword).toBe('Password confirmation does not match');
   });
 });

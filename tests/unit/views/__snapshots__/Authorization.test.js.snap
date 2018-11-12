@@ -11,9 +11,9 @@ exports[`Authorization.test.js renders correctly (snapshots matching) 1`] = `
   <vform-stub>
     <vtextfield-stub
       id="usernameOrEmail"
-      label="Username or email"
+      label="usernameOrEmail"
       rules="function required(value) {
-          return !!value || 'This field is required.';
+          return !!value || _i18n.i18n.t('requireField');
         }"
     />
      
@@ -29,7 +29,7 @@ exports[`Authorization.test.js renders correctly (snapshots matching) 1`] = `
       tag="button"
       type="button"
     >
-      Sign In
+      signin
     </vbtn-stub>
      
     <vbtn-stub
@@ -38,7 +38,7 @@ exports[`Authorization.test.js renders correctly (snapshots matching) 1`] = `
       tag="button"
       type="button"
     >
-      Cancel
+      cancel
     </vbtn-stub>
      
     <!---->
@@ -52,7 +52,7 @@ exports[`Authorization.test.js renders correctly (snapshots matching) 1`] = `
     to="[object Object]"
   >
     <h3>
-      Create an account
+      register
     </h3>
   </router-link-stub>
    
@@ -60,7 +60,7 @@ exports[`Authorization.test.js renders correctly (snapshots matching) 1`] = `
     to="[object Object]"
   >
     <h3>
-      Forgot password
+      forgotPass
     </h3>
   </router-link-stub>
    

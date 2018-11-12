@@ -12,6 +12,7 @@ describe('RegisterUser.test.js', () => {
     wrapper = shallowMount(RegisterUser, {
       mocks: {
         $route: {query: {}},
+        $t: (key) => key,
       },
       stubs: ['router-link'],
     });
@@ -37,13 +38,13 @@ describe('RegisterUser.test.js', () => {
 
   it('validates email correctly', () => {
     const emailRule = wrapper.vm.rules.email;
-    expect(emailRule('invalidEmail')).toBe('E-mail must be valid.');
+    expect(emailRule('invalidEmail')).toBe('E-mail address is invalid');
     expect(emailRule('validEmail@test.com')).toBe(true);
   });
 
   it('validates required fields correctly', () => {
     const requiredRule = wrapper.vm.rules.required;
-    expect(requiredRule()).toBe('This field is required.');
+    expect(requiredRule()).toBe('This field is required');
     expect(requiredRule('notEmpty')).toBe(true);
   });
 });

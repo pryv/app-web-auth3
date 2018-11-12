@@ -13,6 +13,7 @@ describe('ResetPassword.test.js', () => {
     wrapper = shallowMount(ResetPassword, {
       mocks: {
         $route: {query: {}},
+        $t: (key) => key,
       },
       stubs: ['router-link'],
     });
@@ -38,7 +39,7 @@ describe('ResetPassword.test.js', () => {
 
   it('validates required fields correctly', () => {
     const requiredRule = wrapper.vm.rules.required;
-    expect(requiredRule()).toBe('This field is required.');
+    expect(requiredRule()).toBe('This field is required');
     expect(requiredRule('notEmpty')).toBe(true);
   });
 
@@ -47,7 +48,7 @@ describe('ResetPassword.test.js', () => {
     const pageTitle = wrapper.find('h1').text();
     expect(pageTitle).toBe('Reset password');
     const submitButton = wrapper.find('#submitButton');
-    expect(submitButton.text()).toBe('Request password reset');
+    expect(submitButton.text()).toBe('Reset');
     const usernameOrEmail = wrapper.find('#usernameOrEmail');
     expect(usernameOrEmail.exists()).toBe(true);
     // Does not ask for password
@@ -63,7 +64,7 @@ describe('ResetPassword.test.js', () => {
     const pageTitle = wrapper.find('h1').text();
     expect(pageTitle).toBe('Set a new password');
     const submitButton = wrapper.find('#submitButton');
-    expect(submitButton.text()).toBe('Change password');
+    expect(submitButton.text()).toBe('Change');
     const usernameOrEmail = wrapper.find('#usernameOrEmail');
     expect(usernameOrEmail.exists()).toBe(true);
     // Ask for password

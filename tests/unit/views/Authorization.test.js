@@ -13,6 +13,7 @@ describe('Authorization.test.js', () => {
     wrapper = shallowMount(Authorization, {
       mocks: {
         $route: {query: {}},
+        $t: (key) => key,
       },
       stubs: ['router-link'],
     });
@@ -38,7 +39,7 @@ describe('Authorization.test.js', () => {
 
   it('validates required fields correctly', () => {
     const requiredRule = wrapper.vm.rules.required;
-    expect(requiredRule()).toBe('This field is required.');
+    expect(requiredRule()).toBe('This field is required');
     expect(requiredRule('notEmpty')).toBe(true);
   });
 

@@ -12,7 +12,7 @@
         id="usernameOrEmail"
         v-model="ctx.user.username"
         :rules="[rules.required]"
-        label="Username or email"/>
+        :label="$t('usernameOrEmail')"/>
 
       <Password
         v-if="resetToken!=null"
@@ -28,7 +28,7 @@
 
     <div v-if="ctx.permissions.list != null">
       <v-divider class="mt-3 mb-2"/>
-      <router-link :to="{ name: 'Authorization' }"><h3>Go back to Sign in</h3></router-link>
+      <router-link :to="{ name: 'Authorization' }"><h3>{{ $t('backToSignin') }}</h3></router-link>
     </div>
 
     <Alerts
@@ -42,6 +42,7 @@ import Password from './bits/Password';
 import Alerts from './bits/Alerts';
 import Context from '../../context.js';
 import controllerFactory from '../controller/controller.js';
+import { i18n } from '../../locals/i18n.js';
 
 export default {
   components: {
@@ -60,16 +61,16 @@ export default {
     ctx: {},
     c: null,
     rules: {
-      required: value => !!value || 'This field is required.',
+      required: value => !!value || i18n.t('requireField'),
     },
     validForm: false,
   }),
   computed: {
     pageTitle: function () {
-      return this.resetToken ? 'Set a new password' : 'Reset password';
+      return this.resetToken ? i18n.t('setNewPass') : i18n.t('resetPass');
     },
     buttonText: function () {
-      return this.resetToken ? 'Change password' : 'Request password reset';
+      return this.resetToken ? i18n.t('changePass') : i18n.t('requestResetPass');
     },
   },
   created () {
@@ -85,7 +86,7 @@ export default {
           this.c.resetPassword()
             .then(() => {
               this.showForm = false;
-              this.success = 'We have sent password reset instructions to your e-mail address.';
+              this.success = i18n.t('resetInstructions');
             })
             .catch(this.showError)
             .finally(() => { this.submitting = false; });
@@ -94,7 +95,7 @@ export default {
           this.c.changePassword(this.password, this.resetToken)
             .then(() => {
               this.showForm = false;
-              this.success = 'Your password have been successfully changed.';
+              this.success = i18n.t('passwordChanged');
             })
             .catch(this.showError)
             .finally(() => { this.submitting = false; });

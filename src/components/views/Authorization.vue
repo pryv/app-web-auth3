@@ -18,7 +18,7 @@
         id="usernameOrEmail"
         v-model="ctx.user.username"
         :rules="[rules.required]"
-        label="Username or email"/>
+        :label="$t('usernameOrEmail')"/>
 
       <Password v-model="password"/>
 
@@ -26,27 +26,27 @@
         id="submitButton"
         :disabled="!validForm||submitting"
         @click="submit"
-      >Sign In</v-btn>
+      >{{ $t('signin') }}</v-btn>
 
       <v-btn
         @click="refuse"
-      >Cancel</v-btn>
+      >{{ $t('cancel') }}</v-btn>
 
       <div v-if="serviceInfos.support">
-        Feel free to reach our
+        {{ $t('reachUs1') }}
         <a
           :href="serviceInfos.support"
           target="_blank">
           helpdesk</a>
-        if you have questions.
+        {{ $t('reachUs2') }}
       </div>
     </v-form>
 
     <v-divider class="mt-3 mb-2"/>
 
-    <router-link :to="{ name: 'RegisterUser' }"><h3>Create an account</h3></router-link>
+    <router-link :to="{ name: 'RegisterUser' }"><h3>{{ $t('register') }}</h3></router-link>
 
-    <router-link :to="{ name: 'ResetPassword' }"><h3>Forgot password</h3></router-link>
+    <router-link :to="{ name: 'ResetPassword' }"><h3>{{ $t('forgotPass') }}</h3></router-link>
 
     <Alerts
       :errorMsg="error"/>
@@ -59,6 +59,7 @@ import Permissions from './bits/Permissions.vue';
 import Alerts from './bits/Alerts.vue';
 import Context from '../../context.js';
 import controllerFactory from '../controller/controller.js';
+import { i18n } from '../../locals/i18n.js';
 
 export default {
   components: {
@@ -77,8 +78,8 @@ export default {
     c: null,
     ctx: {},
     rules: {
-      required: value => !!value || 'This field is required.',
-      email: value => /.+@.+/.test(value) || 'E-mail must be valid',
+      required: value => !!value || i18n.t('requireField'),
+      email: value => /.+@.+/.test(value) || i18n.t('invalidEmail'),
     },
     validForm: false,
   }),

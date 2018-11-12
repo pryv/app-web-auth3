@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1>Register a new user</h1>
+    <h1>{{ $t('register') }}</h1>
 
     <v-form
       v-if="newUser==null"
@@ -13,14 +13,14 @@
         id="email"
         v-model="email"
         :rules="[rules.required, rules.email]"
-        label="E-mail"
+        :label="$t('email')"
       />
 
       <v-text-field
         id="username"
         v-model="ctx.user.username"
         :rules="[rules.required]"
-        label="Username"
+        :label="$t('username')"
       />
 
       <Password
@@ -32,33 +32,34 @@
         v-model="hosting"
         :items="hostingsSelection"
         :rules="[rules.required]"
-        placeholder="Choose hosting..."
-        label="Hosting"
+        :label="$t('hosting')"
+        :placeholder="$t('chooseHosting')"
+
       />
 
       <v-btn
         id="submitButton"
         :disabled="!validForm||submitting"
         @click="submit"
-      >Create</v-btn>
+      >{{ $t('createUser') }}</v-btn>
 
       <v-btn
         id="clearButton"
         @click="clear"
-      >Clear</v-btn>
+      >{{ $t('clear') }}</v-btn>
 
       <div>
-        By registering you agree with our
+        {{ $t('terms1') }}
         <a
           target="_blank"
           href="https://pryv.com/terms-of-use/">
-        terms of use</a>.
+        {{ $t('terms2') }}</a>.
       </div>
     </v-form>
 
     <div v-if="ctx.permissions.list != null">
       <v-divider class="mt-3 mb-2"/>
-      <router-link :to="{ name: 'Authorization' }"><h3>Go back to Sign in</h3></router-link>
+      <router-link :to="{ name: 'Authorization' }"><h3>{{ $t('backToSignin') }}</h3></router-link>
     </div>
 
     <Alerts
@@ -72,6 +73,7 @@ import Password from './bits/Password.vue';
 import Alerts from './bits/Alerts.vue';
 import Context from '../../context.js';
 import controllerFactory from '../controller/controller.js';
+import { i18n } from '../../locals/i18n.js';
 
 export default {
   components: {
@@ -90,8 +92,8 @@ export default {
     error: '',
     success: '',
     rules: {
-      required: value => !!value || 'This field is required.',
-      email: value => /.+@.+/.test(value) || 'E-mail must be valid.',
+      required: value => !!value || i18n.t('requireField'),
+      email: value => /.+@.+/.test(value) || i18n.t('invalidEmail'),
     },
     validForm: false,
   }),
@@ -115,7 +117,7 @@ export default {
             if (this.ctx.permissions.list == null) {
               location.href = this.ctx.pryv.core(newUser.username);
             }
-            this.success = `New user successfully created: ${newUser.username}.`;
+            this.success = `${i18n.t('userCreated')} ${newUser.username}.`;
           })
           .catch(this.showError)
           .finally(() => { this.submitting = false; });

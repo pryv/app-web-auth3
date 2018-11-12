@@ -2,6 +2,7 @@ import { shallowMount } from '@vue/test-utils';
 import Permissions from '@/components/views/bits/Permissions';
 import Vue from 'vue';
 import Vuetify from 'vuetify';
+import {i18n} from '@/locals/i18n.js';
 
 Vue.use(Vuetify);
 
@@ -21,6 +22,9 @@ describe('Permissions.test.js', () => {
         accept: () => {},
         refuse: () => {},
       },
+      mocks: {
+        $t: (...args) => i18n.t(...args),
+      },
     });
   });
 
@@ -35,7 +39,7 @@ describe('Permissions.test.js', () => {
 
   it('shows a list of all requested permissions', () => {
     const list = wrapper.find('ul').html();
-    expect(list).toContain(`A permission on stream <b>Diary</b> with level <b>READ</b></li>`);
-    expect(list).toContain(`A permission on stream <b>Work</b> with level <b>MANAGE</b></li>`);
+    expect(list).toContain(`A permission on stream <b>Diary</b> with level <b>READ</b>.`);
+    expect(list).toContain(`A permission on stream <b>Work</b> with level <b>MANAGE</b>.`);
   });
 });
