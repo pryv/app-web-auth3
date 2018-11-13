@@ -71,7 +71,7 @@ class Pryv {
         username: username,
         password: password,
         appId: this.appId,
-      }
+      },
     );
     return res.data.token;
   }
@@ -101,8 +101,8 @@ class Pryv {
   }
 
   // POST/core: create a new app access, returns the according app token
-  async createAppAccess (username: string, permissions: PermissionsList,
-    personalToken: string, appToken: ?string, expireAfter: ?number): Promise<AppAccess> {
+  async createAppAccess (username: string, personalToken: string, permissions: PermissionsList,
+    clientData: {}, appToken: ?string, expireAfter: ?number): Promise<AppAccess> {
     const res = await axios.post(
       `${this.core(username)}/accesses`, {
         name: this.appId,
@@ -110,6 +110,7 @@ class Pryv {
         permissions: permissions,
         token: appToken,
         expireAfter: expireAfter,
+        clientData: clientData,
       }, {
         headers: { Authorization: personalToken },
       }
@@ -118,8 +119,8 @@ class Pryv {
   }
 
   // PUT/core: update an existing app access, returns the according app token
-  async updateAppAccess (accessId: string, username: string, permissions: PermissionsList,
-    personalToken: string, appToken: ?string, expireAfter: ?number): Promise<AppAccess> {
+  async updateAppAccess (accessId: string, username: string, personalToken: string,
+    permissions: PermissionsList, clientData: {}, appToken: ?string, expireAfter: ?number): Promise<AppAccess> {
     const res = await axios.put(
       `${this.core(username)}/accesses/${accessId}`, {
         name: this.appId,
@@ -127,6 +128,7 @@ class Pryv {
         permissions: permissions,
         token: appToken,
         expireAfter: expireAfter,
+        clientData: clientData,
       }, {
         headers: { Authorization: personalToken },
       }

@@ -20,10 +20,10 @@ class Context {
   clientData: mixed;
 
   constructor (queryParams) {
-    const domain = domainFromUrl() || 'pryv.me';
+    this.domain = domainFromUrl() || 'pryv.me';
     this.language = 'en';
     this.appId = 'pryv-app-web-auth-3';
-    this.pryv = new Pryv(domain, this.appId);
+    this.pryv = new Pryv(this.domain, this.appId);
     this.pollKey = queryParams.key;
     this.user = {
       username: '',

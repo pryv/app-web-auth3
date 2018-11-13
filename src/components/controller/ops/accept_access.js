@@ -12,10 +12,19 @@ async function acceptAccess (
 
   if (updateId != null) {
     // Update existing app access
-    appAccess = await ctx.pryv.updateAppAccess(updateId, ctx.user.username, ctx.permissions.list, ctx.user.personalToken);
+    appAccess = await ctx.pryv.updateAppAccess(
+      updateId,
+      ctx.user.username,
+      ctx.user.personalToken,
+      ctx.permissions.list,
+      ctx.clientData);
   } else {
     // Create a new app access
-    appAccess = await ctx.pryv.createAppAccess(ctx.user.username, ctx.permissions.list, ctx.user.personalToken);
+    appAccess = await ctx.pryv.createAppAccess(
+      ctx.user.username,
+      ctx.user.personalToken,
+      ctx.permissions.list,
+      ctx.clientData);
   }
 
   // Notify register about accepted state
