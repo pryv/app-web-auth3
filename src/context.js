@@ -17,10 +17,10 @@ class Context {
     username: string,
     personalToken: string,
   }
-  clientData: mixed;
+  clientData: ?{};
 
   constructor (queryParams) {
-    this.domain = domainFromUrl() || 'pryv.me';
+    this.domain = domainFromUrl() || 'rec.la';
     this.language = 'en';
     this.appId = 'pryv-app-web-auth-3';
     this.pryv = new Pryv(this.domain, this.appId);

@@ -6,6 +6,7 @@
       v-if="checkedPermissions!=null"
       :appId="ctx.appId"
       :permissionsList="checkedPermissions"
+      :clientData="ctx.clientData"
       @accepted="accept"
       @refused="refuse"/>
 

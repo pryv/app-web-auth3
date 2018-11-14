@@ -32,13 +32,13 @@ export type NeedSigninState = {
   key: string;
   requestingAppId: string;
   requestedPermissions: PermissionsList;
-  returnURL: string;
+  returnURL: ?string;
   poll_rate_ms: number;
-  clientData: mixed;
+  clientData: ?{};
   url: string;
   lang: string;
   poll: string;
-  oauthState: string;
+  oauthState: ?string;
 }
 
 export type AuthState = AcceptedAuthState|RefusedAuthState|ErrorAuthState|NeedSigninState;
