@@ -71,7 +71,6 @@ export default {
     personalToken: '',
     error: '',
     checkedPermissions: null,
-    accessId: null,
     serviceInfos: {},
     submitting: false,
     c: null,
@@ -100,13 +99,12 @@ export default {
       }
     },
     // Print requested permissions to the user
-    showPermissions (accessId) {
+    showPermissions () {
       this.checkedPermissions = this.ctx.permissions.list;
-      this.accessId = accessId;
     },
     // The user accepts the requested permissions
     accept () {
-      this.c.acceptAccess(this.accessId)
+      this.c.acceptAccess()
         .catch(this.showError);
     },
     // The user refuses the requested permissions
