@@ -9,7 +9,10 @@ async function login (
   await checkUsername(ctx);
 
   // Login against Pryv
-  ctx.user.personalToken = await ctx.pryv.login(ctx.user.username, password);
+  ctx.user.personalToken = await ctx.pryv.login(
+    ctx.user.username,
+    password,
+    ctx.appId);
 }
 
 export default login;

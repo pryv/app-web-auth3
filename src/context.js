@@ -6,10 +6,11 @@ import type {NeedSigninState} from './components/models/AuthStates.js';
 
 class Context {
   domain: string;
-  appId: string;
+  appId: string; // id of the web-auth app
+  requestingAppId: string; // id of the app requesting access
   language: string;
-  returnURL: string;
-  oauthState: string;
+  returnURL: ?string;
+  oauthState: ?string;
   permissions: Permissions;
   pollKey: string;
   pryv: Pryv;
@@ -20,10 +21,10 @@ class Context {
   clientData: ?{};
 
   constructor (queryParams) {
-    this.domain = domainFromUrl() || 'rec.la';
-    this.language = 'en';
+    this.domain = domainFromUrl() || 'pryv.me';
+    this.language = queryParams.lang || 'en';
     this.appId = 'pryv-app-web-auth-3';
-    this.pryv = new Pryv(this.domain, this.appId);
+    this.pryv = new Pryv(this.domain);
     this.pollKey = queryParams.key;
     this.user = {
       username: '',
@@ -31,14 +32,13 @@ class Context {
     };
   }
 
-  syncFromAuthState (state: NeedSigninState) {
+  updateFromAuthState (state: NeedSigninState) {
     this.clientData = state.clientData;
-    this.appId = state.requestingAppId;
+    this.requestingAppId = state.requestingAppId;
     this.permissions = new Permissions(state.requestedPermissions);
-    this.pryv = new Pryv(this.domain, this.appId);
     this.returnURL = state.returnURL;
     this.oauthState = state.oauthState;
-    this.language = state.lang;
+    if (state.lang != null) this.language = state.lang;
   }
 }
 

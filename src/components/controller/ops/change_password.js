@@ -8,7 +8,11 @@ async function changePassword (
   newPassword: string,
   resetToken: string): Promise<void> {
   await checkUsername(ctx);
-  await ctx.pryv.changePassword(ctx.user.username, newPassword, resetToken);
+  await ctx.pryv.changePassword(
+    ctx.user.username,
+    newPassword,
+    resetToken,
+    ctx.appId);
 }
 
 export default changePassword;

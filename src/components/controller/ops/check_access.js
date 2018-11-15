@@ -15,8 +15,8 @@ async function checkAccess (
   switch (authState.status) {
     case NEED_SIGNIN_STATUS:
       // Auth request is pending
-      const pendingAuthState: NeedSigninState = authState;
-      ctx.syncFromAuthState(pendingAuthState);
+      const needSigninState: NeedSigninState = authState;
+      ctx.updateFromAuthState(needSigninState);
       break;
     default:
       // Auth request was already accepted or terminated (error/refused)
@@ -26,7 +26,11 @@ async function checkAccess (
   await login(ctx, password);
 
   // Check for existing app access
-  const checkApp = await ctx.pryv.checkAppAccess(ctx.user.username, ctx.permissions.list, ctx.user.personalToken);
+  const checkApp = await ctx.pryv.checkAppAccess(
+    ctx.user.username,
+    ctx.permissions.list,
+    ctx.user.personalToken,
+    ctx.requestingAppId);
 
   // A matching access exists, returning it alongside with accepted state
   if (checkApp.match) {

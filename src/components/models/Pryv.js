@@ -37,14 +37,10 @@ export type ServiceInfos = {
 class Pryv {
   core: (string) => string;
   register: string;
-  appId: string;
-  origin: ?string;
 
-  constructor (domain: string, appId: string, origin: ?string) {
+  constructor (domain: string) {
     this.core = username => `https://${username}.${domain}`;
     this.register = `https://reg.${domain}`;
-    this.appId = appId;
-    this.origin = origin;
   }
 
   // ---------- AUTH calls ----------
@@ -65,12 +61,12 @@ class Pryv {
   }
 
   // POST/core: login with Pryv credentials
-  async login (username: string, password: string): Promise<string> {
+  async login (username: string, password: string, appId: string): Promise<string> {
     const res = await axios.post(
       `${this.core(username)}/auth/login`, {
         username: username,
         password: password,
-        appId: this.appId,
+        appId: appId,
       },
     );
     return res.data.token;
@@ -82,10 +78,10 @@ class Pryv {
   // 2. match: existing access with matching permissions
   // 3. mismatch: existing access with mismatching permissions
   async checkAppAccess (username: string, permissions: PermissionsList,
-    personalToken: string, deviceName: ?string): Promise<AppCheck> {
+    personalToken: string, appId: string, deviceName: ?string): Promise<AppCheck> {
     const res = await axios.post(
       `${this.core(username)}/accesses/check-app`, {
-        requestingAppId: this.appId,
+        requestingAppId: appId,
         requestedPermissions: permissions,
         deviceName: deviceName,
       }, {
@@ -102,10 +98,11 @@ class Pryv {
 
   // POST/core: create a new app access, returns the according app token
   async createAppAccess (username: string, personalToken: string,
-    permissions: PermissionsList, clientData: ?{}, appToken: ?string, expireAfter: ?number): Promise<AppAccess> {
+    permissions: PermissionsList, appId: string,
+    clientData: ?{}, appToken: ?string, expireAfter: ?number): Promise<AppAccess> {
     const res = await axios.post(
       `${this.core(username)}/accesses`, {
-        name: this.appId,
+        name: appId,
         type: 'app',
         permissions: permissions,
         token: appToken,
@@ -120,10 +117,11 @@ class Pryv {
 
   // PUT/core: update an existing app access, returns the according app token
   async updateAppAccess (accessId: string, username: string, personalToken: string,
-    permissions: PermissionsList, clientData: ?{}, appToken: ?string, expireAfter: ?number): Promise<AppAccess> {
+    permissions: PermissionsList, appId: string,
+    clientData: ?{}, appToken: ?string, expireAfter: ?number): Promise<AppAccess> {
     const res = await axios.put(
       `${this.core(username)}/accesses/${accessId}`, {
-        name: this.appId,
+        name: appId,
         type: 'app',
         permissions: permissions,
         token: appToken,
@@ -148,10 +146,11 @@ class Pryv {
 
   // POST/reg: create a new Pryv user
   async createUser (username: string, password: string, email: string,
-    hosting: string, lang: string, invitation: ?string, referer: ?string): Promise<NewUser> {
+    hosting: string, lang: string, appId: string,
+    invitation: ?string, referer: ?string): Promise<NewUser> {
     const res = await axios.post(
       `${this.register}/user`, {
-        appid: this.appId,
+        appid: appId,
         username: username,
         password: password,
         email: email,
@@ -185,13 +184,11 @@ class Pryv {
   // ---------- RESET calls ----------
 
   // POST/core: request a password reset
-  async requestPasswordReset (username: string): Promise<number> {
+  async requestPasswordReset (username: string, appId: string): Promise<number> {
     const res = await axios.post(
       `${this.core(username)}/account/request-password-reset`, {
-        appId: this.appId,
+        appId: appId,
         username: username,
-      }, {
-        headers: { Origin: this.origin },
       }
     );
     return res.status;
@@ -199,15 +196,13 @@ class Pryv {
 
   // POST/core: change Pryv password using a reset token
   async changePassword (username: string, newPassword: string,
-    resetToken: string): Promise<number> {
+    resetToken: string, appId: string): Promise<number> {
     const res = await axios.post(
       `${this.core(username)}/account/reset-password`, {
         username: username,
         newPassword: newPassword,
-        appId: this.appId,
+        appId: appId,
         resetToken: resetToken,
-      }, {
-        headers: { Origin: this.origin },
       }
     );
     return res.status;

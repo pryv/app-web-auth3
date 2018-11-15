@@ -5,27 +5,14 @@ import type {AcceptedAuthState} from '../../models/AuthStates.js';
 import closeOrRedirect from './close_or_redirect.js';
 import type Context from '../../../context.js';
 
-async function acceptAccess (
-  ctx: Context,
-  updateId: ?string): Promise<void> {
-  let appAccess;
-
-  if (updateId != null) {
-    // Update existing app access
-    appAccess = await ctx.pryv.updateAppAccess(
-      updateId,
-      ctx.user.username,
-      ctx.user.personalToken,
-      ctx.permissions.list,
-      ctx.clientData);
-  } else {
-    // Create a new app access
-    appAccess = await ctx.pryv.createAppAccess(
-      ctx.user.username,
-      ctx.user.personalToken,
-      ctx.permissions.list,
-      ctx.clientData);
-  }
+async function acceptAccess (ctx: Context): Promise<void> {
+  // Create a new app access
+  const appAccess = await ctx.pryv.createAppAccess(
+    ctx.user.username,
+    ctx.user.personalToken,
+    ctx.permissions.list,
+    ctx.requestingAppId,
+    ctx.clientData);
 
   // Notify register about accepted state
   const acceptedState: AcceptedAuthState = {
