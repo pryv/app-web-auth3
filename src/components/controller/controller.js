@@ -15,7 +15,6 @@ import getServiceInfo from './ops/get_service_info.js';
 import checkUsername from './ops/check_username.js';
 
 function tryAndCatch (ctx, fun) {
-  // $FlowFixMe
   return async (...args) => {
     try {
       return await fun(ctx, ...args);

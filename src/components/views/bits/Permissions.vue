@@ -18,9 +18,6 @@
           </li>
         </ul>
       </v-card-text>
-      <v-card-text v-if="clientData.consent">
-        {{ clientData.consent }}
-      </v-card-text>
       <v-divider/>
       <v-card-actions>
         <v-spacer/>
@@ -42,7 +39,6 @@ export default {
   props: {
     permissionsList: {type: Array, default: () => ([])},
     appId: {type: String, default: ''},
-    clientData: {type: Object, default: () => {}},
   },
   data: () => ({
     dialog: true,

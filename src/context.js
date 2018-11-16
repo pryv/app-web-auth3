@@ -4,6 +4,11 @@ import Pryv from './components/models/Pryv.js';
 import Permissions from './components/models/Permissions.js';
 import type {NeedSigninState} from './components/models/AuthStates.js';
 
+type QueryParameters = {
+  key: string,
+  lang: ?string
+}
+
 class Context {
   domain: string;
   appId: string; // id of the web-auth app
@@ -20,7 +25,7 @@ class Context {
   }
   clientData: ?{};
 
-  constructor (queryParams) {
+  constructor (queryParams: QueryParameters) {
     this.domain = domainFromUrl() || 'pryv.me';
     this.language = queryParams.lang || 'en';
     this.appId = 'pryv-app-web-auth-3';

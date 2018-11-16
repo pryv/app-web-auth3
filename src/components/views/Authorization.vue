@@ -4,9 +4,8 @@
 
     <Permissions
       v-if="checkedPermissions!=null"
-      :appId="ctx.appId"
+      :appId="ctx.requestingAppId"
       :permissionsList="checkedPermissions"
-      :clientData="ctx.clientData"
       @accepted="accept"
       @refused="refuse"/>
 

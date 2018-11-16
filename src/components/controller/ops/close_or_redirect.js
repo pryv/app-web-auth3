@@ -17,7 +17,6 @@ function closeOrRedirect (ctx: Context, state: AuthState): void {
       returnUrl += `?prYvkey=${ctx.pollKey}`;
 
       Object.keys(state).forEach(key => {
-        // $FlowFixMe
         returnUrl += `&prYv${key}=${state[key]}`;
       });
     }
