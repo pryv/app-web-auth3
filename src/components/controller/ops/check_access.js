@@ -44,17 +44,15 @@ async function checkAccess (
   }
 
   // No such access already exists, we will create a new one with checked permissions
-  let matchingAccessId = null;
   if (checkApp.permissions) {
     ctx.permissions.updateList(checkApp.permissions);
   }
 
-  // A mismatching access exists, we will update it with the new permissions
-  if (checkApp.mismatch) {
-    matchingAccessId = checkApp.mismatch.id;
-  }
+  // We intentionally do not check for the existence of mismatching access (checkApp.mismatch)
+  // If a mismatching access exists, we also want to create a new access anyway.
+  // Thus, the mismatching access continue to exist independantly of the new access.
 
-  showPermissions(matchingAccessId);
+  showPermissions();
 }
 
 export default checkAccess;
