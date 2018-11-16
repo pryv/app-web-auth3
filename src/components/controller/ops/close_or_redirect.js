@@ -1,9 +1,9 @@
 // @flow
 
 import type Context from '../../../Context.js';
-import type {AuthState} from '../../models/AuthStates.js';
+import type {TerminationAuthState} from '../../models/AuthStates.js';
 
-function closeOrRedirect (ctx: Context, state: AuthState): void {
+function closeOrRedirect (ctx: Context, state: TerminationAuthState): void {
   let returnUrl = ctx.returnURL;
   // If no return URL was provided, just close the popup
   if (returnUrl == null || returnUrl === 'false' || !returnUrl) {

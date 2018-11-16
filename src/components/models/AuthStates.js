@@ -41,4 +41,5 @@ export type NeedSigninState = {
   oauthState: ?string;
 }
 
-export type AuthState = AcceptedAuthState|RefusedAuthState|ErrorAuthState|NeedSigninState;
+export type TerminationAuthState = AcceptedAuthState|RefusedAuthState|ErrorAuthState;
+export type AuthState = TerminationAuthState|NeedSigninState;
