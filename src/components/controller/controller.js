@@ -15,7 +15,7 @@ import getServiceInfo from './ops/get_service_info.js';
 import checkUsername from './ops/check_username.js';
 
 function tryAndCatch (ctx, fun) {
-  return async (...args) => {
+  return async (...args: Array<*>) => {
     try {
       return await fun(ctx, ...args);
     } catch (err) {
