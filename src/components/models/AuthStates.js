@@ -8,26 +8,26 @@ export const ERROR_STATUS = 'ERROR';
 export const NEED_SIGNIN_STATUS = 'NEED_SIGNIN';
 
 export type AcceptedAuthState = {
-  status: string;
+  status: 'ACCEPTED';
   username: string;
   token: string;
 }
 
 export type RefusedAuthState = {
-  status: string;
+  status: 'REFUSED';
   reasonId: string;
   message: string;
 }
 
 export type ErrorAuthState = {
-  status: string;
+  status: 'ERROR';
   id: number;
   message: string;
   detail: string;
 }
 
 export type NeedSigninState = {
-  status: string;
+  status: 'NEED_SIGNIN';
   code: number;
   key: string;
   requestingAppId: string;

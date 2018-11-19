@@ -16,9 +16,11 @@ function closeOrRedirect (ctx: Context, state: TerminationAuthState): void {
     } else {
       returnUrl += `?prYvkey=${ctx.pollKey}`;
 
-      Object.keys(state).forEach(key => {
-        returnUrl += `&prYv${key}=${state[key]}`;
-      });
+      for (const [key, val] of Object.entries(state)) {
+        if (typeof val === 'string' || typeof val === 'number') {
+          returnUrl += `&prYv${key}=${val}`;
+        }
+      }
     }
     location.href = returnUrl;
   }
