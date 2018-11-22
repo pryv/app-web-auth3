@@ -23,7 +23,7 @@ const usernameForEmailMock = RequestMock()
   .respond({uid: 'tmodoux'}, 200, {'Access-Control-Allow-Origin': '*'});
 
 fixture(`Reset password request`)
-  .page('http://localhost:8080/reset?requestingAppId=pryv-reset-standalone&standaloneReset=true')
+  .page('http://localhost:8080/reset')
   .requestHooks(resetLogger, emailLogger, resetRequestMock, usernameForEmailMock);
 
 test('Reset request with email-username conversion', async testController => {
@@ -44,7 +44,7 @@ test('Reset request with email-username conversion', async testController => {
     .expect(resetLogger.contains(record =>
       record.request.method === 'post' &&
       record.response.statusCode === 200 &&
-      record.request.body.includes('"appId":"pryv-reset-standalone"') &&
+      record.request.body.includes('"appId":"pryv-app-web-auth-3"') &&
       record.request.body.includes('"username":"tmodoux"')
     )).ok()
     .expect(Selector('body').textContent).contains('We have sent password reset instructions to your e-mail address.');

@@ -4,7 +4,7 @@ const authEndpoint = 'https://tmodoux.pryv.me/auth/login';
 const checkAppEndpoint = 'https://tmodoux.pryv.me/accesses/check-app';
 const emailEndpoint = 'https://reg.pryv.me/test@test.com/uid';
 const userEndpoint = 'https://reg.pryv.me/tmodoux/server';
-const updateStateEndpoint = 'https://reg.pryv.me/access/pollKey';
+const pollEndpoint = 'https://reg.pryv.me/access/pollKey';
 const createAccessEndpoint = 'https://tmodoux.pryv.me/accesses';
 const permissions = [
   {streamId: 'diary', defaultName: 'Diary', level: 'read'},
@@ -14,6 +14,11 @@ const checkedPermissions = [
   {streamId: 'diary', defaultName: 'Diary', level: 'read'},
   {streamId: 'work', name: 'Work', level: 'manage'},
 ];
+const needSigninState = {
+  status: 'NEED_SIGNIN',
+  requestingAppId: 'client-app',
+  requestedPermissions: permissions,
+};
 
 // ---------- Requests loggers ----------
 
@@ -31,7 +36,7 @@ const emailLogger = RequestLogger(emailEndpoint);
 
 const userLogger = RequestLogger(userEndpoint);
 
-const updateStateLogger = RequestLogger(updateStateEndpoint, {
+const pollLogger = RequestLogger(pollEndpoint, {
   logRequestBody: true,
   stringifyRequestBody: true,
 });
@@ -59,18 +64,18 @@ const userExistenceMock = RequestMock()
   .onRequestTo(userEndpoint)
   .respond(null, 200, {'Access-Control-Allow-Origin': '*'});
 
-const updateStateMock = RequestMock()
-  .onRequestTo(updateStateEndpoint)
-  .respond(null, 200, {'Access-Control-Allow-Origin': '*'});
+const pollMock = RequestMock()
+  .onRequestTo(pollEndpoint)
+  .respond(needSigninState, 200, {'Access-Control-Allow-Origin': '*'});
 
 const createAccessMock = RequestMock()
   .onRequestTo(createAccessEndpoint)
   .respond({access: {token: 'appToken'}}, 200, {'Access-Control-Allow-Origin': '*'});
 
 fixture(`Auth request`)
-  .page(`http://localhost:8080/auth?requestingAppId=pryv-auth-standalone&key=pollKey&requestedPermissions=${JSON.stringify(permissions)}`)
-  .requestHooks(authLogger, checkAppLogger, emailLogger, userLogger, updateStateLogger, createAccessLogger,
-    authRequestMock, checkAppMock, usernameForEmailMock, userExistenceMock, updateStateMock, createAccessMock);
+  .page(`http://localhost:8080/auth?key=pollKey`)
+  .requestHooks(authLogger, checkAppLogger, emailLogger, userLogger, pollLogger, createAccessLogger,
+    authRequestMock, checkAppMock, usernameForEmailMock, userExistenceMock, pollMock, createAccessMock);
 
 test('Auth request, app access check and then accept permissions', async testController => {
   await testController
@@ -82,6 +87,11 @@ test('Auth request, app access check and then accept permissions', async testCon
     .typeText('#usernameOrEmail', 'test@test.com')
     .typeText('#password', 'mypass')
     .click('#submitButton')
+    // Poll call was performed
+    .expect(pollLogger.contains(record =>
+      record.request.method === 'get' &&
+      record.response.statusCode === 200
+    )).ok()
     // Email to username call was performed
     .expect(emailLogger.contains(record =>
       record.request.method === 'get' &&
@@ -96,7 +106,7 @@ test('Auth request, app access check and then accept permissions', async testCon
     .expect(authLogger.contains(record =>
       record.request.method === 'post' &&
       record.response.statusCode === 200 &&
-      record.request.body.includes('"appId":"pryv-auth-standalone"') &&
+      record.request.body.includes('"appId":"pryv-app-web-auth-3"') &&
       record.request.body.includes('"username":"tmodoux"') &&
       record.request.body.includes('"password":"mypass"')
     )).ok()
@@ -104,11 +114,11 @@ test('Auth request, app access check and then accept permissions', async testCon
     .expect(checkAppLogger.contains(record =>
       record.request.method === 'post' &&
       record.response.statusCode === 200 &&
-      record.request.body.includes('"requestingAppId":"pryv-auth-standalone"') &&
+      record.request.body.includes('"requestingAppId":"client-app"') &&
       record.request.body.includes(`"requestedPermissions":${JSON.stringify(permissions)}`)
     )).ok()
     // Requested permissions are printed to the user
-    .expect(Selector('#appIdText').innerText).contains('App pryv-auth-standalone is requesting :')
+    .expect(Selector('#appIdText').innerText).contains('App client-app is requesting :')
     .expect(Selector('ul').textContent).contains('A permission on stream Diary with level READ')
     .expect(Selector('ul').textContent).contains('A permission on stream Work with level MANAGE')
     // If the user accepts them
@@ -117,12 +127,12 @@ test('Auth request, app access check and then accept permissions', async testCon
     .expect(createAccessLogger.contains(record =>
       record.request.method === 'post' &&
       record.response.statusCode === 200 &&
-      record.request.body.includes('"name":"pryv-auth-standalone"') &&
+      record.request.body.includes('"name":"client-app"') &&
       record.request.body.includes('"type":"app"') &&
       record.request.body.includes(`"permissions":${JSON.stringify(checkedPermissions)}`)
     )).ok()
     // Update call is performed with accepted state
-    .expect(updateStateLogger.contains(record =>
+    .expect(pollLogger.contains(record =>
       record.request.method === 'post' &&
       record.response.statusCode === 200 &&
       record.request.body.includes('"status":"ACCEPTED"') &&

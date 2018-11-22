@@ -51,7 +51,7 @@ const redirectMock = RequestMock()
   .respond(null, 200, {'Access-Control-Allow-Origin': '*'});
 
 fixture(`Register user`)
-  .page('http://localhost:8080/register?requestingAppId=pryv-reg-standalone&standaloneRegister=true')
+  .page('http://localhost:8080/register?lang=fr')
   .requestHooks(registerLogger, hostingsLogger, registerUserMock, hostingsMock, redirectMock);
 
 test('Register new user with hostings retrieval', async testController => {
@@ -75,12 +75,12 @@ test('Register new user with hostings retrieval', async testController => {
     .expect(registerLogger.contains(record =>
       record.request.method === 'post' &&
       record.response.statusCode === 200 &&
-      record.request.body.includes('"appid":"pryv-reg-standalone"') &&
+      record.request.body.includes('"appid":"pryv-app-web-auth-3"') &&
       record.request.body.includes('"username":"tmodoux"') &&
       record.request.body.includes('"password":"mypass"') &&
       record.request.body.includes('"email":"test@test.com"') &&
       record.request.body.includes('"hosting":"gandi.net-fr"') &&
-      record.request.body.includes('"languageCode":"en"') &&
+      record.request.body.includes('"languageCode":"fr"') &&
       record.request.body.includes('"invitationtoken":"enjoy"')
     )).ok();
 });

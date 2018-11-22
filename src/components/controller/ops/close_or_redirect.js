@@ -1,27 +1,28 @@
 // @flow
 
 import type Context from '../../../Context.js';
-import type {AuthState} from '../../models/AuthStates.js';
+import type {TerminationAuthState} from '../../models/AuthStates.js';
 
-function closeOrRedirect (ctx: Context, state: AuthState): void {
-  let href = ctx.returnURL;
+function closeOrRedirect (ctx: Context, state: TerminationAuthState): void {
+  let returnUrl = ctx.returnURL;
   // If no return URL was provided, just close the popup
-  if (href == null || href === 'false') {
+  if (returnUrl == null || returnUrl === 'false' || !returnUrl) {
     window.close();
   } else {
     // Otherwise, we need to redirect to the return URL,
     // passing the resulting parameters as querystring
     if (ctx.oauthState) {
-      href += `?state=${ctx.oauthState}&code=${ctx.pollKey}`;
+      returnUrl += `?state=${ctx.oauthState}&code=${ctx.pollKey}`;
     } else {
-      href += `?prYvkey=${ctx.pollKey}`;
+      returnUrl += `?prYvkey=${ctx.pollKey}`;
 
-      Object.keys(state.body).forEach(key => {
-        // $FlowFixMe
-        href += `&prYv${key}=${state.body[key]}`;
-      });
+      for (const [key, val] of Object.entries(state)) {
+        if (typeof val === 'string' || typeof val === 'number') {
+          returnUrl += `&prYv${key}=${val}`;
+        }
+      }
     }
-    location.href = href;
+    location.href = returnUrl;
   }
 }
 
