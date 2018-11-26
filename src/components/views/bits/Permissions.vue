@@ -18,6 +18,9 @@
           </li>
         </ul>
       </v-card-text>
+      <v-card-text v-if="consentMsg">
+        {{ consentMsg }}
+      </v-card-text>
       <v-divider/>
       <v-card-actions>
         <v-spacer/>
@@ -39,10 +42,17 @@ export default {
   props: {
     permissionsList: {type: Array, default: () => ([])},
     appId: {type: String, default: ''},
+    clientData: {type: Object, default: () => {}},
   },
   data: () => ({
     dialog: true,
   }),
+  computed: {
+    consentMsg: function () {
+      const description = this.clientData['app-web-auth:description'];
+      return description != null ? description.content : null;
+    },
+  },
   methods: {
     closeDialog (acceptOrReject) {
       this.dialog = false;
