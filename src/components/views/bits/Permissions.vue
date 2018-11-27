@@ -18,9 +18,7 @@
           </li>
         </ul>
       </v-card-text>
-      <v-card-text v-if="consentMsg">
-        {{ consentMsg }}
-      </v-card-text>
+      <v-card-text v-html="consentMsg"/>
       <v-divider/>
       <v-card-actions>
         <v-spacer/>
@@ -38,6 +36,7 @@
 </template>
 
 <script>
+import marked from 'marked';
 export default {
   props: {
     permissionsList: {type: Array, default: () => ([])},
@@ -51,7 +50,7 @@ export default {
     consentMsg: function () {
       if (this.clientData != null) {
         const description = this.clientData['app-web-auth:description'];
-        return description != null ? description.content : null;
+        return description != null ? marked(description.content) : '';
       }
     },
   },
