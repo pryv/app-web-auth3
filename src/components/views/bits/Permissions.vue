@@ -49,8 +49,10 @@ export default {
   }),
   computed: {
     consentMsg: function () {
-      const description = this.clientData['app-web-auth:description'];
-      return description != null ? description.content : null;
+      if (this.clientData != null) {
+        const description = this.clientData['app-web-auth:description'];
+        return description != null ? description.content : null;
+      }
     },
   },
   methods: {
