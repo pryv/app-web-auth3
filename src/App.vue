@@ -8,7 +8,9 @@
     <v-app>
       <v-content>
         <v-container>
-          <img src="@/assets/main-logo.png">
+          <img
+            src="@/assets/logo.png"
+            height="50px">
           <router-view/>
         </v-container>
       </v-content>
