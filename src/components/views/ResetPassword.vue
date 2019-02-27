@@ -26,10 +26,8 @@
       >{{ buttonText }}</v-btn>
     </v-form>
 
-    <div v-if="ctx.permissions != null">
-      <v-divider class="mt-3 mb-2"/>
-      <router-link :to="{ name: 'Authorization' }"><h3>Go back to Sign in</h3></router-link>
-    </div>
+    <v-divider class="mt-3 mb-2"/>
+    <router-link :to="{ name: 'Authorization' }"><h3>Go to Sign in</h3></router-link>
 
     <Alerts
       :successMsg="success"

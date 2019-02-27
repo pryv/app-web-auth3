@@ -56,10 +56,8 @@
       </div>
     </v-form>
 
-    <div v-if="ctx.permissions != null">
-      <v-divider class="mt-3 mb-2"/>
-      <router-link :to="{ name: 'Authorization' }"><h3>Go back to Sign in</h3></router-link>
-    </div>
+    <v-divider class="mt-3 mb-2"/>
+    <router-link :to="{ name: 'Authorization' }"><h3>Go to Sign in</h3></router-link>
 
     <Alerts
       :successMsg="success"
@@ -110,11 +108,6 @@ export default {
         this.c.createUser(this.password, this.email, this.hosting)
           .then((newUser) => {
             this.newUser = newUser;
-            // If the goal was only to register a new user (no requested permissions)
-            // then we just redirect the new user to its pryv core
-            if (this.ctx.permissions == null) {
-              location.href = this.ctx.pryv.core(newUser.username);
-            }
             this.success = `New user successfully created: ${newUser.username}.`;
           })
           .catch(this.showError)

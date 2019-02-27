@@ -74,7 +74,7 @@ In this section, we explain how the three main goals of app-web-auth3 are implem
 1. At the loading of the registration page, a list of available Pryv.io hostings is loaded (form register)
 2. A form ask for information about the new user: email, username, password, choice of hosting
 3. Clicking on Create triggers the user creation
-4. The registration flow ends and the new user can now login and proceed to the authorization flow. If the goal was only to create a new user and was not following an auth request (i.e. the requested permissions are empty) then the new user is redirected to its Pryv server/core.
+4. The registration flow ends and the new user can now login and proceed to the authorization flow.
 
 ### Reset password flow
 
