@@ -26,7 +26,7 @@
       >{{ buttonText }}</v-btn>
     </v-form>
 
-    <div v-if="ctx.permissions != null">
+    <div v-if="ctx.pollKey != null">
       <v-divider class="mt-3 mb-2"/>
       <router-link :to="{ name: 'Authorization' }"><h3>Go to Sign in</h3></router-link>
     </div>
