@@ -89,12 +89,29 @@ In this section, we explain how the three main goals of app-web-auth3 are implem
 
 #### login op.
 
+```
+POST username.domain/auth/login
+params: username, password, appId
+```
+
 Uses provided Pryv credentials (username, password) to login against Pryv API.
 Before actually login in, two preliminary calls happens:
   - getUsernameForEmail: if a Pryv email was provided instead of the username, convert it to username.
+    ```
+    GET reg.domain/:email/uid
+    ```
   - checkUsernameExistence: check if provided username exists (i.e. is assigned to a Pryv server/core).
+    ```
+    POST reg.domain/:username/server
+    ```
 
 #### checkAccess op.
+
+```
+POST username.domain/accesses/check-app
+params: requestingAppId, requestedPermissions, deviceName
+headers: Authorization = personal token
+```
 
 Checks the requested app access (especially the permissions it contains) and compare it with eventually existing ones (only [accesses of type 'app'](http://api.pryv.com/concepts/#accesses) are considered here).
 
@@ -105,21 +122,45 @@ From this check, three different objects can be returned, depending on the situa
 
 Knowing that, this operation continues as follow:
 
-If **matchingAccess** exists, register is notified by sending an AcceptedAuthState (which contains the username and the app token) to the poll endpoint (so that the app token can further be retrieved by the app doing polling). Finally, we can just jump to the end of the [auth flow](#authorization-flow) (step 5), returning the existing access.
+If **matchingAccess** exists, register is notified by sending an AcceptedAuthState (similar as the last part of [acceptAccess op.](acceptaccess-op.)). Finally, we can just jump to the end of the [auth flow](#authorization-flow) (step 5), returning the existing access.
 
 Otherwise, we first replace the permissions list with the **checkedPermissions** and then show them to the user so that he can consent (or not) to the creation of the new access ([auth flow](#authorization-flow), step 4).
 
-If **mismatchingAccess** exists, we still show the **checkedPermissions** to the user, but instead of creating a new access upon user consent ([auth flow](#authorization-flow), step 4), we just update the existing one with the new permissions.
+If **mismatchingAccess** exists, we still show the **checkedPermissions** to the user, but instead of creating a new access upon user consent ([auth flow](#authorization-flow), step 4), we will just update the existing one with the new permissions.
 
 #### acceptAccess op.
 
-Triggered when user accept to consent to the new app access, it creates the access according to provided username, personalToken and permissionsList (or updates an existing **mismatchingAccess** using its access id).
+Triggered when user accept to consent to the new app access, it creates the access according to provided username, personalToken and permissionsList. 
+
+```
+POST username.domain/accesses
+params: name, type = 'app', permissions, token,
+headers: Authorization = personal token
+```
+
+If we had a **mismatchingAccess** previously, it updates the existing access with the new permissions instead.
+
+```
+PUT username.domain/accesses/:accessId
+params: permissions
+headers: Authorization = personal token
+```
 
 Then, register is notified by sending an AcceptedAuthState (which contains the username and the app token) to the poll endpoint (so that the app token can further be retrieved by the app doing polling) and the auth flow ends ([closeOrRedirect op.](closeorredirect-op.)).
+
+```
+POST reg.domain/access/:pollKey
+params: status = 'ACCEPTED', username, token = app token
+```
 
 #### refuseAccess op.
 
 Triggered when user refuses to consent to the new app access, it notifies register by sending an RefusedAuthState (which contains nothing more than a refuse message) and then ends the auth flow ([closeOrRedirect op.](closeorredirect-op.)).
+
+```
+POST reg.domain/access/:pollKey
+params: status = 'REFUSED', reasonId, message
+```
 
 #### closeOrRedirect op.
 
