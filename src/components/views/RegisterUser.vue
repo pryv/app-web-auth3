@@ -111,6 +111,11 @@ export default {
           .then((newUser) => {
             this.newUser = newUser;
             this.success = `New user successfully created: ${newUser.username}.`;
+            // If the goal was only to register a new user (no pollKey)
+            // then we just redirect the new user to its pryv core
+            if (this.ctx.pollKey == null) {
+              location.href = this.ctx.pryv.core(newUser.username);
+            }
           })
           .catch(this.showError)
           .finally(() => { this.submitting = false; });
