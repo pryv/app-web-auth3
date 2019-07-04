@@ -12,7 +12,9 @@ function closeOrRedirect (ctx: Context, state: TerminationAuthState): void {
     // Otherwise, we need to redirect to the return URL,
     // passing the resulting parameters as querystring
 
-    returnUrl += returnUrl.endsWith('?') ? '&' : '?';
+    if (!returnUrl.endsWith('?')) {
+      returnUrl += '?';
+    }
 
     if (ctx.oauthState) {
       returnUrl += `state=${ctx.oauthState}&code=${ctx.pollKey}`;
