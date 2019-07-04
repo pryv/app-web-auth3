@@ -11,10 +11,13 @@ function closeOrRedirect (ctx: Context, state: TerminationAuthState): void {
   } else {
     // Otherwise, we need to redirect to the return URL,
     // passing the resulting parameters as querystring
+
+    returnUrl += returnUrl.endsWith('?') ? '&' : '?';
+
     if (ctx.oauthState) {
-      returnUrl += `?state=${ctx.oauthState}&code=${ctx.pollKey}`;
+      returnUrl += `state=${ctx.oauthState}&code=${ctx.pollKey}`;
     } else {
-      returnUrl += `?prYvkey=${ctx.pollKey}`;
+      returnUrl += `prYvkey=${ctx.pollKey}`;
 
       for (const [key, val] of Object.entries(state)) {
         if (typeof val === 'string' || typeof val === 'number') {
