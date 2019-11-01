@@ -10,8 +10,8 @@
     "lint": "eslint --ext .js,.vue src",
     "build": "node build/build.js",
     "unit": "./node_modules/.bin/jest tests/unit/",
-    "e2e": "testcafe firefox tests/e2e/*.test.js --app \"yarn run dev\"",
-    "e2eS": "testcafe firefox tests/e2e/*.test.js --app \"yarn run dev\" -S -s screenshots",
+    "e2e": "testcafe chrome tests/e2e/*.test.js --app \"yarn run dev\"",
+    "e2eS": "testcafe chrome tests/e2e/*.test.js --app \"yarn run dev\" -S -s screenshots",
     "setup": "sh scripts/setup.sh",
     "upload": "sh scripts/upload.sh",
     "clear": "rm -rf dist/ && yarn setup"
