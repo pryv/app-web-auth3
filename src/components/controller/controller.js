@@ -19,7 +19,11 @@ function tryAndCatch (ctx, fun) {
     try {
       return await fun(ctx, ...args);
     } catch (err) {
-      throw new AppError(err);
+      if (err instanceof AppError) {
+        throw err;
+      } else {
+        throw new AppError(err);
+      }
     }
   };
 }

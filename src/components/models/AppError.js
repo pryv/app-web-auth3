@@ -29,7 +29,7 @@ type UnparsedError = {
 class AppError {
   msg: string;
 
-  constructor (error: UnparsedError) {
+  constructor (error: string | UnparsedError) {
     this.msg = this.parseError(error);
   }
 
