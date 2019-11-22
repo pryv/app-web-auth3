@@ -22,11 +22,12 @@ class Context {
   user: {
     username: string,
     personalToken: string,
+    mfaToken: string,
   }
   clientData: ?{};
 
   constructor (queryParams: QueryParameters) {
-    this.domain = domainFromUrl() || 'pryv.me';
+    this.domain = domainFromUrl() || 'pryv.li';
     this.language = queryParams.lang || 'en';
     this.appId = 'pryv-app-web-auth-3';
     this.pryv = new Pryv(this.domain);
@@ -34,6 +35,7 @@ class Context {
     this.user = {
       username: '',
       personalToken: '',
+      mfaToken: '',
     };
   }
 

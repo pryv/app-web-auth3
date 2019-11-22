@@ -13,6 +13,7 @@ import refuseAccess from './ops/refuse_access.js';
 import resetPassword from './ops/reset_password.js';
 import getServiceInfo from './ops/get_service_info.js';
 import checkUsername from './ops/check_username.js';
+import mfaVerify from './ops/mfa_verify.js';
 
 function tryAndCatch (ctx, fun) {
   return async (...args: Array<*>) => {
@@ -40,6 +41,7 @@ function controllerFactory (ctx: Context) {
     resetPassword: tryAndCatch(ctx, resetPassword),
     getServiceInfo: tryAndCatch(ctx, getServiceInfo),
     checkUsername: tryAndCatch(ctx, checkUsername),
+    mfaVerify: tryAndCatch(ctx, mfaVerify),
   };
 }
 
