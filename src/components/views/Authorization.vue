@@ -116,8 +116,6 @@ export default {
     async submit () {
       if (this.$refs.form.validate()) {
         this.submitting = true;
-        this.ctx.user.mfaToken = 'coucou';
-        /*
         try {
           await this.c.login(this.password);
           if (this.ctx.user.mfaToken === '') {
@@ -128,7 +126,6 @@ export default {
         } finally {
           this.submitting = false;
         }
-        */
       }
     },
     // Handle provided MFA code
