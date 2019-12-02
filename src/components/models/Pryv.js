@@ -67,14 +67,12 @@ class Pryv {
 
   // POST/core: login with Pryv credentials
   async login (username: string, password: string, appId: string): Promise<LoginResult> {
-    const allow = {};
-    allow['Access-Control-Allow-Origin'] = true;
     const res = await axios.post(
       `${this.core(username)}/auth/login`, {
         username: username,
         password: password,
         appId: appId,
-      }, {headers: allow}
+      }
     );
     return res.data;
   }
@@ -83,7 +81,6 @@ class Pryv {
   async mfaChallenge (username: string, mfaToken: string): Promise<void> {
     await axios.post(
       `${this.core(username)}/mfa/challenge`, {}, {
-        params: {private_key: 'abcdef'},
         headers: {Authorization: mfaToken},
       }
     );
@@ -95,7 +92,6 @@ class Pryv {
       `${this.core(username)}/mfa/verify`, {
         code: code,
       }, {
-        params: {private_key: 'abcdef'},
         headers: {Authorization: mfaToken},
       }
     );

@@ -27,7 +27,7 @@ class Context {
   clientData: ?{};
 
   constructor (queryParams: QueryParameters) {
-    this.domain = domainFromUrl() || 'pryv.li';
+    this.domain = domainFromUrl() || 'pryv.me';
     this.language = queryParams.lang || 'en';
     this.appId = 'pryv-app-web-auth-3';
     this.pryv = new Pryv(this.domain);
