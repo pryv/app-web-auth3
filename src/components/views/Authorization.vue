@@ -13,13 +13,14 @@
     <v-dialog
       v-model="ctx.user.mfaToken!==''"
       persistent
-      maxWidth="290">
+      width="600">
       <v-card>
-        <v-card-title class="headline">MFA verification</v-card-title>
+        <v-card-title class="headline grey lighten-2">MFA verification</v-card-title>
         <v-text-field
           id="mfaCode"
           v-model="mfaCode"
           :rules="[rules.required]"
+          class="ma-3"
           label="MFA code"/>
         <v-card-actions>
           <v-spacer/>
