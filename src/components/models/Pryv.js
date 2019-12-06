@@ -58,12 +58,7 @@ class Pryv {
 
   async init () {
     console.log('Pryv init');
-    let res;
-    try {
-      res = await this.getServiceInfo();
-    } catch (error) {
-      return Promise.reject(error);
-    }
+    const res = await this.getServiceInfo();
 
     this.apiUrl = res.api;
     this.register = res.register;
