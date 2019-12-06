@@ -10,7 +10,6 @@ type QueryParameters = {
 }
 
 class Context {
-  domain: string;
   appId: string; // id of the web-auth app
   requestingAppId: string; // id of the app requesting access
   language: string;
@@ -26,10 +25,10 @@ class Context {
   clientData: ?{};
 
   constructor (queryParams: QueryParameters) {
-    this.domain = domainFromUrl() || 'pryv.me';
     this.language = queryParams.lang || 'en';
     this.appId = 'pryv-app-web-auth-3';
-    this.pryv = new Pryv(this.domain);
+    const serviceInfoUrl = 'https://reg.pryv.me/service/info';
+    this.pryv = new Pryv(serviceInfoUrl);
     this.pollKey = queryParams.key;
     this.user = {
       username: '',
@@ -45,10 +44,6 @@ class Context {
     this.oauthState = state.oauthState;
     if (state.lang != null) this.language = state.lang;
   }
-}
-
-function domainFromUrl () {
-  return location.hostname.split('.').slice(1).join('.');
 }
 
 export default Context;
