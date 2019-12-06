@@ -38,7 +38,7 @@ export type ServiceInfos = {
 
 class Pryv {
   core: (string, ?string) => string;
-  init: () => null;
+  init: () => Promise<void>;
   serviceInfoUrl: string;
   register: string;
   apiUrl: string;
