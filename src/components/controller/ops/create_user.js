@@ -1,6 +1,6 @@
 // @flow
 
-import type Context from '../../../Context.js';
+import type Context from '../../../context.js';
 import type NewUser from '../../models/Pryv.js';
 
 async function createUser (

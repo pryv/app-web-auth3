@@ -29,12 +29,17 @@ class Context {
     this.domain = domainFromUrl() || 'pryv.me';
     this.language = queryParams.lang || 'en';
     this.appId = 'pryv-app-web-auth-3';
-    this.pryv = new Pryv(this.domain);
+    const serviceInfoUrl = 'https://reg.' + this.domain + '/service/info';
+    this.pryv = new Pryv(serviceInfoUrl);
     this.pollKey = queryParams.key;
     this.user = {
       username: '',
       personalToken: '',
     };
+  }
+
+  async init () {
+    await this.pryv.init();
   }
 
   updateFromAuthState (state: NeedSigninState) {

@@ -1,6 +1,6 @@
 // @flow
 
-import type Context from '../../../Context.js';
+import type Context from '../../../context.js';
 import type {AuthState, TerminationAuthState, AcceptedAuthState, NeedSigninState} from '../../models/AuthStates.js';
 import {ACCEPTED_STATUS, NEED_SIGNIN_STATUS} from '../../models/AuthStates.js';
 import closeOrRedirect from './close_or_redirect.js';

@@ -82,8 +82,9 @@ export default {
     },
     validForm: false,
   }),
-  created () {
+  async created () {
     this.ctx = new Context(this.$route.query);
+    await this.ctx.init();
     this.c = controllerFactory(this.ctx);
     this.c.getServiceInfo()
       .then(this.showInfos)

@@ -1,6 +1,6 @@
 // @flow
 
-import type Context from '../../../Context.js';
+import type Context from '../../../context.js';
 
 async function checkUsername (ctx: Context): Promise<void> {
   // Convert email to Pryv username if needed
