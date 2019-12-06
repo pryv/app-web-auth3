@@ -34,6 +34,8 @@ class AppError {
   }
 
   parseError (error: string | UnparsedError): string {
+    console.error(error);
+
     // Error is a simple string
     if (typeof error === 'string') {
       return `<b>${error}</b>`;

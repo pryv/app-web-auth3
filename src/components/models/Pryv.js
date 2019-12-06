@@ -4,6 +4,7 @@ import axios from 'axios';
 import Hostings from './Hostings.js';
 import type {AuthState} from './AuthStates.js';
 import type {PermissionsList} from './Permissions.js';
+import AppError from '../models/AppError.js';
 
 const url = require('url');
 
@@ -40,7 +41,7 @@ class Pryv {
   core: (string, ?string) => string;
   init: () => Promise<void>;
   serviceInfoUrl: string;
-  register: string;
+  registerUrl: string;
   apiUrl: string;
 
   constructor (serviceInfoUrl: string) {
@@ -60,29 +61,25 @@ class Pryv {
     console.log('Pryv init');
     const res = await this.getServiceInfo();
 
+    if (res.api == null || res.register == null) {
+      return Promise.reject(new AppError('api or register parameters are null, something is wrong with service info url : ' + this.serviceInfoUrl));
+    }
     this.apiUrl = res.api;
-    this.register = res.register;
-    console.log('service info fetched. api = ' + this.apiUrl + ' / reg = ' + this.register);
+    this.registerUrl = res.register;
   }
 
   // ---------- AUTH calls ----------
 
   // GET/reg: polling with according poll key
   async poll (pollKey: string): Promise<AuthState> {
-    if (this.register == null) {
-      return Promise.reject(new Error('register url is not set yet, call \'init()\' and wait for service info to be loaded'));
-    }
-    const res = await axios.get(url.resolve(this.register, 'access/' + pollKey));
+    const res = await axios.get(url.resolve(this.registerUrl, 'access/' + pollKey));
     return res.data;
   }
 
   // POST/reg: advertise updated auth state
   async updateAuthState (pollKey: string, authState: AuthState): Promise<number> {
-    if (this.register == null) {
-      return Promise.reject(new Error('register url is not set yet, call \'init()\' and wait for service info to be loaded'));
-    }
     const res = await axios.post(
-      url.resolve(this.register, 'access/' + pollKey),
+      url.resolve(this.registerUrl, 'access/' + pollKey),
       authState
     );
     return res.status;
@@ -166,10 +163,7 @@ class Pryv {
 
   // GET/reg: retrieve all available Pryv hostings
   async getAvailableHostings (): Promise<Hostings> {
-    if (this.register == null) {
-      return Promise.reject(new Error('register url is not set yet, call \'init()\' and wait for service info to be loaded'));
-    }
-    const res = await axios.get(url.resolve(this.register, 'hostings'));
+    const res = await axios.get(url.resolve(this.registerUrl, 'hostings'));
     return new Hostings(res.data);
   }
 
@@ -177,11 +171,8 @@ class Pryv {
   async createUser (username: string, password: string, email: string,
     hosting: string, lang: string, appId: string,
     invitation: ?string, referer: ?string): Promise<NewUser> {
-    if (this.register == null) {
-      return Promise.reject(new Error('register url is not set yet, call \'init()\' and wait for service info to be loaded'));
-    }
     const res = await axios.post(
-      url.resolve(this.register, 'user'), {
+      url.resolve(this.registerUrl, 'user'), {
         appid: appId,
         username: username,
         password: password,
@@ -196,10 +187,7 @@ class Pryv {
   }
 
   async checkUsernameExistence (username: string): Promise<string> {
-    if (this.register == null) {
-      return Promise.reject(new Error('register url is not set yet, call \'init()\' and wait for service info to be loaded'));
-    }
-    const res = await axios.post(url.resolve(this.register, username + '/server'));
+    const res = await axios.post(url.resolve(this.registerUrl, username + '/server'));
     return res.server;
   }
 
@@ -208,10 +196,7 @@ class Pryv {
     if (usernameOrEmail.search('@') < 0) {
       return usernameOrEmail;
     }
-    if (this.register == null) {
-      return Promise.reject(new Error('register url is not set yet, call \'init()\' and wait for service info to be loaded'));
-    }
-    const res = await axios.get(url.resolve(this.register, usernameOrEmail + '/uid'));
+    const res = await axios.get(url.resolve(this.registerUrl, usernameOrEmail + '/uid'));
     return res.data.uid;
   }
 
