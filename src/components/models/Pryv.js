@@ -38,24 +38,17 @@ export type ServiceInfos = {
 
 class Pryv {
   core: (string, ?string) => string;
+  init: () => null;
   serviceInfoUrl: string;
   register: string;
   apiUrl: string;
 
   constructor (serviceInfoUrl: string) {
     this.serviceInfoUrl = serviceInfoUrl;
-    this.getServiceInfo()
-      .then(res => {
-        this.apiUrl = res.api;
-        this.register = res.register;
-      })
-      .catch(err => {
-        console.error('Problem while fetching service info : ', err);
-      });
 
     this.core = function (username: string, path: ?string) {
       if (this.apiUrl == null) {
-        console.error('apiUrl is not set yet');
+        console.error('apiUrl url is not set yet, call \'init()\' and wait for service info to be loaded');
         return '';
       }
       path = path || '';
@@ -63,12 +56,26 @@ class Pryv {
     };
   }
 
+  async init () {
+    console.log('Pryv init');
+    let res;
+    try {
+      res = await this.getServiceInfo();
+    } catch (error) {
+      return Promise.reject(error);
+    }
+
+    this.apiUrl = res.api;
+    this.register = res.register;
+    console.log('service info fetched. api = ' + this.apiUrl + ' / reg = ' + this.register);
+  }
+
   // ---------- AUTH calls ----------
 
   // GET/reg: polling with according poll key
   async poll (pollKey: string): Promise<AuthState> {
     if (this.register == null) {
-      return Promise.reject(new Error('register url is not set yet, wait for service info to be loaded'));
+      return Promise.reject(new Error('register url is not set yet, call \'init()\' and wait for service info to be loaded'));
     }
     const res = await axios.get(url.resolve(this.register, 'access/' + pollKey));
     return res.data;
@@ -77,7 +84,7 @@ class Pryv {
   // POST/reg: advertise updated auth state
   async updateAuthState (pollKey: string, authState: AuthState): Promise<number> {
     if (this.register == null) {
-      return Promise.reject(new Error('register url is not set yet, wait for service info to be loaded'));
+      return Promise.reject(new Error('register url is not set yet, call \'init()\' and wait for service info to be loaded'));
     }
     const res = await axios.post(
       url.resolve(this.register, 'access/' + pollKey),
@@ -165,7 +172,7 @@ class Pryv {
   // GET/reg: retrieve all available Pryv hostings
   async getAvailableHostings (): Promise<Hostings> {
     if (this.register == null) {
-      return Promise.reject(new Error('register url is not set yet, wait for service info to be loaded'));
+      return Promise.reject(new Error('register url is not set yet, call \'init()\' and wait for service info to be loaded'));
     }
     const res = await axios.get(url.resolve(this.register, 'hostings'));
     return new Hostings(res.data);
@@ -176,7 +183,7 @@ class Pryv {
     hosting: string, lang: string, appId: string,
     invitation: ?string, referer: ?string): Promise<NewUser> {
     if (this.register == null) {
-      return Promise.reject(new Error('register url is not set yet, wait for service info to be loaded'));
+      return Promise.reject(new Error('register url is not set yet, call \'init()\' and wait for service info to be loaded'));
     }
     const res = await axios.post(
       url.resolve(this.register, 'user'), {
@@ -195,7 +202,7 @@ class Pryv {
 
   async checkUsernameExistence (username: string): Promise<string> {
     if (this.register == null) {
-      return Promise.reject(new Error('register url is not set yet, wait for service info to be loaded'));
+      return Promise.reject(new Error('register url is not set yet, call \'init()\' and wait for service info to be loaded'));
     }
     const res = await axios.post(url.resolve(this.register, username + '/server'));
     return res.server;
@@ -207,7 +214,7 @@ class Pryv {
       return usernameOrEmail;
     }
     if (this.register == null) {
-      return Promise.reject(new Error('register url is not set yet, wait for service info to be loaded'));
+      return Promise.reject(new Error('register url is not set yet, call \'init()\' and wait for service info to be loaded'));
     }
     const res = await axios.get(url.resolve(this.register, usernameOrEmail + '/uid'));
     return res.data.uid;

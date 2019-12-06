@@ -36,6 +36,10 @@ class Context {
     };
   }
 
+  async init () {
+    await this.pryv.init();
+  }
+
   updateFromAuthState (state: NeedSigninState) {
     this.clientData = state.clientData;
     this.requestingAppId = state.requestingAppId;

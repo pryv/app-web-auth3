@@ -72,8 +72,9 @@ export default {
       return this.resetToken ? 'Change password' : 'Request password reset';
     },
   },
-  created () {
+  async created () {
     this.ctx = new Context(this.$route.query);
+    await this.ctx.init();
     this.c = controllerFactory(this.ctx);
   },
   methods: {
