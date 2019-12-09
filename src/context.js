@@ -27,16 +27,21 @@ class Context {
   clientData: ?{};
 
   constructor (queryParams: QueryParameters) {
-    this.domain = domainFromUrl() || 'pryv.me';
+    this.domain = domainFromUrl() || 'pryv.li';
     this.language = queryParams.lang || 'en';
     this.appId = 'pryv-app-web-auth-3';
-    this.pryv = new Pryv(this.domain);
+    const serviceInfoUrl = 'https://reg.' + this.domain + '/service/info';
+    this.pryv = new Pryv(serviceInfoUrl);
     this.pollKey = queryParams.key;
     this.user = {
       username: '',
       personalToken: '',
       mfaToken: '',
     };
+  }
+
+  async init () {
+    await this.pryv.init();
   }
 
   updateFromAuthState (state: NeedSigninState) {

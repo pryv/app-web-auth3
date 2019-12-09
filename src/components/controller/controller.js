@@ -1,6 +1,6 @@
 // @flow
 
-import type Context from '../../Context.js';
+import type Context from '../../context.js';
 
 import AppError from '../models/AppError.js';
 import acceptAccess from './ops/accept_access.js';

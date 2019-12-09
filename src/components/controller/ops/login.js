@@ -1,6 +1,6 @@
 // @flow
 
-import type Context from '../../../Context.js';
+import type Context from '../../../context.js';
 import type {AuthState, TerminationAuthState, NeedSigninState} from '../../models/AuthStates.js';
 import {NEED_SIGNIN_STATUS} from '../../models/AuthStates.js';
 import checkUsername from './check_username.js';

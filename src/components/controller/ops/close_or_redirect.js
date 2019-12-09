@@ -1,6 +1,6 @@
 // @flow
 
-import type Context from '../../../Context.js';
+import type Context from '../../../context.js';
 import type {TerminationAuthState} from '../../models/AuthStates.js';
 
 function closeOrRedirect (ctx: Context, state: TerminationAuthState): void {

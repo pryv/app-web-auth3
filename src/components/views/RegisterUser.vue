@@ -95,8 +95,9 @@ export default {
     },
     validForm: false,
   }),
-  created () {
+  async created () {
     this.ctx = new Context(this.$route.query);
+    await this.ctx.init();
     this.c = controllerFactory(this.ctx);
     // Fill selector with available hostings, preselect first one
     this.c.loadHostings()

@@ -1,6 +1,6 @@
 // @flow
 
-import type Context from '../../../Context.js';
+import type Context from '../../../context.js';
 import {REFUSED_STATUS} from '../../models/AuthStates.js';
 import type {RefusedAuthState} from '../../models/AuthStates.js';
 import closeOrRedirect from './close_or_redirect.js';
