@@ -22,6 +22,7 @@ class Context {
   user: {
     username: string,
     personalToken: string,
+    mfaToken: string,
   }
   clientData: ?{};
 
@@ -35,6 +36,7 @@ class Context {
     this.user = {
       username: '',
       personalToken: '',
+      mfaToken: '',
     };
   }
 

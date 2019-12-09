@@ -10,6 +10,28 @@
       @accepted="accept"
       @refused="refuse"/>
 
+    <v-dialog
+      v-model="ctx.user.mfaToken!==''"
+      persistent
+      width="600">
+      <v-card>
+        <v-card-title class="headline grey lighten-2">MFA verification</v-card-title>
+        <v-text-field
+          id="mfaCode"
+          v-model="mfaCode"
+          :rules="[rules.required]"
+          class="ma-3"
+          label="MFA code"/>
+        <v-card-actions>
+          <v-spacer/>
+          <v-btn
+            @click="ctx.user.mfaToken = ''; mfaCode = ''">Cancel</v-btn>
+          <v-btn
+            @click="handleMFA()">Ok</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+
     <v-form
       ref="form"
       v-model="validForm"
@@ -70,6 +92,8 @@ export default {
   data: () => ({
     password: '',
     personalToken: '',
+    mfaToken: '',
+    mfaCode: '',
     error: '',
     checkedPermissions: null,
     serviceInfos: {},
@@ -91,13 +115,30 @@ export default {
       .catch(this.showError);
   },
   methods: {
-    submit () {
+    async submit () {
       if (this.$refs.form.validate()) {
         this.submitting = true;
-        // Check for existing app access
-        this.c.checkAccess(this.password, this.showPermissions)
-          .catch(this.showError)
-          .finally(() => { this.submitting = false; });
+        try {
+          await this.c.login(this.password);
+          if (this.ctx.user.mfaToken === '') {
+            await this.c.checkAccess(this.showPermissions);
+          }
+        } catch (err) {
+          this.showError(err);
+        } finally {
+          this.submitting = false;
+        }
+      }
+    },
+    // Handle provided MFA code
+    async handleMFA () {
+      try {
+        await this.c.mfaVerify(this.mfaCode);
+        await this.c.checkAccess(this.showPermissions);
+      } catch (err) {
+        this.showError(err);
+      } finally {
+        this.ctx.user.mfaToken = '';
       }
     },
     // Print requested permissions to the user

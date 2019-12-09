@@ -37,6 +37,11 @@ export type ServiceInfos = {
   terms: string,
 }
 
+type LoginResult = {
+  token?: string,
+  mfaToken?: string,
+}
+
 class Pryv {
   core: (string, ?string) => string;
   init: () => Promise<void>;
@@ -86,13 +91,34 @@ class Pryv {
   }
 
   // POST/core: login with Pryv credentials
-  async login (username: string, password: string, appId: string): Promise<string> {
+  async login (username: string, password: string, appId: string): Promise<LoginResult> {
     const res = await axios.post(
       this.core(username, 'auth/login'), {
         username: username,
         password: password,
         appId: appId,
-      },
+      }
+    );
+    return res.data;
+  }
+
+  // POST/core: perform MFA challenge
+  async mfaChallenge (username: string, mfaToken: string): Promise<void> {
+    await axios.post(
+      `${this.core(username)}/mfa/challenge`, {}, {
+        headers: {Authorization: mfaToken},
+      }
+    );
+  }
+
+  // POST/core: verify MFA challenge
+  async mfaVerify (username: string, mfaToken: string, code: string): Promise<string> {
+    const res = await axios.post(
+      `${this.core(username)}/mfa/verify`, {
+        code: code,
+      }, {
+        headers: {Authorization: mfaToken},
+      }
     );
     return res.data.token;
   }
