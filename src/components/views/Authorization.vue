@@ -11,7 +11,7 @@
       @refused="refuse"/>
 
     <v-dialog
-      v-model="ctx.user.mfaToken!==''"
+      v-model="mfaActivated"
       persistent
       width="600">
       <v-card>
@@ -106,6 +106,13 @@ export default {
     },
     validForm: false,
   }),
+  computed: {
+    mfaActivated: {
+      get: function () {
+        return this.ctx.user.mfaToken !== '';
+      },
+    },
+  },
   async created () {
     this.ctx = new Context(this.$route.query);
     await this.ctx.init();
@@ -120,7 +127,7 @@ export default {
         this.submitting = true;
         try {
           await this.c.login(this.password);
-          if (this.ctx.user.mfaToken === '') {
+          if (!this.mfaActivated) {
             await this.c.checkAccess(this.showPermissions);
           }
         } catch (err) {
