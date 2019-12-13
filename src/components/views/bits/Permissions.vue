@@ -18,7 +18,9 @@
           </li>
         </ul>
       </v-card-text>
-      <v-card-text v-html="consentMsg"/>
+      <v-card-text
+        style="text-align: left; margin-left: 0px"
+        v-html="consentMsg"/>
       <v-divider/>
       <v-card-actions>
         <v-spacer/>
