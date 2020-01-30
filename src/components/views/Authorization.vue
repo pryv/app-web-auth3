@@ -10,8 +10,8 @@
       @accepted="accept"
       @refused="refuse"/>
 
+    <!--v-model below may be replaced by v-if-->
     <v-dialog
-      <!-- May be replaced by v-if -->
       v-model="mfaActivated"
       persistent
       width="600">
