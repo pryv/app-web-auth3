@@ -11,6 +11,7 @@
       @refused="refuse"/>
 
     <v-dialog
+      <!-- May be replaced by v-if -->
       v-model="mfaActivated"
       persistent
       width="600">

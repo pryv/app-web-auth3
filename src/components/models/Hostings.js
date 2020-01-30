@@ -67,9 +67,11 @@ class Hostings {
         const hostings = zone.hostings;
         Object.keys(hostings).forEach(hostingKey => {
           const hosting = hostings[hostingKey];
+          let info = hosting.name || hostingKey;
+          if (hosting.description != null) info = `${info} (${hosting.description})`;
           this.selection.push({
             value: hostingKey,
-            text: `${hosting.name} (${region.name} - ${zone.name})`,
+            text: info,
             description: hosting.description,
           });
         });
