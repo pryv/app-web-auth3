@@ -4,6 +4,10 @@ Pryv.io web pages for app authorization, user registration and password reset.
 
 These web pages are the "popup frame" that opens during the [app authorization process](http://api.pryv.com/reference/#authorizing-your-app)
 
+## Prerequisites
+
+Node v8+, yarn v1+
+
 ## How to?
 
 | Task                              | Command                        |
