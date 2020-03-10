@@ -1,9 +1,9 @@
 // @flow
 
-import axios from 'axios';
+import PryvAPI from 'pryv';
 import Hostings from './Hostings.js';
-import type {AuthState} from './AuthStates.js';
-import type {PermissionsList} from './Permissions.js';
+import type { AuthState } from './AuthStates.js';
+import type { PermissionsList } from './Permissions.js';
 import AppError from '../models/AppError.js';
 
 const url = require('url');
@@ -45,82 +45,71 @@ type LoginResult = {
 class Pryv {
   core: (string, ?string) => string;
   init: () => Promise<void>;
-  serviceInfoUrl: string;
-  registerUrl: string;
-  apiUrl: string;
+  pryvService: PryvAPI.Service;
+  pryvServiceInfo: PryvServiceInfo;
 
-  constructor (serviceInfoUrl: string) {
-    this.serviceInfoUrl = serviceInfoUrl;
+
+  constructor(serviceInfoUrl: string) {
+    this.pryvService = new PryvAPI.Service(serviceInfoUrl);
+
 
     this.core = function (username: string, path: ?string) {
-      if (this.apiUrl == null) {
-        console.error('apiUrl url is not set yet, call \'init()\' and wait for service info to be loaded');
+      if (this.pryvServiceInfo == null) {
+        console.error('pryvServiceInfo data is not set yet, call \'init()\' and wait for service info to be loaded');
         return '';
       }
       path = path || '';
-      return url.resolve(this.apiUrl.replace('{username}', username), path);
+      return this.pryvService.apiEndpointFor(username) + path;
     };
   }
 
-  async init () {
-    console.log('Pryv init');
-    const res = await this.getServiceInfo();
-
-    if (res.api == null || res.register == null) {
-      return Promise.reject(new AppError('api or register parameters are null, something is wrong with service info url : ' + this.serviceInfoUrl));
+  async init() {
+    if (!this.pryvServiceInfo) {
+      this.pryvServiceInfo = await this.getServiceInfo();
     }
-    this.apiUrl = res.api;
-    this.registerUrl = res.register;
+    return this.pryvServiceInfo;
   }
 
   // ---------- AUTH calls ----------
 
   // GET/reg: polling with according poll key
-  async poll (pollKey: string): Promise<AuthState> {
-    const res = await axios.get(url.resolve(this.registerUrl, 'access/' + pollKey));
-    return res.data;
+  async poll(pollKey: string): Promise<AuthState> {
+    const res = await PryvAPI.utils.superagent
+      .get(this.pryvServiceInfo.access + '/' + pollKey)
+      .set('accept', 'json');
+    return res.body;
   }
 
   // POST/reg: advertise updated auth state
-  async updateAuthState (pollKey: string, authState: AuthState): Promise<number> {
-    const res = await axios.post(
-      url.resolve(this.registerUrl, 'access/' + pollKey),
-      authState
-    );
+  async updateAuthState(pollKey: string, authState: AuthState): Promise<number> {
+    const res = await PryvAPI.utils.superagent
+      .post(this.pryvServiceInfo.access + '/' + pollKey)
+      .send(authState);
     return res.status;
   }
 
   // POST/core: login with Pryv credentials
-  async login (username: string, password: string, appId: string): Promise<LoginResult> {
-    const res = await axios.post(
-      this.core(username, 'auth/login'), {
-        username: username,
-        password: password,
-        appId: appId,
-      }
-    );
-    return res.data;
+  async login(username: string, password: string, appId: string): Promise<LoginResult> {
+    return await this.pryvService.login(username, password, appId);
   }
 
   // POST/core: perform MFA challenge
-  async mfaChallenge (username: string, mfaToken: string): Promise<void> {
-    await axios.post(
-      `${this.core(username)}/mfa/challenge`, {}, {
-        headers: {Authorization: mfaToken},
-      }
-    );
+  async mfaChallenge(username: string, mfaToken: string): Promise<void> {
+    await PryvAPI.utils.superagent
+      .post(this.core(username) + 'mfa/challenge')
+      .set('accept', 'json')
+      .set('Authorization', mfaToken)
+      .send({});
   }
 
   // POST/core: verify MFA challenge
-  async mfaVerify (username: string, mfaToken: string, code: string): Promise<string> {
-    const res = await axios.post(
-      `${this.core(username)}/mfa/verify`, {
-        code: code,
-      }, {
-        headers: {Authorization: mfaToken},
-      }
-    );
-    return res.data.token;
+  async mfaVerify(username: string, mfaToken: string, code: string): Promise<string> {
+    const res = await PryvAPI.utils.superagent
+      .post(this.core(username) + 'mfa/verify')
+      .set('accept', 'json')
+      .set('Authorization', mfaToken)
+      .send({ code: code });
+    return res.body.token;
   }
 
   // POST/core: check if requested app access already exists or not,
@@ -128,18 +117,18 @@ class Pryv {
   // 1. checkedPermissions: corrected permissions if the access does not exists yet
   // 2. match: existing access with matching permissions
   // 3. mismatch: existing access with mismatching permissions
-  async checkAppAccess (username: string, permissions: PermissionsList,
+  async checkAppAccess(username: string, permissions: PermissionsList,
     personalToken: string, appId: string, deviceName: ?string): Promise<AppCheck> {
-    const res = await axios.post(
-      this.core(username, 'accesses/check-app'), {
+    const res = await PryvAPI.utils.superagent 
+      .post(this.core(username) + 'accesses/check-app')
+      .set('accept', 'json')
+      .set('Authorization', personalToken)
+      .send({
         requestingAppId: appId,
         requestedPermissions: permissions,
         deviceName: deviceName,
-      }, {
-        headers: { Authorization: personalToken },
-      }
-    );
-    const data = res.data;
+      });
+    const data = res.body;
     return {
       permissions: data.checkedPermissions,
       match: data.matchingAccess,
@@ -148,57 +137,61 @@ class Pryv {
   }
 
   // POST/core: create a new app access, returns the according app token
-  async createAppAccess (username: string, personalToken: string,
+  async createAppAccess(username: string, personalToken: string,
     permissions: PermissionsList, appId: string,
     clientData: ?{}, appToken: ?string, expireAfter: ?number): Promise<AppAccess> {
-    const res = await axios.post(
-      this.core(username, 'accesses'), {
+    const res = await PryvAPI.utils.superagent
+      .post(this.core(username) + 'accesses')
+      .set('accept', 'json')
+      .set('Authorization', personalToken)
+      .send({
         name: appId,
         type: 'app',
         permissions: permissions,
         token: appToken,
         expireAfter: expireAfter,
         clientData: clientData,
-      }, {
-        headers: { Authorization: personalToken },
-      }
-    );
-    return res.data.access;
+      });
+    return res.body.access;
   }
 
   // PUT/core: update an existing app access, returns the according app token
-  async updateAppAccess (accessId: string, username: string, personalToken: string,
+  async updateAppAccess(accessId: string, username: string, personalToken: string,
     permissions: PermissionsList, appId: string,
     clientData: ?{}, appToken: ?string, expireAfter: ?number): Promise<AppAccess> {
-    const res = await axios.put(
-      this.core(username, 'accesses/' + accessId), {
+    const res = await PryvAPI.utils.superagent
+      .post(this.core(username) + 'accesses/' + accessId)
+      .set('accept', 'json')
+      .set('Authorization', personalToken)
+      .send({
         name: appId,
         type: 'app',
         permissions: permissions,
         token: appToken,
         expireAfter: expireAfter,
         clientData: clientData,
-      }, {
-        headers: { Authorization: personalToken },
-      }
-    );
-    return res.data.access;
+      });
+    return res.body.access;
   }
 
   // ---------- REGISTER calls ----------
 
   // GET/reg: retrieve all available Pryv hostings
-  async getAvailableHostings (): Promise<Hostings> {
-    const res = await axios.get(url.resolve(this.registerUrl, 'hostings'));
-    return new Hostings(res.data);
+  async getAvailableHostings(): Promise<Hostings> {
+    const res = await PryvAPI.utils.superagent
+      .get(this.pryvServiceInfo.register + '/hostings')
+      .set('accept', 'json');
+    return new Hostings(res.body);
   }
 
   // POST/reg: create a new Pryv user
-  async createUser (username: string, password: string, email: string,
+  async createUser(username: string, password: string, email: string,
     hosting: string, lang: string, appId: string,
     invitation: ?string, referer: ?string): Promise<NewUser> {
-    const res = await axios.post(
-      url.resolve(this.registerUrl, 'user'), {
+    const res = await PryvAPI.utils.superagent
+      .post(this.pryvServiceInfo.register + '/user')
+      .set('accept', 'json')
+      .send({
         appid: appId,
         username: username,
         password: password,
@@ -207,58 +200,63 @@ class Pryv {
         languageCode: lang || 'en',
         invitationtoken: invitation || 'enjoy',
         referer: referer,
-      }
-    );
-    return res.data;
+      });
+    return res.body;
   }
 
-  async checkUsernameExistence (username: string): Promise<string> {
-    const res = await axios.post(url.resolve(this.registerUrl, username + '/server'));
-    return res.server;
+  async checkUsernameExistence(username: string): Promise<string> {
+    const res = await PryvAPI.utils.superagent
+      .post(this.pryvServiceInfo.register + '/server')
+      .set('accept', 'json')
+      .send();
+    return res.body.server;
   }
 
   // GET/reg: convert email to Pryv username
-  async getUsernameForEmail (usernameOrEmail: string): Promise<string> {
+  async getUsernameForEmail(usernameOrEmail: string): Promise<string> {
     if (usernameOrEmail.search('@') < 0) {
       return usernameOrEmail;
     }
-    const res = await axios.get(url.resolve(this.registerUrl, usernameOrEmail + '/uid'));
-    return res.data.uid;
+    const res = await PryvAPI.utils.superagent
+      .get(this.pryvServiceInfo.register + '/' + usernameOrEmail +  '/uid')
+      .set('accept', 'json')
+    return res.body.uid;
   }
 
   // ---------- RESET calls ----------
 
   // POST/core: request a password reset
-  async requestPasswordReset (username: string, appId: string): Promise<number> {
-    const res = await axios.post(
-      this.core(username, 'account/request-password-reset'), {
-        appId: appId,
-        username: username,
-      }
-    );
+  async requestPasswordReset(username: string, appId: string): Promise<number> {
+    const res = await PryvAPI.utils.superagent
+      .post(this.core(username) + 'account/request-password-reset')
+      .set('accept', 'json')
+      .send({
+        name: appId,
+        username: username
+      });
     return res.status;
   }
 
   // POST/core: change Pryv password using a reset token
-  async changePassword (username: string, newPassword: string,
+  async changePassword(username: string, newPassword: string,
     resetToken: string, appId: string): Promise<number> {
-    const res = await axios.post(
-      this.core(username, 'account/reset-password'), {
+    const res = await PryvAPI.utils.superagent
+      .post(this.core(username) + 'account/reset-password')
+      .set('accept', 'json')
+      .send({
         username: username,
         newPassword: newPassword,
         appId: appId,
         resetToken: resetToken,
-      }
-    );
+      });
     return res.status;
   }
 
   // ---------- UTILS calls ----------
 
   // GET/reg: retrieve service information
-  async getServiceInfo (): Promise<ServiceInfos> {
-    const res = await axios.get(this.serviceInfoUrl);
-    return res.data;
+  async getServiceInfo(): Promise<ServiceInfos> {
+    return await this.pryvService.info()
   }
 }
 
