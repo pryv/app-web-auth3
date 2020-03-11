@@ -14,11 +14,27 @@ Node v8+, yarn v1+
 | --------------------------------- | ------------------------------ |
 | Install dependencies              | `yarn install`                 |
 | Create distribution               | `yarn build`                   |
-| Run the app locally               | `yarn start`                   |
+| Run the app locally in dev mode   | `yarn start`                   |
+| Test dist/ content with rec-la    | `yarn webserver`               |
 | Run unit tests                    | `yarn unit`                    |
 | Run E2E tests                     | `yarn e2e`                     |
 | Run E2E tests with snapshots      | `yarn e2eS`                    |
 | Run eslint                        | `yarn lint`                    |
+
+### Using rec-la for local manual test
+
+[rec-la](https://github.com/pryv/rec-la) Provides an SSL certificate and Webserver pointing to localhost for testing purposes. 
+
+Run: 
+ - `yarn build`
+ - `yarn webserver`
+
+Open one of the entrypoint you need to test 
+
+ - [https://l.rec.la:4443/access/signinhub.html?pryvServiceInfoUrl=https://reg.pryv.com/service/info](https://l.rec.la:4443/access/signinhub.html?pryvServiceInfoUrl=https://reg.pryv.com/service/info)
+
+ Note: you can override default hardcoded serviceInfoUrl with the queryParamet `pryvServiceInfoUrl`
+
 
 ### Publish to github pages
 
@@ -31,7 +47,27 @@ Then, publish your changes by running `yarn upload ${COMMIT_MESSAGE}`
 If you encounter conflicts while publishing, run `yarn clear` to reset the `dist/` folder,
 then build and publish again.
 
-### Configure for a use with NGINX
+### Possible deployments and structure
+
+This application is based on a [Vue history router](https://router.vuejs.org/guide/essentials/history-mode.html) design. 
+It exposes one single `index.html` file but the application has several entrypoints:
+
+- access.html - To handle Authentication process.
+- siginhub.html - To redirect users to their eventual dashboard. (it depends on Pryv.io deployment)
+- register.html - To create a new account
+- reset-password.html - To request a password request. 
+
+In order to expose these entrypoints, you can either 
+
+#### Use Symbolic Links
+Point the entrypoints to dist/index.html
+
+The build process creates automatically the necessary links in `dist/` and this folder can be directly exposed by a web sever.
+
+The pages are accessible by https://yourdomain.com/access/register.html 
+
+#### Use a reverse proxy, example with NGINX
+Redirect requests to these endpoint to index.html with a reverse proxy. You can find an example for NGINX bellow. 
 
 We present here an example of Nginx configuration for using app-web-auth3 within a Pryv.io installation.
 

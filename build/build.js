@@ -10,6 +10,10 @@ const chalk = require('chalk')
 const webpack = require('webpack')
 const config = require('../config')
 const webpackConfig = require('./webpack.prod.conf')
+const mkdirp = require('mkdirp')
+const fs = require('fs');
+
+const Aliases = require('../src/router/aliases.js');
 
 const spinner = ora('building for production...')
 spinner.start()
@@ -17,6 +21,7 @@ spinner.start()
 rm(path.join(config.build.assetsRoot, config.build.assetsSubDirectory), err => {
   if (err) throw err
   webpack(webpackConfig, (err, stats) => {
+    addAliases();
     spinner.stop()
     if (err) throw err
     process.stdout.write(stats.toString({
@@ -39,3 +44,23 @@ rm(path.join(config.build.assetsRoot, config.build.assetsSubDirectory), err => {
     ))
   })
 })
+
+function addAliases() {
+  const dest = config.build.assetsRoot + '/' + Aliases.basePath ;
+  mkdirp.sync(dest);
+
+  // static
+  if (!fs.existsSync(dest + '/' + config.build.assetsSubDirectory)) {
+    fs.symlinkSync('../' + config.build.assetsSubDirectory, dest + '/' + config.build.assetsSubDirectory);
+  }
+
+  Object.values(Aliases.pages).forEach((filename) => { 
+    const link = dest + filename; 
+    if (! fs.existsSync(link)) {
+     fs.symlinkSync('../index.html', link);
+    } else if (! fs.lstatSync(link).isSymbolicLink()) {
+      throw new Error('Cannot create symlink, Please remove file ' + link);
+    }
+  });
+}
+
