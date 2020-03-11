@@ -6,7 +6,8 @@ import type {NeedSigninState} from './components/models/AuthStates.js';
 
 type QueryParameters = {
   key: string,
-  lang: ?string
+  lang: ?string,
+  pryvServiceInfoUrl: ?string,
 }
 
 class Context {
@@ -30,7 +31,7 @@ class Context {
     this.domain = domainFromUrl() || 'pryv.me';
     this.language = queryParams.lang || 'en';
     this.appId = 'pryv-app-web-auth-3';
-    const serviceInfoUrl = 'https://reg.' + this.domain + '/service/info';
+    const serviceInfoUrl = queryParams.pryvServiceInfoUrl || 'https://reg.' + this.domain + '/service/info';
     this.pryv = new Pryv(serviceInfoUrl);
     this.pollKey = queryParams.key;
     this.user = {

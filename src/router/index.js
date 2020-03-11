@@ -10,7 +10,7 @@ Vue.use(VueRouter);
 
 let Router = new VueRouter({
   mode: 'history',
-  base: 'access',
+  base: '/access',
   routes: [
     {
       path: '/',
