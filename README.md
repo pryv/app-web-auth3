@@ -31,7 +31,7 @@ Run:
 
 Open one of the entrypoint you need to test 
 
- - [https://l.rec.la:4443/access/signinhub.html?pryvServiceInfoUrl=https://reg.pryv.com/service/info](https://l.rec.la:4443/access/signinhub.html?pryvServiceInfoUrl=https://reg.pryv.com/service/info)
+ - [https://l.rec.la:4443/access/signinhub.html?pryvServiceInfoUrl=https://reg.pryv.me/service/info](https://l.rec.la:4443/access/signinhub.html?pryvServiceInfoUrl=https://reg.pryv.me/service/info)
 
  Note: you can override default hardcoded serviceInfoUrl with the queryParamet `pryvServiceInfoUrl`
 
