@@ -6,8 +6,8 @@ import type {NeedSigninState} from './components/models/AuthStates.js';
 
 type QueryParameters = {
   key: string,
-  lang: ?string,
-  pryvServiceInfoUrl: ?string,
+  pryvServiceInfoUrl: string,
+  lang: ?string
 }
 
 class Context {

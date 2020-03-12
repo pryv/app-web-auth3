@@ -6,19 +6,35 @@ These web pages are the "popup frame" that opens during the [app authorization p
 
 ## Prerequisites
 
-Node v8+, yarn v1+
+Node v12+, yarn v1+
 
 ## How to?
 
-| Task                              | Command                        |
-| --------------------------------- | ------------------------------ |
-| Install dependencies              | `yarn install`                 |
-| Create distribution               | `yarn build`                   |
-| Run the app locally               | `yarn start`                   |
-| Run unit tests                    | `yarn unit`                    |
-| Run E2E tests                     | `yarn e2e`                     |
-| Run E2E tests with snapshots      | `yarn e2eS`                    |
-| Run eslint                        | `yarn lint`                    |
+| Task                                      | Command                        |
+| ----------------------------------------- | ------------------------------ |
+| Install dependencies                      | `yarn install`                 |
+| Create distribution in dist/              | `yarn build`                   |
+| Run the app locally in dev mode           | `yarn start`                   |
+| Serve dist/ content with rec-la SSL cert  | `yarn webserver`               |
+| Run unit tests                            | `yarn unit`                    |
+| Run E2E tests                             | `yarn e2e`                     |
+| Run E2E tests with snapshots              | `yarn e2eS`                    |
+| Run eslint                                | `yarn lint`                    |
+
+### Using rec-la for local manual test
+
+[rec-la](https://github.com/pryv/rec-la) Provides a Webserver and SSL certificate pointing to localhost for testing purposes. 
+
+Run: 
+ - `yarn build`
+ - `yarn webserver`
+
+Open one of the entrypoint you need to test such as:
+
+ - [https://l.rec.la:4443/access/signinhub.html?pryvServiceInfoUrl=https://reg.pryv.me/service/info](https://l.rec.la:4443/access/signinhub.html?pryvServiceInfoUrl=https://reg.pryv.me/service/info)
+
+ Note: you can override default hardcoded serviceInfoUrl with the query parameter  `pryvServiceInfoUrl` as shown.
+
 
 ### Publish to github pages
 
@@ -31,7 +47,27 @@ Then, publish your changes by running `yarn upload ${COMMIT_MESSAGE}`
 If you encounter conflicts while publishing, run `yarn clear` to reset the `dist/` folder,
 then build and publish again.
 
-### Configure for a use with NGINX
+### Possible deployments and structure
+
+This application is based on the [Vue history router](https://router.vuejs.org/guide/essentials/history-mode.html) design. 
+It exposes one single `index.html` file but the application has several **entry points**:
+
+- access.html - To handle the [Pryv.io app authentication process](https://api.pryv.com/reference/#authorizing-your-app).
+- register.html - To create a new account. See [reference](https://api.pryv.com/reference-system/#create-user).
+- reset-password.html - To request a password reset. See [reference](https://api.pryv.com/reference-full/#request-password-reset)
+- siginhub.html - To sign in users and redirect them to the [default dashboard app](https://github.com/pryv/app-web). (it depends on Pryv.io deployment)
+
+In order to expose these entrypoints, you can either 
+
+#### Use Symbolic Links
+Reference the entry points to `dist/index.html`
+
+The build process automatically creates the necessary links in `dist/` and this folder can be directly exposed by a web sever.
+
+The pages are accessible by https://your-app-domain.com/access/register.html 
+
+#### Use a reverse proxy, example with NGINX
+Redirect requests to these endpoint to index.html with a reverse proxy. You can find an example for NGINX bellow. 
 
 We present here an example of Nginx configuration for using app-web-auth3 within a Pryv.io installation.
 
