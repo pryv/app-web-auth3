@@ -20,12 +20,12 @@
   "dependencies": {
     "axios": "^0.18.0",
     "marked": "^0.5.2",
+    "mkdirp": "0",
     "vue": "^2.5.2",
     "vue-router": "^3.0.1",
     "vuetify": "^1.0.0"
   },
   "devDependencies": {
-    "mkdirp": "^1.0.3",
     "@vue/test-utils": "^1.0.0-beta.24",
     "autoprefixer": "^7.1.2",
     "babel-core": "^6.22.1",
