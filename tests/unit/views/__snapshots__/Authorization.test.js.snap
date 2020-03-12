@@ -8,92 +8,91 @@ exports[`Authorization.test.js renders correctly (snapshots matching) 1`] = `
    
   <!---->
    
-  <vdialog-stub
+  <v-dialog-stub
+    contentclass=""
     maxwidth="none"
     origin="center center"
     persistent="true"
     transition="dialog-transition"
     width="600"
   >
-    <vcard-stub
+    <v-card-stub
       tag="div"
     >
-      <vcardtitle-stub
+      <v-card-title-stub
         class="headline grey lighten-2"
       >
         MFA verification
-      </vcardtitle-stub>
+      </v-card-title-stub>
        
-      <vtextfield-stub
+      <v-text-field-stub
         class="ma-3"
         id="mfaCode"
         label="MFA code"
         rules="function required(value) {
           return !!value || 'This field is required.';
         }"
+        value=""
       />
        
-      <vcardactions-stub>
-        <vspacer-stub />
+      <v-card-actions-stub>
+        <v-spacer-stub />
          
-        <vbtn-stub
+        <v-btn-stub
           activeclass="v-btn--active"
-          ripple="true"
           tag="button"
           type="button"
         >
           Cancel
-        </vbtn-stub>
+        </v-btn-stub>
          
-        <vbtn-stub
+        <v-btn-stub
           activeclass="v-btn--active"
-          ripple="true"
           tag="button"
           type="button"
         >
           Ok
-        </vbtn-stub>
-      </vcardactions-stub>
-    </vcard-stub>
-  </vdialog-stub>
+        </v-btn-stub>
+      </v-card-actions-stub>
+    </v-card-stub>
+  </v-dialog-stub>
    
-  <vform-stub>
-    <vtextfield-stub
+  <v-form-stub>
+    <v-text-field-stub
       id="usernameOrEmail"
       label="Username or email"
       rules="function required(value) {
           return !!value || 'This field is required.';
         }"
+      value=""
     />
      
     <password-stub
       value=""
     />
      
-    <vbtn-stub
+    <v-btn-stub
       activeclass="v-btn--active"
       disabled="true"
       id="submitButton"
-      ripple="true"
       tag="button"
       type="button"
     >
       Sign In
-    </vbtn-stub>
+    </v-btn-stub>
      
-    <vbtn-stub
+    <v-btn-stub
       activeclass="v-btn--active"
-      ripple="true"
       tag="button"
       type="button"
     >
       Cancel
-    </vbtn-stub>
+    </v-btn-stub>
      
     <!---->
-  </vform-stub>
+  </v-form-stub>
    
-  <vdivider-stub
+  <v-divider-stub
     class="mt-3 mb-2"
   />
    

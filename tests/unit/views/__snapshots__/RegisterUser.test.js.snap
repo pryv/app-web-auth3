@@ -6,10 +6,10 @@ exports[`RegisterUser.test.js renders correctly (snapshots matching) 1`] = `
     Register a new user
   </h1>
    
-  <vform-stub
+  <v-form-stub
     id="registerForm"
   >
-    <vtextfield-stub
+    <v-text-field-stub
       id="email"
       label="E-mail"
       rules="function required(value) {
@@ -18,14 +18,16 @@ exports[`RegisterUser.test.js renders correctly (snapshots matching) 1`] = `
           return (/.+@.+/.test(value) || 'E-mail must be valid.'
           );
         }"
+      value=""
     />
      
-    <vtextfield-stub
+    <v-text-field-stub
       id="username"
       label="Username"
       rules="function required(value) {
           return !!value || 'This field is required.';
         }"
+      value=""
     />
      
     <password-stub
@@ -33,47 +35,74 @@ exports[`RegisterUser.test.js renders correctly (snapshots matching) 1`] = `
       value=""
     />
      
-    <vautocomplete-stub
+    <v-autocomplete-stub
       allowoverflow="true"
+      appendicon="$vuetify.icons.dropdown"
+      backgroundcolor=""
       browserautocomplete="off"
+      clearicon="$vuetify.icons.clear"
+      color="primary"
+      errorcount="1"
+      errormessages=""
       filter="function _default(item, queryText, itemText) {
-                var hasValue = function hasValue(val) {
-                    return val != null ? val : '';
-                };
-                var text = hasValue(itemText);
-                var query = hasValue(queryText);
-                return text.toString().toLowerCase().indexOf(query.toString().toLowerCase()) > -1;
+                return itemText.toLocaleLowerCase().indexOf(queryText.toLocaleLowerCase()) > -1;
             }"
       id="hosting"
+      itemavatar="avatar"
+      itemdisabled="disabled"
       items=""
+      itemtext="text"
+      itemvalue="value"
       label="Hosting"
       menuprops="[object Object]"
+      messages=""
+      nodatatext="$vuetify.noDataText"
       placeholder="Choose hosting..."
       rules="function required(value) {
           return !!value || 'This field is required.';
         }"
+      successmessages=""
+      type="text"
+      value=""
+      valuecomparator="function deepEqual(a, b) {
+    if (a === b) return true;
+    if (a instanceof Date && b instanceof Date) {
+        // If the values are Date, they were convert to timestamp with getTime and compare it
+        if (a.getTime() !== b.getTime()) return false;
+    }
+    if (a !== Object(a) || b !== Object(b)) {
+        // If the values aren't objects, they were already checked for equality
+        return false;
+    }
+    var props = Object.keys(a);
+    if (props.length !== Object.keys(b).length) {
+        // Different number of props, don't bother to check
+        return false;
+    }
+    return props.every(function (p) {
+        return deepEqual(a[p], b[p]);
+    });
+}"
     />
      
-    <vbtn-stub
+    <v-btn-stub
       activeclass="v-btn--active"
       disabled="true"
       id="submitButton"
-      ripple="true"
       tag="button"
       type="button"
     >
       Create
-    </vbtn-stub>
+    </v-btn-stub>
      
-    <vbtn-stub
+    <v-btn-stub
       activeclass="v-btn--active"
       id="clearButton"
-      ripple="true"
       tag="button"
       type="button"
     >
       Clear
-    </vbtn-stub>
+    </v-btn-stub>
      
     <div>
       
@@ -89,7 +118,7 @@ exports[`RegisterUser.test.js renders correctly (snapshots matching) 1`] = `
       .
     
     </div>
-  </vform-stub>
+  </v-form-stub>
    
   <!---->
    
