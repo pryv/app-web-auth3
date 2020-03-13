@@ -5,12 +5,13 @@ import ResetPassword from '@/components/views/ResetPassword';
 import Authorization from '@/components/views/Authorization';
 import PageNotFound from '@/components/views/PageNotFound';
 import SigninHub from '@/components/views/SigninHub';
+import Aliases from './aliases.js';
 
 Vue.use(VueRouter);
 
 let Router = new VueRouter({
   mode: 'history',
-  base: 'access',
+  base: Aliases.basePath,
   routes: [
     {
       path: '/',
@@ -20,13 +21,13 @@ let Router = new VueRouter({
       path: '/auth',
       name: 'Authorization',
       component: Authorization,
-      alias: '/access.html',
+      alias: Aliases.pages.auth,
     },
     {
       path: '/register',
       name: 'RegisterUser',
       component: RegisterUser,
-      alias: '/register.html',
+      alias: Aliases.pages.register,
     },
     {
       path: '/reset',
@@ -35,13 +36,13 @@ let Router = new VueRouter({
       props: (route) => ({
         resetToken: route.query.resetToken,
       }),
-      alias: '/reset-password.html',
+      alias: Aliases.pages.reset,
     },
     {
       path: '/signin',
       name: 'SigninHub',
       component: SigninHub,
-      alias: '/signinhub.html',
+      alias: Aliases.pages.signin,
     },
     {
       path: '*',
