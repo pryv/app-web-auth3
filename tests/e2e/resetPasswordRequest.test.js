@@ -1,7 +1,7 @@
 import {Selector, RequestMock, RequestLogger} from 'testcafe';
 
-const resetEndpoint = 'https://tmodoux.pryv.me/account/request-password-reset';
-const emailEndpoint = 'https://reg.pryv.me/test@test.com/uid';
+const resetEndpoint = 'https://js-lib.pryv.li/account/request-password-reset';
+const emailEndpoint = 'https://reg.pryv.li/test@test.com/uid';
 
 // ---------- Requests loggers ----------
 
@@ -20,7 +20,7 @@ const resetRequestMock = RequestMock()
 
 const usernameForEmailMock = RequestMock()
   .onRequestTo(emailEndpoint)
-  .respond({uid: 'tmodoux'}, 200, {'Access-Control-Allow-Origin': '*'});
+  .respond({uid: 'js-lib'}, 200, {'Access-Control-Allow-Origin': '*'});
 
 fixture(`Reset password request`)
   .page('http://localhost:8080/reset')
@@ -45,7 +45,7 @@ test('Reset request with email-username conversion', async testController => {
       record.request.method === 'post' &&
       record.response.statusCode === 200 &&
       record.request.body.includes('"appId":"pryv-app-web-auth-3"') &&
-      record.request.body.includes('"username":"tmodoux"')
+      record.request.body.includes('"username":"js-lib"')
     )).ok()
     .expect(Selector('body').textContent).contains('We have sent password reset instructions to your e-mail address.');
 });

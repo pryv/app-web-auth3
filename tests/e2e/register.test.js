@@ -1,8 +1,8 @@
 import {RequestMock, RequestLogger} from 'testcafe';
 
-const registerEndpoint = 'https://reg.pryv.me/user';
-const hostingsEndpoint = 'https://reg.pryv.me/hostings';
-const redirectEndpoint = 'https://tmodoux.pryv.me';
+const registerEndpoint = 'https://reg.pryv.li/user';
+const hostingsEndpoint = 'https://reg.pryv.li/hostings';
+const redirectEndpoint = 'https://js-lib.pryv.li';
 const fakeHostings = {
   'regions': {
     'europe': {
@@ -40,7 +40,7 @@ const hostingsLogger = RequestLogger(hostingsEndpoint);
 
 const registerUserMock = RequestMock()
   .onRequestTo(registerEndpoint)
-  .respond({username: 'tmodoux'}, 200, {'Access-Control-Allow-Origin': '*'});
+  .respond({username: 'js-lib'}, 200, {'Access-Control-Allow-Origin': '*'});
 
 const hostingsMock = RequestMock()
   .onRequestTo(hostingsEndpoint)
@@ -66,9 +66,9 @@ test('Register new user with hostings retrieval', async testController => {
       record.response.statusCode === 200
     )).ok()
     // Fill the new user information
-    .typeText('#username', 'tmodoux')
-    .typeText('#password', 'mypass')
-    .typeText('#passConfirmation', 'mypass')
+    .typeText('#username', 'js-lib')
+    .typeText('#password', 'js-libpass')
+    .typeText('#passConfirmation', 'js-libpass')
     .typeText('#email', 'test@test.com')
     .click('#submitButton')
     // User creation call was performed
@@ -76,8 +76,8 @@ test('Register new user with hostings retrieval', async testController => {
       record.request.method === 'post' &&
       record.response.statusCode === 200 &&
       record.request.body.includes('"appid":"pryv-app-web-auth-3"') &&
-      record.request.body.includes('"username":"tmodoux"') &&
-      record.request.body.includes('"password":"mypass"') &&
+      record.request.body.includes('"username":"js-lib"') &&
+      record.request.body.includes('"password":"js-libpass"') &&
       record.request.body.includes('"email":"test@test.com"') &&
       record.request.body.includes('"hosting":"gandi.net-fr"') &&
       record.request.body.includes('"languageCode":"fr"') &&

@@ -54,7 +54,7 @@ class Pryv {
         return '';
       }
       path = path || '';
-      return PryvAPI.Service.buildAPIEndpoint(this.pryvServiceInfo, username) + '/' + path;
+      return PryvAPI.Service.buildAPIEndpoint(this.pryvServiceInfo, username) + path;
     };
   }
 
@@ -66,16 +66,18 @@ class Pryv {
 
   // GET/reg: polling with according poll key
   async poll (pollKey: string): Promise<AuthState> {
+    console.log('Warning: poll should use pollurl and not pollKey!');
     const res = await PryvAPI.utils.superagent
-      .get(this.pryvServiceInfo.access + '/' + pollKey)
+      .get(this.pryvServiceInfo.access + 'access/' + pollKey)
       .set('accept', 'json');
     return res.body;
   }
 
   // POST/reg: advertise updated auth state
   async updateAuthState (pollKey: string, authState: AuthState): Promise<number> {
+    console.log('Warning: access should use access Url and not pollKey!');
     const res = await PryvAPI.utils.superagent
-      .post(this.pryvServiceInfo.access + '/' + pollKey)
+      .post(this.pryvServiceInfo.access + 'access/' + pollKey)
       .send(authState);
     return res.status;
   }
@@ -223,7 +225,7 @@ class Pryv {
       .post(this.core(username) + 'account/request-password-reset')
       .set('accept', 'json')
       .send({
-        name: appId,
+        appId: appId,
         username: username,
       });
     return res.status;

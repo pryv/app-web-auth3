@@ -1,11 +1,11 @@
 import {Selector, RequestMock, RequestLogger} from 'testcafe';
 
-const authEndpoint = 'https://tmodoux.pryv.me/auth/login';
-const checkAppEndpoint = 'https://tmodoux.pryv.me/accesses/check-app';
-const emailEndpoint = 'https://reg.pryv.me/test@test.com/uid';
-const userEndpoint = 'https://reg.pryv.me/tmodoux/server';
-const pollEndpoint = 'https://reg.pryv.me/access/pollKey';
-const createAccessEndpoint = 'https://tmodoux.pryv.me/accesses';
+const authEndpoint = 'https://js-lib.pryv.li/auth/login';
+const checkAppEndpoint = 'https://js-lib.pryv.li/accesses/check-app';
+const emailEndpoint = 'https://reg.pryv.li/test@test.com/uid';
+const userEndpoint = 'https://reg.pryv.li/js-lib/server';
+const pollEndpoint = 'https://access.pryv.li/access/pollKey';
+const createAccessEndpoint = 'https://js-lib.pryv.li/accesses';
 const permissions = [
   {streamId: 'diary', defaultName: 'Diary', level: 'read'},
   {streamId: 'work', defaultName: 'Work', level: 'manage'},
@@ -58,7 +58,7 @@ const checkAppMock = RequestMock()
 
 const usernameForEmailMock = RequestMock()
   .onRequestTo(emailEndpoint)
-  .respond({uid: 'tmodoux'}, 200, {'Access-Control-Allow-Origin': '*'});
+  .respond({uid: 'js-lib'}, 200, {'Access-Control-Allow-Origin': '*'});
 
 const userExistenceMock = RequestMock()
   .onRequestTo(userEndpoint)
@@ -85,7 +85,7 @@ test('Auth request, app access check and then accept permissions', async testCon
     })
     // Fill the auth form
     .typeText('#usernameOrEmail', 'test@test.com')
-    .typeText('#password', 'mypass')
+    .typeText('#password', 'js-libpass')
     .click('#submitButton')
     // Poll call was performed
     .expect(pollLogger.contains(record =>
@@ -107,8 +107,8 @@ test('Auth request, app access check and then accept permissions', async testCon
       record.request.method === 'post' &&
       record.response.statusCode === 200 &&
       record.request.body.includes('"appId":"pryv-app-web-auth-3"') &&
-      record.request.body.includes('"username":"tmodoux"') &&
-      record.request.body.includes('"password":"mypass"')
+      record.request.body.includes('"username":"js-lib"') &&
+      record.request.body.includes('"password":"js-libpass"')
     )).ok()
     // Check-app call was performed
     .expect(checkAppLogger.contains(record =>
@@ -136,7 +136,7 @@ test('Auth request, app access check and then accept permissions', async testCon
       record.request.method === 'post' &&
       record.response.statusCode === 200 &&
       record.request.body.includes('"status":"ACCEPTED"') &&
-      record.request.body.includes('"username":"tmodoux"') &&
+      record.request.body.includes('"username":"js-lib"') &&
       record.request.body.includes('"token":"appToken"')
     )).ok();
 });

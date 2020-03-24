@@ -2,7 +2,8 @@
   "name": "app-web-auth3",
   "version": "1.0.0",
   "description": "Pryv.io web pages for user registration, authentication & password reset.",
-  "author": "Thiébaud Modoux <tmodoux@pryv.com>",
+  "author": {"name": "Pryv SA", "email": "info@pryv.com", "url": "https://pryv.com"},
+  "contributors": ["Thiébaud Modoux", "Pierre-Mikael Legris"],
   "private": true,
   "scripts": {
     "dev": "webpack-dev-server --inline --progress --config build/webpack.dev.conf.js",
