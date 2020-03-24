@@ -68,7 +68,7 @@ class Pryv {
   async poll (pollKey: string): Promise<AuthState> {
     console.log('Warning: poll should use pollurl and not pollKey!');
     const res = await PryvAPI.utils.superagent
-      .get(this.pryvServiceInfo.access + 'access/' + pollKey)
+      .get(this.pryvServiceInfo.access + pollKey)
       .set('accept', 'json');
     return res.body;
   }
@@ -77,7 +77,7 @@ class Pryv {
   async updateAuthState (pollKey: string, authState: AuthState): Promise<number> {
     console.log('Warning: access should use access Url and not pollKey!');
     const res = await PryvAPI.utils.superagent
-      .post(this.pryvServiceInfo.access + 'access/' + pollKey)
+      .post(this.pryvServiceInfo.access + pollKey)
       .send(authState);
     return res.status;
   }
