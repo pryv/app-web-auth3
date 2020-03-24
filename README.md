@@ -6,12 +6,13 @@ These web pages are the "popup frame" that opens during the [app authorization p
 
 ## Prerequisites
 
-Node v12+, yarn v1+
+Node v8, yarn v1
 
 ## How to?
 
 | Task                                      | Command                        |
 | ----------------------------------------- | ------------------------------ |
+| Prepare dev environement                  | `yarn setup`                   |
 | Install dependencies                      | `yarn install`                 |
 | Create distribution in dist/              | `yarn build`                   |
 | Run the app locally in dev mode           | `yarn start`                   |
