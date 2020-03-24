@@ -38,8 +38,8 @@ async function login (
     ctx.user.personalToken = res.token || '';
   } catch (err) {
     // MFA is required
-    if (err.response != null && err.response.data != null && err.response.data.mfaToken != null) {
-      const mfaToken = err.response.data.mfaToken;
+    if (err.response != null && err.response.body != null && err.response.body.mfaToken != null) {
+      const mfaToken = err.response.body.mfaToken;
       try {
         await ctx.pryv.mfaChallenge(username, mfaToken);
         ctx.user.mfaToken = mfaToken || '';

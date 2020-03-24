@@ -10,7 +10,7 @@ type SubErrors = Array<SubErrorData>;
 type EncapsulatedError = {
   message: string,
   detail: ?string,
-  data: SubErrors,
+  body: SubErrors,
 }
 
 type ErrorData = {
@@ -22,7 +22,7 @@ type ErrorData = {
 
 type UnparsedError = {
   response: {
-    data: ErrorData,
+    body: ErrorData,
   }
 }
 
@@ -42,17 +42,17 @@ class AppError {
     }
 
     // Error is lacking of information, declare it as unexpected
-    if (error == null || error.response == null || error.response.data == null) {
+    if (error == null || error.response == null || error.response.body == null) {
       return `<b>${this.unexpectedError()}</b>`;
     }
 
     // Parse main error
-    const errorData = error.response.data;
+    const errorData = error.response.body;
     const encapsulatedError = errorData.error;
     let errorMsg = `<b>${this.parseErrorData(encapsulatedError || errorData)}</b>`;
 
     // Parse additional sub errors
-    const subErrors = encapsulatedError ? encapsulatedError.data : errorData.errors;
+    const subErrors = encapsulatedError ? encapsulatedError.body : errorData.errors;
     errorMsg += this.parseSubErrors(subErrors);
 
     return errorMsg;

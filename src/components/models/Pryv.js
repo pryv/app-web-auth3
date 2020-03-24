@@ -43,7 +43,7 @@ class Pryv {
   core: (string, ?string) => string;
   init: () => Promise<void>;
   pryvService: PryvAPI.Service;
-  pryvServiceInfo: Object;
+  pryvServiceInfo: PryvAPI.PryvServiceInfo;
 
   constructor (serviceInfoUrl: string) {
     this.pryvService = new PryvAPI.Service(serviceInfoUrl);
@@ -54,7 +54,7 @@ class Pryv {
         return '';
       }
       path = path || '';
-      return this.pryvService.apiEndpointFor(username) + '/' + path;
+      return PryvAPI.Service.buildAPIEndpoint(this.pryvServiceInfo, username) + '/' + path;
     };
   }
 
@@ -172,7 +172,7 @@ class Pryv {
   // GET/reg: retrieve all available Pryv hostings
   async getAvailableHostings (): Promise<Hostings> {
     const res = await PryvAPI.utils.superagent
-      .get(this.pryvServiceInfo.register + '/hostings')
+      .get(this.pryvServiceInfo.register + 'hostings')
       .set('accept', 'json');
     return new Hostings(res.body);
   }
@@ -182,7 +182,7 @@ class Pryv {
     hosting: string, lang: string, appId: string,
     invitation: ?string, referer: ?string): Promise<NewUser> {
     const res = await PryvAPI.utils.superagent
-      .post(this.pryvServiceInfo.register + '/user')
+      .post(this.pryvServiceInfo.register + 'user')
       .set('accept', 'json')
       .send({
         appid: appId,
@@ -199,9 +199,8 @@ class Pryv {
 
   async checkUsernameExistence (username: string): Promise<string> {
     const res = await PryvAPI.utils.superagent
-      .post(this.pryvServiceInfo.register + '/server')
-      .set('accept', 'json')
-      .send();
+      .post(this.pryvServiceInfo.register + username + '/server')
+      .set('accept', 'json');
     return res.body.server;
   }
 
@@ -211,7 +210,7 @@ class Pryv {
       return usernameOrEmail;
     }
     const res = await PryvAPI.utils.superagent
-      .get(this.pryvServiceInfo.register + '/' + usernameOrEmail + '/uid')
+      .get(this.pryvServiceInfo.register + usernameOrEmail + '/uid')
       .set('accept', 'json');
     return res.body.uid;
   }
