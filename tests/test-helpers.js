@@ -10,17 +10,13 @@ const testHelpers = {
   requestingAppId: 'client-app',
   pollKey: 'pollKey',
   serviceInfo: null,
-  apiEndpoint: null,
-
+  apiEndpoint: null
 }
-
 
 testHelpers.load = async function () {
   const service = new Pryv.Service(testHelpers.serviceInfoUrl);
   testHelpers.serviceInfo = await service.info();
   testHelpers.apiEndpoint = await service.apiEndpointFor(testHelpers.user);
-
-
   console.log(testHelpers.serviceInfo);
   return true;
 }

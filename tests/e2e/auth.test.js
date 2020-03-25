@@ -6,7 +6,7 @@ const createAccessEndpoint = testHelpers.apiEndpoint + 'accesses';
 const checkAppEndpoint = createAccessEndpoint + '/check-app';
 const emailEndpoint = testHelpers.serviceInfo.register + testHelpers.email + '/uid';
 const userEndpoint = testHelpers.serviceInfo.register + testHelpers.user + '/server';
-const pollEndpoint = testHelpers.serviceInfo.register + 'pollKey';
+const pollEndpoint = testHelpers.serviceInfo.access + 'pollKey';
 
 const permissions = [
   { streamId: 'diary', defaultName: 'Diary', level: 'read' },
@@ -64,7 +64,7 @@ const usernameForEmailMock = RequestMock()
 
 const userExistenceMock = RequestMock()
   .onRequestTo(userEndpoint)
-  .respond(null, 200, { 'Access-Control-Allow-Origin': '*' });
+  .respond({server: 'exists.com'}, 200, { 'Access-Control-Allow-Origin': '*' });
 
 const pollMock = RequestMock()
   .onRequestTo(pollEndpoint)
@@ -124,6 +124,7 @@ test('Auth request, app access check and then accept permissions', async testCon
     .expect(Selector('ul').textContent).contains('A permission on stream Diary with level READ')
     .expect(Selector('ul').textContent).contains('A permission on stream Work with level MANAGE')
     // If the user accepts them
+
     .click('#acceptPermissions')
     // Access creation call is performed
     .expect(createAccessLogger.contains(record =>

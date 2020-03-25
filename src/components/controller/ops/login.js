@@ -30,12 +30,12 @@ async function login (
   // Login against Pryv
 
   try {
-    const res = await ctx.pryv.login(
+    const pryvConnection = await ctx.pryv.login(
       username,
       password,
       ctx.appId);
 
-    ctx.user.personalToken = res.token || '';
+    ctx.user.personalToken = pryvConnection.token || '';
   } catch (err) {
     // MFA is required
     if (err.response != null && err.response.body != null && err.response.body.mfaToken != null) {

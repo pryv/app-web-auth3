@@ -83,9 +83,9 @@ class Pryv {
   }
 
   // POST/core: login with Pryv credentials
-  async login (username: string, password: string, appId: string): Promise<LoginResult> {
-    const res = await this.pryvService.login(username, password, appId);
-    return res.body;
+  async login (username: string, password: string, appId: string): Promise<PryvAPI.Connection> {
+    const pryvConnection = await this.pryvService.login(username, password, appId);
+    return pryvConnection;
   }
 
   // POST/core: perform MFA challenge
@@ -202,7 +202,8 @@ class Pryv {
   async checkUsernameExistence (username: string): Promise<string> {
     const res = await PryvAPI.utils.superagent
       .post(this.pryvServiceInfo.register + username + '/server')
-      .set('accept', 'json');
+      .set('accept', 'json').send({});
+    console.log('checkUsernameExistence: ' + res.body, this.pryvServiceInfo.register + username + '/server');
     return res.body.server;
   }
 
