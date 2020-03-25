@@ -1,7 +1,8 @@
 import {Selector, RequestMock, RequestLogger} from 'testcafe';
+import testHelpers from '../test-helpers';
 
-const resetEndpoint = 'https://js-lib.pryv.li/account/request-password-reset';
-const emailEndpoint = 'https://reg.pryv.li/test@test.com/uid';
+const resetEndpoint = testHelpers.apiEndpoint + 'account/request-password-reset';
+const emailEndpoint = testHelpers.serviceInfo.register + testHelpers.email + '/uid';
 
 // ---------- Requests loggers ----------
 
@@ -33,7 +34,7 @@ test('Reset request with email-username conversion', async testController => {
       throw new Error(text);
     })
     // Fill password reset form
-    .typeText('#usernameOrEmail', 'test@test.com')
+    .typeText('#usernameOrEmail', testHelpers.email)
     .click('#submitButton')
     // Email to username call was performed
     .expect(emailLogger.contains(record =>
@@ -44,8 +45,8 @@ test('Reset request with email-username conversion', async testController => {
     .expect(resetLogger.contains(record =>
       record.request.method === 'post' &&
       record.response.statusCode === 200 &&
-      record.request.body.includes('"appId":"pryv-app-web-auth-3"') &&
-      record.request.body.includes('"username":"js-lib"')
+      record.request.body.includes('"appId":"' + testHelpers.appId + '"') &&
+      record.request.body.includes('"username":"' + testHelpers.user + '"')
     )).ok()
     .expect(Selector('body').textContent).contains('We have sent password reset instructions to your e-mail address.');
 });

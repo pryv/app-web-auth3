@@ -28,7 +28,7 @@ class Context {
   clientData: ?{};
 
   constructor (queryParams: QueryParameters) {
-    this.domain = domainFromUrl() || 'pryv.me'; // should be depracted
+    this.domain = 'pryv.li' || domainFromUrl() ; // should be depracted
     this.language = queryParams.lang || 'en';
     this.appId = 'pryv-app-web-auth-3';
     const serviceInfoUrl = queryParams.pryvServiceInfoUrl || 'https://reg.' + this.domain + '/service/info';

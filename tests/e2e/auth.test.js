@@ -1,22 +1,24 @@
-import {Selector, RequestMock, RequestLogger} from 'testcafe';
+import { Selector, RequestMock, RequestLogger } from 'testcafe';
+import testHelpers from '../test-helpers';
 
-const authEndpoint = 'https://js-lib.pryv.li/auth/login';
-const checkAppEndpoint = 'https://js-lib.pryv.li/accesses/check-app';
-const emailEndpoint = 'https://reg.pryv.li/test@test.com/uid';
-const userEndpoint = 'https://reg.pryv.li/js-lib/server';
-const pollEndpoint = 'https://access.pryv.li/access/pollKey';
-const createAccessEndpoint = 'https://js-lib.pryv.li/accesses';
+const authEndpoint = testHelpers.apiEndpoint + 'auth/login';
+const createAccessEndpoint = testHelpers.apiEndpoint + 'accesses';
+const checkAppEndpoint = createAccessEndpoint + '/check-app';
+const emailEndpoint = testHelpers.serviceInfo.register + testHelpers.email + '/uid';
+const userEndpoint = testHelpers.serviceInfo.register + testHelpers.user + '/server';
+const pollEndpoint = testHelpers.serviceInfo.register + 'pollKey';
+
 const permissions = [
-  {streamId: 'diary', defaultName: 'Diary', level: 'read'},
-  {streamId: 'work', defaultName: 'Work', level: 'manage'},
+  { streamId: 'diary', defaultName: 'Diary', level: 'read' },
+  { streamId: 'work', defaultName: 'Work', level: 'manage' },
 ];
 const checkedPermissions = [
-  {streamId: 'diary', defaultName: 'Diary', level: 'read'},
-  {streamId: 'work', name: 'Work', level: 'manage'},
+  { streamId: 'diary', defaultName: 'Diary', level: 'read' },
+  { streamId: 'work', name: 'Work', level: 'manage' },
 ];
 const needSigninState = {
   status: 'NEED_SIGNIN',
-  requestingAppId: 'client-app',
+  requestingAppId: testHelpers.requestingAppId,
   requestedPermissions: permissions,
 };
 
@@ -50,30 +52,30 @@ const createAccessLogger = RequestLogger(createAccessEndpoint, {
 
 const authRequestMock = RequestMock()
   .onRequestTo(authEndpoint)
-  .respond({token: 'personalToken'}, 200, {'Access-Control-Allow-Origin': '*'});
+  .respond({ token: 'personalToken' }, 200, { 'Access-Control-Allow-Origin': '*' });
 
 const checkAppMock = RequestMock()
   .onRequestTo(checkAppEndpoint)
-  .respond({checkedPermissions: checkedPermissions}, 200, {'Access-Control-Allow-Origin': '*'});
+  .respond({ checkedPermissions: checkedPermissions }, 200, { 'Access-Control-Allow-Origin': '*' });
 
 const usernameForEmailMock = RequestMock()
   .onRequestTo(emailEndpoint)
-  .respond({uid: 'js-lib'}, 200, {'Access-Control-Allow-Origin': '*'});
+  .respond({ uid: testHelpers.user }, 200, { 'Access-Control-Allow-Origin': '*' });
 
 const userExistenceMock = RequestMock()
   .onRequestTo(userEndpoint)
-  .respond(null, 200, {'Access-Control-Allow-Origin': '*'});
+  .respond(null, 200, { 'Access-Control-Allow-Origin': '*' });
 
 const pollMock = RequestMock()
   .onRequestTo(pollEndpoint)
-  .respond(needSigninState, 200, {'Access-Control-Allow-Origin': '*'});
+  .respond(needSigninState, 200, { 'Access-Control-Allow-Origin': '*' });
 
 const createAccessMock = RequestMock()
   .onRequestTo(createAccessEndpoint)
-  .respond({access: {token: 'appToken'}}, 200, {'Access-Control-Allow-Origin': '*'});
+  .respond({ access: { token: 'appToken' } }, 200, { 'Access-Control-Allow-Origin': '*' });
 
 fixture(`Auth request`)
-  .page(`http://localhost:8080/auth?key=pollKey`)
+  .page(`http://localhost:8080/auth?key=` + testHelpers.pollKey)
   .requestHooks(authLogger, checkAppLogger, emailLogger, userLogger, pollLogger, createAccessLogger,
     authRequestMock, checkAppMock, usernameForEmailMock, userExistenceMock, pollMock, createAccessMock);
 
@@ -84,8 +86,8 @@ test('Auth request, app access check and then accept permissions', async testCon
       throw new Error(text);
     })
     // Fill the auth form
-    .typeText('#usernameOrEmail', 'test@test.com')
-    .typeText('#password', 'js-libpass')
+    .typeText('#usernameOrEmail', testHelpers.email)
+    .typeText('#password', testHelpers.password)
     .click('#submitButton')
     // Poll call was performed
     .expect(pollLogger.contains(record =>
@@ -106,15 +108,15 @@ test('Auth request, app access check and then accept permissions', async testCon
     .expect(authLogger.contains(record =>
       record.request.method === 'post' &&
       record.response.statusCode === 200 &&
-      record.request.body.includes('"appId":"pryv-app-web-auth-3"') &&
-      record.request.body.includes('"username":"js-lib"') &&
-      record.request.body.includes('"password":"js-libpass"')
+      record.request.body.includes('"appId":"' + testHelpers.appId + '"') &&
+      record.request.body.includes('"username":"' + testHelpers.user + '"') &&
+      record.request.body.includes('"password":"' + testHelpers.password + '"')
     )).ok()
     // Check-app call was performed
     .expect(checkAppLogger.contains(record =>
       record.request.method === 'post' &&
       record.response.statusCode === 200 &&
-      record.request.body.includes('"requestingAppId":"client-app"') &&
+      record.request.body.includes('"requestingAppId":"' + testHelpers.requestingAppId + '"') &&
       record.request.body.includes(`"requestedPermissions":${JSON.stringify(permissions)}`)
     )).ok()
     // Requested permissions are printed to the user
@@ -127,7 +129,7 @@ test('Auth request, app access check and then accept permissions', async testCon
     .expect(createAccessLogger.contains(record =>
       record.request.method === 'post' &&
       record.response.statusCode === 200 &&
-      record.request.body.includes('"name":"client-app"') &&
+      record.request.body.includes('"name":"' + testHelpers.requestingAppId + '"') &&
       record.request.body.includes('"type":"app"') &&
       record.request.body.includes(`"permissions":${JSON.stringify(checkedPermissions)}`)
     )).ok()
@@ -136,7 +138,7 @@ test('Auth request, app access check and then accept permissions', async testCon
       record.request.method === 'post' &&
       record.response.statusCode === 200 &&
       record.request.body.includes('"status":"ACCEPTED"') &&
-      record.request.body.includes('"username":"js-lib"') &&
+      record.request.body.includes('"username":"' + testHelpers.user + '"') &&
       record.request.body.includes('"token":"appToken"')
     )).ok();
 });

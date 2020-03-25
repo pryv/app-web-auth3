@@ -17,7 +17,7 @@ Node v8, yarn v1
 | Create distribution in dist/              | `yarn build`                   |
 | Run the app locally in dev mode           | `yarn start`                   |
 | Serve dist/ content with rec-la SSL cert  | `yarn webserver`               |
-| Run unit tests                            | `yarn unit`                    |
+| Run unit tests (-u to updates snapshots)  | `yarn unit`                    |
 | Run E2E tests                             | `yarn e2e`                     |
 | Run E2E tests with snapshots              | `yarn e2eS`                    |
 | Run eslint                                | `yarn lint`                    |

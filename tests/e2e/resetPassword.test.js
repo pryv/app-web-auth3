@@ -1,7 +1,8 @@
 import {RequestMock, RequestLogger} from 'testcafe';
+import testHelpers from '../test-helpers';
 
-const resetEndpoint = 'https://js-lib.pryv.li/account/reset-password';
-const emailEndpoint = 'https://reg.pryv.li/test@test.com/uid';
+const resetEndpoint = testHelpers.apiEndpoint + 'account/reset-password';
+const emailEndpoint = testHelpers.serviceInfo.register + testHelpers.email + '/uid';
 
 // ---------- Requests loggers ----------
 
@@ -20,7 +21,7 @@ const resetRequestMock = RequestMock()
 
 const usernameForEmailMock = RequestMock()
   .onRequestTo(emailEndpoint)
-  .respond({uid: 'js-lib'}, 200, {'Access-Control-Allow-Origin': '*'});
+  .respond({uid: testHelpers.user}, 200, {'Access-Control-Allow-Origin': '*'});
 
 fixture(`Reset password`)
   .page('http://localhost:8080/reset?resetToken=1234')
@@ -33,7 +34,7 @@ test('Reset password with email conversion', async testController => {
       throw new Error(text);
     })
     // Fill password change form
-    .typeText('#usernameOrEmail', 'test@test.com')
+    .typeText('#usernameOrEmail', testHelpers.email)
     .typeText('#password', '123456789')
     .typeText('#passConfirmation', '123456789')
     .click('#submitButton')
@@ -46,8 +47,8 @@ test('Reset password with email conversion', async testController => {
     .expect(resetLogger.contains(record =>
       record.request.method === 'post' &&
       record.response.statusCode === 200 &&
-      record.request.body.includes('"appId":"pryv-app-web-auth-3"') &&
-      record.request.body.includes('"username":"js-lib"') &&
+      record.request.body.includes('"appId":"' + testHelpers.appId + '"') &&
+      record.request.body.includes('"username":"' + testHelpers.user +'"') &&
       record.request.body.includes('"newPassword":"123456789"') &&
       record.request.body.includes('"resetToken":"1234"')
     )).ok();
