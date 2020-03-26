@@ -45,7 +45,7 @@ class Pryv {
   pryvService: PryvAPI.Service;
   pryvServiceInfo: PryvAPI.PryvServiceInfo;
 
-  constructor (serviceInfoUrl: string) {
+  constructor (serviceInfoUrl: ?string) {
     this.pryvService = new PryvAPI.Service(serviceInfoUrl);
 
     this.core = function (username: string, path: ?string) {

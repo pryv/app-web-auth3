@@ -1,5 +1,5 @@
 // @flow
-
+import PryvAPI from 'pryv';
 import Pryv from './components/models/Pryv.js';
 import Permissions from './components/models/Permissions.js';
 import type {NeedSigninState} from './components/models/AuthStates.js';
@@ -11,14 +11,10 @@ type QueryParameters = {
 }
 
 class Context {
-  domain: string;
   appId: string; // id of the web-auth app
-  requestingAppId: string; // id of the app requesting access
   language: string;
-  returnURL: ?string;
-  oauthState: ?string;
-  permissions: Permissions;
-  pollKey: string;
+  authState: object; // used only in the context of a "Auth" process
+  pollUrl: string; // used only in the context of a "Auth" process
   pryv: Pryv;
   user: {
     username: string,
@@ -28,12 +24,17 @@ class Context {
   clientData: ?{};
 
   constructor (queryParams: QueryParameters) {
-    this.domain = 'pryv.li' || domainFromUrl() ; // should be depracted
     this.language = queryParams.lang || 'en';
     this.appId = 'pryv-app-web-auth-3';
-    const serviceInfoUrl = queryParams.pryvServiceInfoUrl || 'https://reg.' + this.domain + '/service/info';
-    this.pryv = new Pryv(serviceInfoUrl);
-    this.pollKey = queryParams.key;
+    this.pollUrl = queryParams.poll;
+    if (this.pollUrl) {
+      // Context will set necessary serviceInfo during Context.init();
+      this.pryv = new Pryv();
+    } else {
+      const domain = 'pryv.li' || domainFromUrl(); // should be depracted
+      const serviceInfoUrl = queryParams.pryvServiceInfoUrl || 'https://reg.' + this.domain + '/service/info';
+      this.pryv = new Pryv(serviceInfoUrl);
+    }
     this.user = {
       username: '',
       personalToken: '',
@@ -42,7 +43,20 @@ class Context {
   }
 
   async init () {
+    if (this.pollUrl) {
+      await this.loadAuthState();
+      console.log(this.authState);
+      this.pryv.pryvService.setServiceInfo(this.authState.serviceInfo);
+    }
     await this.pryv.init();
+  }
+
+  // in Auth process load the Poll Url
+  async loadAuthState() {
+    const res = await PryvAPI.utils.superagent.get(this.pollUrl).set('accept', 'json');
+    if (! res.body.status ) throw new Error('Invalid data from Access server');
+    this.authState = res.body;
+    return this.authState ;
   }
 
   updateFromAuthState (state: NeedSigninState) {
