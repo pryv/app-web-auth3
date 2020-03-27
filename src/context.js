@@ -13,8 +13,9 @@ type QueryParameters = {
 class Context {
   appId: string; // id of the web-auth app
   language: string;
-  authState: object; // used only in the context of a "Auth" process
+  authState: AuthState; // used only in the context of a "Auth" process
   pollUrl: string; // used only in the context of a "Auth" process
+  permissions: Permissions; // used only in the context of a "Auth" process
   pryv: Pryv;
   user: {
     username: string,
@@ -32,7 +33,7 @@ class Context {
       this.pryv = new Pryv();
     } else {
       const domain = 'pryv.li' || domainFromUrl(); // should be depracted
-      const serviceInfoUrl = queryParams.pryvServiceInfoUrl || 'https://reg.' + this.domain + '/service/info';
+      const serviceInfoUrl = queryParams.pryvServiceInfoUrl || 'https://reg.' + domain + '/service/info';
       this.pryv = new Pryv(serviceInfoUrl);
     }
     this.user = {
@@ -56,16 +57,20 @@ class Context {
     const res = await PryvAPI.utils.superagent.get(this.pollUrl).set('accept', 'json');
     if (! res.body.status ) throw new Error('Invalid data from Access server');
     this.authState = res.body;
+
+    if (this.authState.requestedPermissions) {
+      this.permissions = new Permissions(this.authState.requestedPermissions);
+    }
     return this.authState ;
   }
 
-  updateFromAuthState (state: NeedSigninState) {
-    this.clientData = state.clientData;
-    this.requestingAppId = state.requestingAppId;
-    this.permissions = new Permissions(state.requestedPermissions);
-    this.returnURL = state.returnURL;
-    this.oauthState = state.oauthState;
-    if (state.lang != null) this.language = state.lang;
+  // POST/reg: advertise updated auth state
+  async updateAuthState(authState: AuthState): Promise<number> {
+    const res = await PryvAPI.utils.superagent.post(this.pollUrl).send(authState);
+    this.authState = authState;
+    if (this.authState.lang != null) this.language = this.authState.lang;
+    console.log("XXXXX Updated Authstate", authState, res.body);
+    return res.status;
   }
 }
 

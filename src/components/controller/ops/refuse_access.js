@@ -14,10 +14,10 @@ async function refuseAccess (ctx: Context): Promise<void> {
 
   try {
     // Notify register about refused state
-    await ctx.pryv.updateAuthState(ctx.pollKey, refusedState);
+    await ctx.updateAuthState(refusedState);
   } finally {
     // Close the page anyway (the auth state update may answer 403)
-    closeOrRedirect(ctx, refusedState);
+    closeOrRedirect(ctx);
   }
 }
 

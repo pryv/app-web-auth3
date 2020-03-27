@@ -11,18 +11,19 @@ async function acceptAccess (ctx: Context): Promise<void> {
     ctx.user.username,
     ctx.user.personalToken,
     ctx.permissions.list,
-    ctx.requestingAppId,
+    ctx.authState.requestingAppId,
     ctx.clientData);
 
   // Notify register about accepted state
   const acceptedState: AcceptedAuthState = {
     status: ACCEPTED_STATUS,
-    username: ctx.user.username,
-    token: appAccess.token,
+    username: ctx.user.username, // to be deprecated
+    token: appAccess.token, // to be deprecated
+    apiEndpoint: ctx.pryv.pryvService.apiEndpointFor(ctx.user.username, appAccess.token),
   };
-  await ctx.pryv.updateAuthState(ctx.pollKey, acceptedState);
 
-  closeOrRedirect(ctx, acceptedState);
+  await ctx.updateAuthState(acceptedState);
+  closeOrRedirect(ctx);
 }
 
 export default acceptAccess;

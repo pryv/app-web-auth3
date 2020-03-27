@@ -55,8 +55,10 @@
         terms of use</a>.
       </div>
     </v-form>
-
-    <div v-if="ctx.pollKey != null">
+    <!--
+      // If the goal was to register a new user during an Auth Proceess (pollUrl exists)
+      -->
+    <div v-if="ctx.pollUrl != null">
       <v-divider class="mt-3 mb-2"/>
       <router-link :to="{ name: 'Authorization' }"><h3>Go to Sign in</h3></router-link>
     </div>
@@ -112,9 +114,9 @@ export default {
           .then((newUser) => {
             this.newUser = newUser;
             this.success = `New user successfully created: ${newUser.username}.`;
-            // If the goal was only to register a new user (no pollKey)
+            // If the goal was only to register a new user (no pollUrl)
             // then we just redirect the new user to its pryv core
-            if (this.ctx.pollKey == null) {
+            if (this.ctx.pollUrl == null) {
               location.href = this.ctx.pryv.core(newUser.username);
             }
           })

@@ -25,8 +25,10 @@
         @click="submit"
       >{{ buttonText }}</v-btn>
     </v-form>
-
-    <div v-if="ctx.pollKey != null">
+      <!--
+      // If the reset password happend during an Auth Proceess (pollUrl exists)
+      -->
+    <div v-if="ctx.pollUrl != null">
       <v-divider class="mt-3 mb-2"/>
       <router-link :to="{ name: 'Authorization' }"><h3>Go to Sign in</h3></router-link>
     </div>

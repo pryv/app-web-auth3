@@ -13,7 +13,7 @@ async function checkAccess (
     ctx.user.username,
     ctx.permissions.list,
     ctx.user.personalToken,
-    ctx.requestingAppId);
+    ctx.authState.requestingAppId);
 
   // A matching access exists, returning it alongside with accepted state
   if (checkApp.match) {
@@ -22,8 +22,8 @@ async function checkAccess (
       username: ctx.user.username,
       token: checkApp.match.token,
     };
-    await ctx.pryv.updateAuthState(ctx.pollKey, acceptedState);
-    return closeOrRedirect(ctx, acceptedState);
+    await ctx.updateAuthState(acceptedState);
+    return closeOrRedirect(ctx);
   }
 
   // No such access already exists, we will create a new one with checked permissions

@@ -6,7 +6,6 @@ const createAccessEndpoint = testHelpers.apiEndpoint + 'accesses';
 const checkAppEndpoint = createAccessEndpoint + '/check-app';
 const emailEndpoint = testHelpers.serviceInfo.register + testHelpers.email + '/uid';
 const userEndpoint = testHelpers.serviceInfo.register + testHelpers.user + '/server';
-const pollEndpoint = testHelpers.serviceInfo.access + 'pollKey';
 
 const permissions = [
   { streamId: 'diary', defaultName: 'Diary', level: 'read' },
@@ -16,11 +15,10 @@ const checkedPermissions = [
   { streamId: 'diary', defaultName: 'Diary', level: 'read' },
   { streamId: 'work', name: 'Work', level: 'manage' },
 ];
-const needSigninState = {
-  status: 'NEED_SIGNIN',
-  requestingAppId: testHelpers.requestingAppId,
-  requestedPermissions: permissions,
-};
+const needSigninState = testHelpers.needSigninState;
+needSigninState.requestingAppId = testHelpers.requestingAppId;
+needSigninState.requestedPermissions = permissions;
+
 
 // ---------- Requests loggers ----------
 
@@ -38,7 +36,7 @@ const emailLogger = RequestLogger(emailEndpoint);
 
 const userLogger = RequestLogger(userEndpoint);
 
-const pollLogger = RequestLogger(pollEndpoint, {
+const pollLogger = RequestLogger(testHelpers.pollUrl, {
   logRequestBody: true,
   stringifyRequestBody: true,
 });
@@ -67,7 +65,7 @@ const userExistenceMock = RequestMock()
   .respond({server: 'exists.com'}, 200, { 'Access-Control-Allow-Origin': '*' });
 
 const pollMock = RequestMock()
-  .onRequestTo(pollEndpoint)
+  .onRequestTo(testHelpers.pollUrl)
   .respond(needSigninState, 200, { 'Access-Control-Allow-Origin': '*' });
 
 const createAccessMock = RequestMock()
@@ -75,7 +73,7 @@ const createAccessMock = RequestMock()
   .respond({ access: { token: 'appToken' } }, 200, { 'Access-Control-Allow-Origin': '*' });
 
 fixture(`Auth request`)
-  .page(`http://localhost:8080/auth?key=` + testHelpers.pollKey)
+  .page(`http://localhost:8080/auth?poll=` + testHelpers.pollUrl)
   .requestHooks(authLogger, checkAppLogger, emailLogger, userLogger, pollLogger, createAccessLogger,
     authRequestMock, checkAppMock, usernameForEmailMock, userExistenceMock, pollMock, createAccessMock);
 
