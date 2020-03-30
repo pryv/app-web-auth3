@@ -16,7 +16,8 @@
     "setup": "sh scripts/setup.sh",
     "upload": "sh scripts/upload.sh",
     "clear": "rm -rf dist/ && yarn setup",
-    "webserver": "node node_modules/rec-la/webserver/main.js ./dist"
+    "webserver": "node node_modules/rec-la/webserver/main.js ./dist",
+    "webserver-auth": "node node_modules/rec-la/webserver/main.js ./tests/webpage-auth/ 5443"
   },
   "dependencies": {
     "pryv": "git://github.com/pryv/lib-js.git#2.0.0",

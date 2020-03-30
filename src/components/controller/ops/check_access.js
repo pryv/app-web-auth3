@@ -1,8 +1,8 @@
 // @flow
 
 import type Context from '../../../context.js';
-import type {AcceptedAuthState} from '../../models/AuthStates.js';
-import {ACCEPTED_STATUS} from '../../models/AuthStates.js';
+import type {AcceptedAccessState} from '../../models/AccessStates.js';
+import {ACCEPTED_STATUS} from '../../models/AccessStates.js';
 import closeOrRedirect from './close_or_redirect.js';
 
 async function checkAccess (
@@ -13,16 +13,16 @@ async function checkAccess (
     ctx.user.username,
     ctx.permissions.list,
     ctx.user.personalToken,
-    ctx.authState.requestingAppId);
+    ctx.accessState.requestingAppId);
 
   // A matching access exists, returning it alongside with accepted state
   if (checkApp.match) {
-    const acceptedState: AcceptedAuthState = {
+    const acceptedState: AcceptedAccessState = {
       status: ACCEPTED_STATUS,
       username: ctx.user.username,
       token: checkApp.match.token,
     };
-    await ctx.updateAuthState(acceptedState);
+    await ctx.updateAccessState(acceptedState);
     return closeOrRedirect(ctx);
   }
 

@@ -2,7 +2,7 @@
 
 import PryvAPI from 'pryv';
 import Hostings from './Hostings.js';
-import type { AuthState } from './AuthStates.js';
+import type { AccessState } from './AccessStates.js';
 import type { PermissionsList } from './Permissions.js';
 
 type AppAccess = {

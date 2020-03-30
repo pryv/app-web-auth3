@@ -22,7 +22,7 @@ const testHelpers = {
     "authUrl": "https://sw.rec.la:4443/access/access.html?&pollUrl=https%3A%2F%2Faccess.pryv.li%2Faccess%2FRKHRTvKlaUDQodGX",
     "poll": "https://access.pryv.li/access/pollKey",
     "returnURL": null,
-    "oauthState": null,
+    "oaccessState": null,
     "poll_rate_ms": 1000,
     "clientData": {
       "app-web-auth:description": {

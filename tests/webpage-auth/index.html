@@ -1,0 +1,181 @@
+<!doctype html>
+<html>
+
+<head>
+  <title>Pryv - Test Auth Process</title>
+  <script src="https://pryv.github.io/lib-js/pryv.js"></script>
+</head>
+
+<body>
+  <h1>Pryv auth test</h1>
+
+  <p>Edit this page in ./tests/webpage-auth/ for your manual tests</p>
+
+  <p>
+    <span id="pryv-button"></span> <strong>⇠ sign in here</strong><br>
+  </p>
+
+  <h5>Notes</h5>
+  <input type='text' id='create-note' placeholder='Content' value='' />
+  <button onClick='createNoteEvent()'>Save Note</button>
+
+  <h5>Numerical Value</h5>
+  <input type='text' id='create-value' placeholder='Content' value='' />
+  <button onClick='createValueEvent()'>Save Value</button>
+
+  <h5>Upload File</h5>
+  <input type="file" id="create-file">
+  <button onClick='uploadFile()'>Save Value</button>
+
+  <h3>Events</h3>
+  <textarea id='events'></textarea>
+
+  <div class="clearfix"></div>
+  <h3>Console</h3>
+  <textarea id='console'></textarea>
+
+
+</body>
+
+<script>
+
+  // will handle the connection
+  var connection = null;
+
+  let serviceInfoUrl = 'https://reg.pryv.li/service/infos';
+  // override serviceInfo if provided in the url. 
+  serviceInfoUrl = Pryv.Browser.serviceInfoFromUrl() || serviceInfoUrl;
+
+  var authSettings = {
+    spanButtonID: 'pryv-button',
+    onStateChange: pryvAccessStateChange,
+    authRequest: { // See: http://api.pryv.com/reference/#auth-request
+      languageCode: 'fr',
+      requestingAppId: 'test-value-notes',
+      requestedPermissions: [
+        {
+          streamId: 'test',
+          defaultName: 'test',
+          level: 'manage'
+        }
+      ],
+      clientData: {
+        'app-web-auth:description': {
+          'type': 'note/txt', 'content': 'This is a consent message.'
+        }
+      },
+      reclaDevel: ':4443/access/access.html'
+    }
+  };
+
+
+  var $console = document.getElementById('console'),
+    $events = document.getElementById('events'),
+    $noteContent = document.getElementById('create-note'),
+    $valueContent = document.getElementById('create-value'),
+    $fileContent = document.getElementById('create-file')
+    ;
+
+
+  (async function () {
+    const service = await Pryv.Browser.setupAuth(authSettings, serviceInfoUrl);
+    (await service.assets()).setAllDefaults();
+  })();
+
+
+  function pryvAccessStateChange(state) {
+    console.log('##pryvAccessStateChange', state);
+    if (state.id === Pryv.Browser.AccessStates.AUTHORIZED) {
+      connection = new Pryv.Connection(state.apiEndpoint);
+      logToConsole('# Browser succeeded for user ' + connection.apiEndpoint);
+    }
+    if (state.id === Pryv.Browser.AccessStates.LOGOUT) {
+      connection = null;
+      logToConsole('# Logout');
+    }
+  }
+
+
+  // Handle local user actions
+
+  function createNoteEvent() {
+    createEvent({
+      streamId: 'test',
+      type: 'note/txt',
+      content: $noteContent.value
+    });
+  }
+
+
+  function createValueEvent() {
+    createEvent({
+      streamId: 'test',
+      type: 'count/generic',
+      content: $valueContent.value
+    });
+  }
+
+
+  function uploadFile() {
+    console.log($fileContent.files);
+    if (!$fileContent.files[0]) {
+      alert('Choose a file first');
+      return;
+    }
+    const formData = new FormData();
+    formData.append('file0', $fileContent.files[0]);
+    connection.createEventWithFormData(
+      { type: 'file/attached', streamId: 'test' },
+      formData
+    ).then(function (res, err) {
+      if (err) { return logToConsole('...error: ' + JSON.stringify(err)); }
+      logToConsole('...event created: ' + JSON.stringify(res));
+      getLastEvents();
+    });
+  }
+
+  function createEvent(data) {
+    if (!connection) { return alert('Please sign in first.'); }
+    logToConsole('Creating event...');
+    var data = [{
+      method: 'events.create',
+      params: data
+    }];
+    connection.api(data).then(function (res, err) {
+      if (err) { return logToConsole('...error: ' + JSON.stringify(err)); }
+      logToConsole('...event created: ' + JSON.stringify(res));
+      getLastEvents();
+    });
+  }
+
+  // UTILS
+  // Retrieve last events
+  function getLastEvents() {
+    var data = [{
+      method: 'events.get',
+      params: {
+        limit: 20
+      }
+    }];
+    connection.api(data).then(function (res, err) {
+      // convert pryv.Event objects to plain data for display
+      display(res[0].events, $events);
+    });
+  }
+
+  function logToConsole(text) {
+    $console.value += text + '\n';
+    $console.scrollTop = $console.scrollHeight;
+  }
+
+  function display(obj, $textArea) {
+    $textArea.value = JSON.stringify(obj, null, 2);
+  }
+
+
+
+
+</script>
+
+
+</html>

@@ -12,11 +12,12 @@ Node v8, yarn v1
 
 | Task                                      | Command                        |
 | ----------------------------------------- | ------------------------------ |
-| Prepare dev environement                  | `yarn setup`                   |
+| Prepare dev environment                  | `yarn setup`                   |
 | Install dependencies                      | `yarn install`                 |
 | Create distribution in dist/              | `yarn build`                   |
 | Run the app locally in dev mode           | `yarn start`                   |
 | Serve dist/ content with rec-la SSL cert  | `yarn webserver`               |
+| To manually test the auth flow             | `yarn webserver-auth`          |
 | Run unit tests (-u to updates snapshots)  | `yarn unit`                    |
 | Run E2E tests                             | `yarn e2e`                     |
 | Run E2E tests with snapshots              | `yarn e2eS`                    |
@@ -35,6 +36,12 @@ Open one of the entrypoint you need to test such as:
  - [https://l.rec.la:4443/access/signinhub.html?pryvServiceInfoUrl=https://reg.pryv.me/service/info](https://l.rec.la:4443/access/signinhub.html?pryvServiceInfoUrl=https://reg.pryv.me/service/info)
 
  Note: you can override default hardcoded serviceInfoUrl with the query parameter  `pryvServiceInfoUrl` as shown.
+
+#### testing Auth flow, with Rec-la
+
+Once you have started `yarn webserver` also start `yarn webserver-auth` and open [https://l.rec.la:5443/](https://l.rec.la:5443/).
+
+You may want to edit the page `./tests/webpage-auth/index.html` 
 
 
 ### Publish to github pages
@@ -146,7 +153,7 @@ From this check, three different objects can be returned, depending on the situa
 
 Knowing that, this operation continues as follow:
 
-If **matchingAccess** exists, register is notified by sending an AcceptedAuthState (which contains the username and the app token) to the poll endpoint (so that the app token can further be retrieved by the app doing polling). Finally, we can just jump to the end of the [auth flow](#authorization-flow) (step 5), returning the existing access.
+If **matchingAccess** exists, register is notified by sending an AcceptedAccessState (which contains the username and the app token) to the poll endpoint (so that the app token can further be retrieved by the app doing polling). Finally, we can just jump to the end of the [auth flow](#authorization-flow) (step 5), returning the existing access.
 
 Otherwise, we first replace the permissions list with the **checkedPermissions** and then show them to the user so that he can consent (or not) to the creation of the new access ([auth flow](#authorization-flow), step 4).
 
@@ -156,17 +163,17 @@ If **mismatchingAccess** exists, we still show the **checkedPermissions** to the
 
 Triggered when user accept to consent to the new app access, it creates the access according to provided username, personalToken and permissionsList (or updates an existing **mismatchingAccess** using its access id).
 
-Then, register is notified by sending an AcceptedAuthState (which contains the username and the app token) to the poll endpoint (so that the app token can further be retrieved by the app doing polling) and the auth flow ends ([closeOrRedirect op.](closeorredirect-op.)).
+Then, register is notified by sending an AcceptedAccessState (which contains the username and the app token) to the poll endpoint (so that the app token can further be retrieved by the app doing polling) and the auth flow ends ([closeOrRedirect op.](closeorredirect-op.)).
 
 #### refuseAccess op.
 
-Triggered when user refuses to consent to the new app access, it notifies register by sending an RefusedAuthState (which contains nothing more than a refuse message) and then ends the auth flow ([closeOrRedirect op.](closeorredirect-op.)).
+Triggered when user refuses to consent to the new app access, it notifies register by sending an RefusedAccessState (which contains nothing more than a refuse message) and then ends the auth flow ([closeOrRedirect op.](closeorredirect-op.)).
 
 #### closeOrRedirect op.
 
-If the requesting app specified a returnUrl within the auth request, the current url is redirected to the returnUrl and the result of the auth flow (app token within AcceptedAuthState or message within RefusedAuthState) will be present as query parameters.
+If the requesting app specified a returnUrl within the auth request, the current url is redirected to the returnUrl and the result of the auth flow (app token within AcceptedAccessState or message within RefusedAccessState) will be present as query parameters.
 
-Otherwise, the auth page is just closed and the requesting app will be able to retrieve the result of the auth flow by calling the polling endpoint on register (since it has been notified about AcceptedAuthState/RefusedAuthState).
+Otherwise, the auth page is just closed and the requesting app will be able to retrieve the result of the auth flow by calling the polling endpoint on register (since it has been notified about AcceptedAccessState/RefusedAccessState).
 
 ## License
 

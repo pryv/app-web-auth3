@@ -7,19 +7,19 @@ export const REFUSED_STATUS = 'REFUSED';
 export const ERROR_STATUS = 'ERROR';
 export const NEED_SIGNIN_STATUS = 'NEED_SIGNIN';
 
-export type AcceptedAuthState = {
+export type AcceptedAccessState = {
   status: 'ACCEPTED';
   username: string;
   token: string;
 }
 
-export type RefusedAuthState = {
+export type RefusedAccessState = {
   status: 'REFUSED';
   reasonId: string;
   message: string;
 }
 
-export type ErrorAuthState = {
+export type ErrorAccessState = {
   status: 'ERROR';
   id: number;
   message: string;
@@ -38,8 +38,8 @@ export type NeedSigninState = {
   url: string;
   lang: string;
   poll: string;
-  oauthState: ?string;
+  oaccessState: ?string;
 }
 
-export type TerminationAuthState = AcceptedAuthState|RefusedAuthState|ErrorAuthState;
-export type AuthState = TerminationAuthState|NeedSigninState;
+export type TerminationAccessState = AcceptedAccessState|RefusedAccessState|ErrorAccessState;
+export type AccessState = TerminationAccessState|NeedSigninState;

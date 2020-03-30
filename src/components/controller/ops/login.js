@@ -1,8 +1,8 @@
 // @flow
 
 import type Context from '../../../context.js';
-import type { AuthState, TerminationAuthState, NeedSigninState } from '../../models/AuthStates.js';
-import { NEED_SIGNIN_STATUS } from '../../models/AuthStates.js';
+import type { AccessState, TerminationAccessState, NeedSigninState } from '../../models/AccessStates.js';
+import { NEED_SIGNIN_STATUS } from '../../models/AccessStates.js';
 import checkUsername from './check_username.js';
 import closeOrRedirect from './close_or_redirect.js';
 import AppError from '../../models/AppError.js';
@@ -10,7 +10,7 @@ import AppError from '../../models/AppError.js';
 async function login(
   ctx: Context,
   password: string): Promise<void> {
-  if (ctx.authState.status !== NEED_SIGNIN_STATUS) {
+  if (ctx.accessState.status !== NEED_SIGNIN_STATUS) {
     return closeOrRedirect(ctx);
   }
 
