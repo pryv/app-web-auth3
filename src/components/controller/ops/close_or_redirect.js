@@ -20,7 +20,7 @@ function closeOrRedirect (ctx: Context): void {
       returnUrl += `state=${ctx.accessState.oaccessState}&code=${ctx.accessState.pollKey}&poll=${ctx.pollUrl}`;
     } else {
       returnUrl += `prYvpoll=${ctx.pollUrl}`;
-      // the following code should be deprecated 
+      // the following code should be deprecated
       for (const [key, val] of Object.entries(ctx.accessState)) {
         if (typeof val === 'string' || typeof val === 'number') {
           returnUrl += `&prYv${key}=${val}`;

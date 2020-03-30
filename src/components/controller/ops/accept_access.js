@@ -7,7 +7,7 @@ import type Context from '../../../context.js';
 
 async function acceptAccess (ctx: Context): Promise<void> {
   // Create a new app access
-  const appAccess = await ctx.pryv.createAppAccess(
+  const appAccess = await ctx.pryvService.createAppAccess(
     ctx.user.username,
     ctx.user.personalToken,
     ctx.permissions.list,
@@ -19,7 +19,7 @@ async function acceptAccess (ctx: Context): Promise<void> {
     status: ACCEPTED_STATUS,
     username: ctx.user.username, // to be deprecated
     token: appAccess.token, // to be deprecated
-    apiEndpoint: ctx.pryv.pryvService.apiEndpointFor(ctx.user.username, appAccess.token),
+    apiEndpoint: ctx.pryvService.apiEndpointForSync(ctx.user.username, appAccess.token),
   };
 
   await ctx.updateAccessState(acceptedState);

@@ -111,8 +111,8 @@ export default {
           .then((newUser) => {
             this.newUser = newUser;
             this.success = `New user successfully created: ${newUser.username}.`;
-            if (this.ctx.isAccessRequest()) {
-              location.href = this.ctx.pryv.core(newUser.username);
+            if (! this.ctx.isAccessRequest()) {
+              location.href = this.ctx.pryvService.apiEndpointForSync(newUser.username);
             }
           })
           .catch(this.showError)

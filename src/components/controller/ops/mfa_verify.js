@@ -8,7 +8,7 @@ async function mfaVerify (
   code: string): Promise<void> {
   // Verify the MFA challenge
   try {
-    ctx.user.personalToken = await ctx.pryv.mfaVerify(ctx.user.username, ctx.user.mfaToken, code);
+    ctx.user.personalToken = await ctx.pryvService.mfaVerify(ctx.user.username, ctx.user.mfaToken, code);
   } catch (err) {
     throw new AppError('MFA verification failed.');
   }

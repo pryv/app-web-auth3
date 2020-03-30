@@ -9,7 +9,7 @@ async function checkAccess (
   ctx: Context,
   showPermissions: (?string) => void): Promise<void> {
   // Check for existing app access
-  const checkApp = await ctx.pryv.checkAppAccess(
+  const checkApp = await ctx.pryvService.checkAppAccess(
     ctx.user.username,
     ctx.permissions.list,
     ctx.user.personalToken,

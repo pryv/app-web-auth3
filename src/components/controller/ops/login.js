@@ -20,7 +20,7 @@ async function login(
   // Login against Pryv
 
   try {
-    const pryvConnection = await ctx.pryv.login(
+    const pryvConnection = await ctx.pryvService.login(
       username,
       password,
       ctx.appId);
@@ -31,7 +31,7 @@ async function login(
     if (err.response != null && err.response.body != null && err.response.body.mfaToken != null) {
       const mfaToken = err.response.body.mfaToken;
       try {
-        await ctx.pryv.mfaChallenge(username, mfaToken);
+        await ctx.pryvService.mfaChallenge(username, mfaToken);
         ctx.user.mfaToken = mfaToken || '';
       } catch (err) {
         throw new AppError('Failed to perform MFA challenge.');

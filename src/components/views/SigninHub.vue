@@ -62,7 +62,7 @@ export default {
       }
     },
     toMyPryv () {
-      location.href = this.ctx.pryv.core(this.ctx.user.username);
+      location.href = this.ctx.pryvService.apiEndpointForSync(this.ctx.user.username);
     },
     showError (error) {
       this.error = error.msg;

@@ -1,7 +1,11 @@
 // @flow
 
 import type Context from '../../../context.js';
-import type NewUser from '../../models/Pryv.js';
+
+export type NewUser = {
+  username: string,
+  server: string,
+};
 
 async function createUser (
   ctx: Context,
@@ -10,7 +14,7 @@ async function createUser (
   hosting: string,
 ): Promise<NewUser> {
   // Create the new user
-  const newUser = await ctx.pryv.createUser(
+  const newUser = await ctx.pryvService.createUser(
     ctx.user.username,
     password,
     email,
