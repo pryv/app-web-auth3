@@ -7,21 +7,21 @@
       <v-card-title
         id="appIdText"
         class="headline grey lighten-2">
-        <span><b>{{ appId }}</b></span>
+        <span><b>{{ accessState.requestingAppId }}</b></span>
       </v-card-title>
       <v-card-text style="text-align:left">
-        <h4>is requesting permission to:</h4>
+        <h4>Is requesting permission:</h4>
         <ul>
           <li
-            v-for="(permission, index) in permissionsList"
+            v-for="(permission, index) in accessState.requestedPermissions"
             :key="index">
             to {{ permission.level.toLowerCase() }} <u>{{ permission.streamId === '*' ? '* (all data)' : permission.name || permission.defaultName }}</u>
           </li>
         </ul>
         <span
-          v-if="expireMsg" 
+          v-if="expire" 
           style="text-align:left">
-          <b>Will expire after:</b> {{ expireMsg }}s
+          <b>will expire after:</b> {{ accessState.expireAfter }}s
         </span>
         <br>
         <span
@@ -29,11 +29,12 @@
           v-html="consentMsg"/>
       </v-card-text>
       <v-alert
-        v-if="accessMismatchMsg"
-        :value="accessMismatchMsg"
+        v-if="accessMismatch"
+        :value="accessMismatch"
         :type="alertType"
-        transition="scale-transition">
-        <span v-html="accessMismatchMsg"/>
+        transition="scale-transition"
+        style="text-align:left">
+        <b>A different access was already given to this app. Do you want to replace it?</b>
       </v-alert>
       <v-divider/>
       <v-card-actions>
@@ -59,8 +60,8 @@ export default {
   },
   data: () => ({
     dialog: true,
-    appId: null,
-    permissionsList: null,
+    accessState: null,
+    checkAppResult: null,
   }),
 
   computed: {
@@ -70,21 +71,16 @@ export default {
         return description != null ? marked(description.content) : '';
       }
     },
-    accessMismatchMsg: function () {
-      if (this.ctx.checkAppResult.mismatchingAccess != null) {
-        return 'A different access was already given to this app. Do you want to replace it?';
-      }
+    accessMismatch: function () {
+     return (this.ctx.checkAppResult.mismatchingAccess != null);
     },
-    expireMsg: function () {
-      return 20000;
-      if (this.ctx.accessState.expireAfter != null) {
-        return 'Expire After: ' + this.ctx.accessState.expireAfter + ' s';
-      }
+    expire: function () {
+      return true || (this.ctx.accessState.expireAfter != null);
     },
   },
   created: function () {
-    this.appId = this.ctx.accessState.requestingAppId;
-    this.permissionsList = this.ctx.accessState.requestedPermissions;
+    this.accessState = this.ctx.accessState;
+    this.checkAppResult = this.ctx.checkAppResult;
   },
   methods: {
     closeDialog (acceptOrReject) {
