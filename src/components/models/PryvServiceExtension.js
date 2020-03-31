@@ -3,7 +3,17 @@
 import Pryv from 'pryv';
 import Hostings from './Hostings.js';
 import type { AccessState } from './AccessStates.js';
-import type { PermissionsList } from './Permissions.js';
+
+
+type Permission = {
+  streamId: string,
+  level: 'read' | 'contribute' | 'manage',
+  defaultName: ?string,
+  name: ?string,
+};
+
+export type PermissionsList = Array<Permission>;
+
 
 type AppAccess = {
   type: 'app',
@@ -67,42 +77,25 @@ Pryv.Service.prototype.mfaVerify = async function mfaVerify(username: string, mf
 // 1. checkedPermissions: corrected permissions if the access does not exists yet
 // 2. match: existing access with matching permissions
 // 3. mismatch: existing access with mismatching permissions
-Pryv.Service.prototype.checkAppAccess = async function checkAppAccess(username: string, permissions: PermissionsList,
-  personalToken: string, appId: string, deviceName: ?string): Promise<AppCheck> {
+Pryv.Service.prototype.checkAppAccess = async function checkAppAccess(username: string, 
+  personalToken: string, checkAppData: Object): Promise<AppCheck> {
   const res = await Pryv.utils.superagent
     .post(this.apiEndpointForSync(username) + 'accesses/check-app')
     .set('accept', 'json')
     .set('Authorization', personalToken)
-    .send({
-      requestingAppId: appId,
-      requestedPermissions: permissions,
-      deviceName: deviceName,
-    });
-  const data = res.body;
-  return {
-    permissions: data.checkedPermissions,
-    match: data.matchingAccess,
-    mismatch: data.mismatchingAccess,
-  };
+    .send(checkAppData);
+  return res.body;
 }
 
 // POST/core: create a new app access, returns the according app token
 Pryv.Service.prototype.createAppAccess = async function createAppAccess(
   username: string, personalToken: string,
-  permissions: PermissionsList, appId: string,
-  clientData: ?{}, appToken: ?string, expireAfter: ?number): Promise<AppAccess> {
+  requestData: Object): Promise<AppAccess> {
   const res = await Pryv.utils.superagent
     .post(this.apiEndpointForSync(username) + 'accesses')
     .set('accept', 'json')
     .set('Authorization', personalToken)
-    .send({
-      name: appId,
-      type: 'app',
-      permissions: permissions,
-      token: appToken,
-      expireAfter: expireAfter,
-      clientData: clientData,
-    });
+    .send(requestData);
   return res.body.access;
 }
 

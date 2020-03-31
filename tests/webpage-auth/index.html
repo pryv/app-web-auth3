@@ -51,12 +51,12 @@
     onStateChange: pryvAccessStateChange,
     authRequest: { // See: http://api.pryv.com/reference/#auth-request
       languageCode: 'fr',
-      requestingAppId: 'test-value-notes',
+      requestingAppId: 'test-value-notes8',
       requestedPermissions: [
         {
           streamId: 'test',
-          defaultName: 'test',
-          level: 'manage'
+          defaultName: 'TEST8',
+          level: 'read'
         }
       ],
       clientData: {
@@ -64,6 +64,7 @@
           'type': 'note/txt', 'content': 'This is a consent message.'
         }
       },
+      expiresAfter: 30,
       reclaDevel: ':4443/access/access.html'
     }
   };
@@ -84,12 +85,12 @@
 
 
   function pryvAccessStateChange(state) {
-    console.log('##pryvAccessStateChange', state);
-    if (state.id === Pryv.Browser.AccessStates.AUTHORIZED) {
+    console.log('##pryvAuthStateChange', state);
+    if (state.id === Pryv.Browser.AuthStates.AUTHORIZED) {
       connection = new Pryv.Connection(state.apiEndpoint);
       logToConsole('# Browser succeeded for user ' + connection.apiEndpoint);
     }
-    if (state.id === Pryv.Browser.AccessStates.LOGOUT) {
+    if (state.id === Pryv.Browser.AuthStates.LOGOUT) {
       connection = null;
       logToConsole('# Logout');
     }
@@ -163,8 +164,9 @@
     });
   }
 
+  let count = 0;
   function logToConsole(text) {
-    $console.value += text + '\n';
+    $console.value += count++ + '\t> ' + text + '\n';
     $console.scrollTop = $console.scrollHeight;
   }
 

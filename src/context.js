@@ -1,7 +1,6 @@
 // @flow
 import Pryv from 'pryv';
-import PryvServiceAuth from './components/models/PryvServiceAccess.js';
-import Permissions from './components/models/Permissions.js';
+import PryvServiceAuth from './components/models/PryvServiceExtension';
 import type {NeedSigninState} from './components/models/AccessStates.js';
 
 type QueryParameters = {
@@ -15,15 +14,13 @@ class Context {
   language: string;
   accessState: AccessState; // used only in the context of a "Auth" process
   pollUrl: string; // used only in the context of a "Auth" process
-  // permissions might be refactored eepending on "Check-App Process"
-  permissions: Permissions; // used only in the context of a "Auth" process
+  checkAppResult: Object; // use nly in the context of a "Auth" process after check-app
   pryvService: Pryv.Service;
   user: {
     username: string,
     personalToken: string,
     mfaToken: string,
-  }
-  clientData: ?{};
+  };
 
   constructor (queryParams: QueryParameters) {
     this.language = queryParams.lang || 'en';
@@ -42,6 +39,7 @@ class Context {
       personalToken: '',
       mfaToken: '',
     };
+    this.checkAppResult = {};
   }
 
   async init () {
@@ -62,10 +60,6 @@ class Context {
     const res = await Pryv.utils.superagent.get(this.pollUrl).set('accept', 'json');
     if (! res.body.status ) throw new Error('Invalid data from Access server');
     this.accessState = res.body;
-
-    if (this.accessState.requestedPermissions) {
-      this.permissions = new Permissions(this.accessState.requestedPermissions);
-    }
     return this.accessState ;
   }
 

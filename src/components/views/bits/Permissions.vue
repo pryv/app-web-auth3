@@ -19,6 +19,7 @@
         </ul>
       </v-card-text>
       <v-card-text v-html="consentMsg"/>
+      <v-card-text v-html="expireMsg"/>
       <v-divider/>
       <v-card-actions>
         <v-spacer/>
@@ -50,6 +51,12 @@ export default {
     consentMsg: function () {
       if (this.clientData != null) {
         const description = this.clientData['app-web-auth:description'];
+        return description != null ? marked(description.content) : '';
+      }
+    },
+    expireAfter: function () {
+      if (this.expireAfter != null) {
+        const description = 'Expire After: ' + this.expireAfter + ' s';
         return description != null ? marked(description.content) : '';
       }
     },

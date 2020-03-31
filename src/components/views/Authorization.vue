@@ -3,10 +3,11 @@
     <h1>Sign in</h1>
 
     <Permissions
-      v-if="checkedPermissions!=null"
+      v-if="ctx.checkAppResult.checkedPermissions!=null"
       :appId="ctx.accessState.requestingAppId"
-      :permissionsList="checkedPermissions"
-      :clientData="ctx.clientData"
+      :permissionsList="ctx.checkAppResult.checkedPermissions"
+      :clientData="ctx.accessState.clientData"
+      :expireAfter="ctx.accessState.expireAfter"
       @accepted="accept"
       @refused="refuse"/>
 
@@ -151,7 +152,7 @@ export default {
     },
     // Print requested permissions to the user
     showPermissions () {
-      this.checkedPermissions = this.ctx.permissions.list;
+      this.checkedPermissions = this.ctx.checkAppResult.checkedPermissions;
     },
     // The user accepts the requested permissions
     accept () {

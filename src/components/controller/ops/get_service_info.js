@@ -2,7 +2,6 @@
 
 import type Context from '../../../context.js';
 
-
 export type ServiceInfos = {
   version: string,
   register: string,
@@ -14,7 +13,7 @@ export type ServiceInfos = {
   terms: string,
 }
 
-async function getServiceInfo(ctx: Context): Promise<ServiceInfos> {
+async function getServiceInfo (ctx: Context): Promise<ServiceInfos> {
   const info = await ctx.pryvService.info();
   return info;
 }

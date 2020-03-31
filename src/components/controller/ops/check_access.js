@@ -8,28 +8,40 @@ import closeOrRedirect from './close_or_redirect.js';
 async function checkAccess (
   ctx: Context,
   showPermissions: (?string) => void): Promise<void> {
+  console.log(ctx.accessState);
+    const checkData = { };
+    [
+      'requestingAppId',
+      'requestedPermissions',
+      'deviceName',
+      'token',
+      'expireAfter',
+      'clientData',
+    ].forEach((key) => {
+      if (typeof ctx.accessState[key] !== 'undefined') {
+        checkData[key] = ctx.accessState[key];
+      }
+    });
+
   // Check for existing app access
-  const checkApp = await ctx.pryvService.checkAppAccess(
+  const checkAppResult = await ctx.pryvService.checkAppAccess(
     ctx.user.username,
-    ctx.permissions.list,
     ctx.user.personalToken,
-    ctx.accessState.requestingAppId);
+    checkData);
 
   // A matching access exists, returning it alongside with accepted state
-  if (checkApp.match) {
+  if (checkAppResult.matchingAccess) {
     const acceptedState: AcceptedAccessState = {
       status: ACCEPTED_STATUS,
       username: ctx.user.username,
-      token: checkApp.match.token,
+      token: checkAppResult.matchingAccess.token,
     };
     await ctx.updateAccessState(acceptedState);
     return closeOrRedirect(ctx);
   }
-
-  // No such access already exists, we will create a new one with checked permissions
-  if (checkApp.permissions) {
-    ctx.permissions.updateList(checkApp.permissions);
-  }
+  
+  // We keep checkAppResult in context for display
+  ctx.checkAppResult = checkAppResult;
 
   // We intentionally do not check for the existence of mismatching access (checkApp.mismatch)
   // If a mismatching access exists, we also want to create a new access anyway.

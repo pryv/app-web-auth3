@@ -1,6 +1,6 @@
 // @flow
 
-import type {PermissionsList} from './Permissions.js';
+import type { PermissionsList } from '../models/PryvServiceExtension';
 
 export const ACCEPTED_STATUS = 'ACCEPTED';
 export const REFUSED_STATUS = 'REFUSED';
@@ -35,6 +35,7 @@ export type NeedSigninState = {
   returnURL: ?string;
   poll_rate_ms: number;
   clientData: ?{};
+  expiresAfter: ?number;
   url: string;
   lang: string;
   poll: string;
