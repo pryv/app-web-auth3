@@ -75,7 +75,7 @@ export default {
      return (this.ctx.checkAppResult.mismatchingAccess != null);
     },
     expire: function () {
-      return true || (this.ctx.accessState.expireAfter != null);
+      return (this.ctx.accessState.expireAfter != null);
     },
   },
   created: function () {

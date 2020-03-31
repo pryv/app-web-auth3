@@ -118,9 +118,9 @@ test('Auth request, app access check and then accept permissions', async testCon
       record.request.body.includes(`"requestedPermissions":${JSON.stringify(permissions)}`)
     )).ok()
     // Requested permissions are printed to the user
-    .expect(Selector('#appIdText').innerText).contains('App client-app is requesting :')
-    .expect(Selector('ul').textContent).contains('A permission on stream Diary with level READ')
-    .expect(Selector('ul').textContent).contains('A permission on stream Work with level MANAGE')
+    .expect(Selector('#appIdText').innerText).contains('client-app')
+    .expect(Selector('ul').textContent).contains('to read Diary')
+    .expect(Selector('ul').textContent).contains('to manage Work')
     // If the user accepts them
 
     .click('#acceptPermissions')
