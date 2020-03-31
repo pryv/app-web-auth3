@@ -101,6 +101,11 @@ server {
 }
 ```
 
+## Assets & Visual Usage and Customization
+
+To customize assets and visual  refer to: https://github.com/pryv/assets-pryv.me
+
+
 ## The code explained
 
 In this section, we explain how the three main goals of app-web-auth3 are implemented; namely authorizing client applications, registering new Pryv users and resetting forgotten passwords. We first present the three flows and then give more details about each operation that takes part in these flows.

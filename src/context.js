@@ -21,6 +21,7 @@ class Context {
     personalToken: string,
     mfaToken: string,
   };
+  initialized: boolean;
 
   constructor (queryParams: QueryParameters) {
     this.language = queryParams.lang || 'en';
@@ -40,9 +41,12 @@ class Context {
       mfaToken: '',
     };
     this.checkAppResult = {};
+    this.initialized = false;
   }
 
   async init () {
+    if (this.initialized) return;
+    this.initialized = false;
     if (this.isAccessRequest()) {
       await this.loadAccessState();
       this.pryvService.setServiceInfo(this.accessState.serviceInfo);

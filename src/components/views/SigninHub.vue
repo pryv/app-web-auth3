@@ -17,12 +17,12 @@
         id="submitButton"
         :disabled="!validForm"
         @click="submit"
-      >Go to my Pryv</v-btn>
+      >Go to my homepage</v-btn>
 
     </v-form>
 
     <v-divider class="mt-3 mb-2"/>
-    <router-link :to="{ name: 'RegisterUser' }"><h3>New to Pryv ? Create an account</h3></router-link>
+    <router-link :to="{ name: 'RegisterUser' }"><h3>New to {{ serviceInfo.name }} ? Create an account</h3></router-link>
 
     <Alerts
       :errorMsg="error"/>
@@ -47,11 +47,13 @@ export default {
       required: value => !!value || 'This field is required.',
     },
     validForm: false,
+    serviceInfo: {name: ''},
   }),
   async created () {
     this.ctx = new Context(this.$route.query);
     await this.ctx.init();
     this.c = controllerFactory(this.ctx);
+    this.serviceInfo = await this.ctx.pryvService.info();
   },
   methods: {
     submit () {
