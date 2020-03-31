@@ -33,8 +33,6 @@
   <div class="clearfix"></div>
   <h3>Console</h3>
   <textarea id='console'></textarea>
-
-
 </body>
 
 <script>
@@ -51,12 +49,12 @@
     onStateChange: pryvAccessStateChange,
     authRequest: { // See: http://api.pryv.com/reference/#auth-request
       languageCode: 'fr',
-      requestingAppId: 'test-value-notes8',
+      requestingAppId: 'test-value-notes',
       requestedPermissions: [
         {
-          streamId: 'test',
-          defaultName: 'TEST8',
-          level: 'read'
+          streamId: 'test2',
+          defaultName: 'TEST',
+          level: 'manage'
         }
       ],
       clientData: {

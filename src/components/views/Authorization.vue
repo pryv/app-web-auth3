@@ -4,10 +4,7 @@
 
     <Permissions
       v-if="ctx.checkAppResult.checkedPermissions!=null"
-      :appId="ctx.accessState.requestingAppId"
-      :permissionsList="ctx.checkAppResult.checkedPermissions"
-      :clientData="ctx.accessState.clientData"
-      :expireAfter="ctx.accessState.expireAfter"
+      :ctx="ctx"
       @accepted="accept"
       @refused="refuse"/>
 
@@ -98,6 +95,7 @@ export default {
     mfaCode: '',
     error: '',
     checkedPermissions: null,
+    checkAppResult: null,
     serviceInfos: {},
     submitting: false,
     c: null,
@@ -152,7 +150,8 @@ export default {
     },
     // Print requested permissions to the user
     showPermissions () {
-      this.checkedPermissions = this.ctx.checkAppResult.checkedPermissions;
+      this.checkAppResult = this.ctx.checkAppResult;
+      this.checkedPermissions = this.ctx.checkedPermissions;
     },
     // The user accepts the requested permissions
     accept () {

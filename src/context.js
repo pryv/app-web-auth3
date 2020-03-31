@@ -45,7 +45,6 @@ class Context {
   async init () {
     if (this.isAccessRequest()) {
       await this.loadAccessState();
-      console.log(this.accessState);
       this.pryvService.setServiceInfo(this.accessState.serviceInfo);
     }
     await this.pryvService.info();
@@ -57,10 +56,15 @@ class Context {
 
   // in Auth process load the Poll Url
   async loadAccessState() {
-    const res = await Pryv.utils.superagent.get(this.pollUrl).set('accept', 'json');
-    if (! res.body.status ) throw new Error('Invalid data from Access server');
-    this.accessState = res.body;
-    return this.accessState ;
+    try { 
+      const res = await Pryv.utils.superagent.get(this.pollUrl).set('accept', 'json');
+      if (! res.body.status ) throw new Error();
+      this.accessState = res.body;
+      return this.accessState;
+    } catch (e) {
+      console.log(e);
+      throw new Error('Invalid data from Access server');
+    }
   }
 
   // POST/reg: advertise updated auth state

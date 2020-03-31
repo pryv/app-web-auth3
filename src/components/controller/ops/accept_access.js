@@ -8,12 +8,22 @@ import type Context from '../../../context.js';
 async function acceptAccess (ctx: Context): Promise<void> {
   // Create a new app access
 
+  // we need to delete a previous access first
+  if (ctx.checkAppResult.mismatchingAccess) {
+    const deleteAction = await ctx.pryvService.deleteAppAccess(
+      ctx.user.username,
+      ctx.user.personalToken,
+      ctx.checkAppResult.mismatchingAccess.id);
+    if (!deleteAction.id) {
+      throw new Error('Failed removing existing access');
+    }
+  }
+
   const requestData = {
     permissions: ctx.checkAppResult.checkedPermissions,
     name: ctx.accessState.requestingAppId,
     type: 'app',
   };
-  console.log(ctx.accessState);
   // optionals
   [
     'deviceName',

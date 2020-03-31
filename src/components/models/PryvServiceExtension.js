@@ -99,6 +99,18 @@ Pryv.Service.prototype.createAppAccess = async function createAppAccess(
   return res.body.access;
 }
 
+// POST/core: delete an new  access, 
+Pryv.Service.prototype.deleteAppAccess = async function deleteAppAccess(
+  username: string, personalToken: string,
+  accessId: string): Promise<AppAccess> {
+  const res = await Pryv.utils.superagent
+    .delete(this.apiEndpointForSync(username) + 'accesses/' + accessId)
+    .set('accept', 'json')
+    .set('Authorization', personalToken)
+    .send({id: accessId});
+  return res.body.accessDeletion;
+}
+
 
 // ---------- REGISTER calls ----------
 
@@ -136,7 +148,6 @@ Pryv.Service.prototype.checkUsernameExistence = async function checkUsernameExis
   const res = await Pryv.utils.superagent
     .post(this.infoSync().register + username + '/server')
     .set('accept', 'json').send({});
-  console.log('checkUsernameExistence: ' + res.body, this.infoSync().register + username + '/server');
   return res.body.server;
 }
 

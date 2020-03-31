@@ -8,7 +8,6 @@ import closeOrRedirect from './close_or_redirect.js';
 async function checkAccess (
   ctx: Context,
   showPermissions: (?string) => void): Promise<void> {
-  console.log(ctx.accessState);
     const checkData = { };
     [
       'requestingAppId',
@@ -40,8 +39,15 @@ async function checkAccess (
     return closeOrRedirect(ctx);
   }
   
+  
+  // replace requested permissions by results
+  if (checkAppResult.checkedPermissions) {
+    ctx.accessState.requestedPermissions = checkAppResult.checkedPermissions;
+  }
+
   // We keep checkAppResult in context for display
   ctx.checkAppResult = checkAppResult;
+
 
   // We intentionally do not check for the existence of mismatching access (checkApp.mismatch)
   // If a mismatching access exists, we also want to create a new access anyway.
