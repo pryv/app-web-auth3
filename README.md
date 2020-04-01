@@ -17,7 +17,7 @@ Node v8, yarn v1
 | Create distribution in dist/              | `yarn build`                   |
 | Run the app locally in dev mode           | `yarn start`                   |
 | Serve dist/ content with rec-la SSL cert  | `yarn webserver`               |
-| To manually test the auth flow             | `yarn webserver-auth`          |
+| To manually test the auth flow             | `yarn webserver-test`          |
 | Run unit tests (-u to updates snapshots)  | `yarn unit`                    |
 | Run E2E tests                             | `yarn e2e`                     |
 | Run E2E tests with snapshots              | `yarn e2eS`                    |
@@ -39,7 +39,7 @@ Open one of the entrypoint you need to test such as:
 
 #### testing Auth flow, with Rec-la
 
-Once you have started `yarn webserver` also start `yarn webserver-auth` and open [https://l.rec.la:5443/](https://l.rec.la:5443/).
+Once you have started `yarn webserver` also start `yarn webserver-test` and open [https://l.rec.la:5443/](https://l.rec.la:5443/).
 
 You may want to edit the page `./tests/webpage-auth/index.html` 
 
