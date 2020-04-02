@@ -37,7 +37,7 @@ export default {
     await this.ctx.init();
     const assets = await this.ctx.pryvService.assets();
     assets.setAllDefaults();
-    this.logoSrcUrl = 
+    this.logoSrcUrl =
       assets.relativeURL(assets._assets['app-web-auth3'].logo.url);
   },
 };

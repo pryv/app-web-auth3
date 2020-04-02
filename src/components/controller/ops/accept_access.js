@@ -30,7 +30,7 @@ async function acceptAccess (ctx: Context): Promise<void> {
     'token',
     'expireAfter',
     'clientData',
-  ].forEach((key) => {
+  ].forEach((key: string) => {
     if (typeof ctx.accessState[key] !== 'undefined') {
       requestData[key] = ctx.accessState[key];
     }

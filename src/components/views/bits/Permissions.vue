@@ -19,7 +19,7 @@
           </li>
         </ul>
         <span
-          v-if="expire" 
+          v-if="expire"
           style="text-align:left">
           <b>will expire after:</b> {{ accessState.expireAfter }}s
         </span>
@@ -72,7 +72,7 @@ export default {
       }
     },
     accessMismatch: function () {
-     return (this.ctx.checkAppResult.mismatchingAccess != null);
+      return (this.ctx.checkAppResult.mismatchingAccess != null);
     },
     expire: function () {
       return (this.ctx.accessState.expireAfter != null);

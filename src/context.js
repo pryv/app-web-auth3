@@ -1,12 +1,12 @@
 // @flow
 import Pryv from 'pryv';
-import PryvServiceAuth from './components/models/PryvServiceExtension';
-import type {NeedSigninState} from './components/models/AccessStates.js';
+import type { AccessState } from './components/models/AccessStates.js';
 
 type QueryParameters = {
   key: string,
   pryvServiceInfoUrl: string,
-  lang: ?string
+  poll: string,
+  lang: ?string,
 }
 
 class Context {
@@ -31,7 +31,7 @@ class Context {
       // Context will set necessary serviceInfo during Context.init();
       this.pryvService = new Pryv.Service();
     } else {
-      const domain = domainFromUrl() || 'pryv.li'; // should be depracted
+      const domain = domainFromUrl() || 'pryv.li'; // should be depracted
       const serviceInfoUrl = queryParams.pryvServiceInfoUrl || 'https://reg.' + domain + '/service/info';
       this.pryvService = new Pryv.Service(serviceInfoUrl);
     }
@@ -54,25 +54,25 @@ class Context {
     await this.pryvService.info();
   }
 
-  isAccessRequest() {
+  isAccessRequest () {
     return this.pollUrl;
   }
 
   // in Auth process load the Poll Url
-  async loadAccessState() {
-    try { 
+  async loadAccessState () {
+    try {
       const res = await Pryv.utils.superagent.get(this.pollUrl).set('accept', 'json');
-      if (! res.body.status ) throw new Error();
+      if (!res.body.status) throw new Error();
       this.accessState = res.body;
       return this.accessState;
-    } catch (e) {
+    } catch (e) {
       console.log(e);
       throw new Error('Invalid data from Access server');
     }
   }
 
   // POST/reg: advertise updated auth state
-  async updateAccessState(accessState: AccessState): Promise<number> {
+  async updateAccessState (accessState: AccessState): Promise<number> {
     const res = await Pryv.utils.superagent.post(this.pollUrl).send(accessState);
     this.accessState = accessState;
     if (this.accessState.lang != null) this.language = this.accessState.lang;

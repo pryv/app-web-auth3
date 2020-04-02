@@ -1,7 +1,6 @@
 // @flow
 
 import type Context from '../../../context.js';
-import type {TerminationAccessState} from '../../models/AccessStates.js';
 
 function closeOrRedirect (ctx: Context): void {
   let returnUrl = ctx.accessState.returnURL;

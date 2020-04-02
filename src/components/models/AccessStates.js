@@ -8,15 +8,17 @@ export const ERROR_STATUS = 'ERROR';
 export const NEED_SIGNIN_STATUS = 'NEED_SIGNIN';
 
 export type AcceptedAccessState = {
-  status: 'ACCEPTED';
-  username: string;
-  token: string;
+  status: 'ACCEPTED',
+  username: string,
+  token: string,
+  apiEndpoint: string,
 }
 
 export type RefusedAccessState = {
   status: 'REFUSED';
   reasonId: string;
   message: string;
+  serviceInfo: string;
 }
 
 export type ErrorAccessState = {
@@ -24,6 +26,7 @@ export type ErrorAccessState = {
   id: number;
   message: string;
   detail: string;
+  serviceInfo: string;
 }
 
 export type NeedSigninState = {
@@ -35,11 +38,12 @@ export type NeedSigninState = {
   returnURL: ?string;
   poll_rate_ms: number;
   clientData: ?{};
-  expiresAfter: ?number;
+  expireAfter: ?number;
   url: string;
   lang: string;
   poll: string;
   oaccessState: ?string;
+  serviceInfo: string;
 }
 
 export type TerminationAccessState = AcceptedAccessState|RefusedAccessState|ErrorAccessState;
