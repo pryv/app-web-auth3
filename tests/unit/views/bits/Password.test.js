@@ -25,10 +25,11 @@ describe('Password.test.js', () => {
     expect(confirmation.exists()).toBe(false);
   });
 
-  it('asks for password and confirmation if needed', () => {
+  it('asks for password and confirmation if needed', async () => {
     wrapper.setProps({
       confirmation: true,
     });
+    await Vue.nextTick();
     // Renders password
     const password = wrapper.find('#password');
     expect(password.exists()).toBe(true);

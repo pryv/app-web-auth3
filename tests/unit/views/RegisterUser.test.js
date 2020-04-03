@@ -27,10 +27,11 @@ describe('RegisterUser.test.js', () => {
     expect(submitButton.attributes().disabled).toBe('true');
   });
 
-  it('activates submit button when form is valid', () => {
+  it('activates submit button when form is valid', async () => {
     wrapper.setData({
       validForm: true,
     });
+    await Vue.nextTick();
     const submitButton = wrapper.find('#submitButton');
     expect(submitButton.attributes().disabled).toBeFalsy();
   });
