@@ -12,7 +12,7 @@ Node v8, yarn v1
 
 | Task                                      | Command                        |
 | ----------------------------------------- | ------------------------------ |
-| Prepare dev environment                  | `yarn setup`                   |
+| Setup dev environment                     | `yarn setup`                   |
 | Install dependencies                      | `yarn install`                 |
 | Create distribution in dist/              | `yarn build`                   |
 | Run the app locally in dev mode           | `yarn start`                   |
@@ -40,9 +40,7 @@ Open one of the entrypoint you need to test such as:
 #### testing Auth flow, with Rec-la
 
 Once you have started `yarn webserver` also start `yarn webserver-test` and open [https://l.rec.la:5443/](https://l.rec.la:5443/).
-
-You may want to edit the page `./tests/webpage-auth/index.html` 
-
+You might want to edit the page `./tests/webpage-auth/index.html`.
 
 ### Publish to github pages
 
@@ -103,8 +101,7 @@ server {
 
 ## Assets & Visual Usage and Customization
 
-To customize assets and visual  refer to: https://github.com/pryv/assets-pryv.me
-
+To customize assets and visual, refer to: [https://github.com/pryv/assets-pryv.me](https://github.com/pryv/assets-pryv.me)
 
 ## The code explained
 
