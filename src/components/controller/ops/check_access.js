@@ -33,8 +33,9 @@ async function checkAccess (
   if (checkAppResult.matchingAccess != null) {
     const acceptedState: AccessState = {
       status: ACCEPTED_STATUS,
-      username: ctx.user.username,
-      token: checkAppResult.matchingAccess.token,
+      apiEndpoint: ctx.pryvService.apiEndpointForSync(ctx.user.username, checkAppResult.matchingAccess.token),
+      username: ctx.user.username, // to be deprecated
+      token: checkAppResult.matchingAccess.token, // to be deprecated
     };
     await ctx.updateAccessState(acceptedState);
     return closeOrRedirect(ctx);

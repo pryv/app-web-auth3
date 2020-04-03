@@ -44,9 +44,10 @@ async function acceptAccess (ctx: Context): Promise<void> {
   // Notify register about accepted state
   const acceptedState: AccessState = {
     status: ACCEPTED_STATUS,
+    // TODO use apiEndpoint field as well (keep username/token for older register versions)
+    apiEndpoint: ctx.pryvService.apiEndpointForSync(ctx.user.username, appAccess.token),
     username: ctx.user.username, // to be deprecated
     token: appAccess.token, // to be deprecated
-    apiEndpoint: ctx.pryvService.apiEndpointForSync(ctx.user.username, appAccess.token),
   };
 
   await ctx.updateAccessState(acceptedState);
