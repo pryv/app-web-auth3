@@ -1,85 +1,85 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Permissions.test.js renders correctly (snapshots matching) 1`] = `
-<vdialog-stub
+<v-dialog-stub
   accept="function accept() {}"
+  contentclass=""
   maxwidth="none"
   origin="center center"
   persistent="true"
   refuse="function refuse() {}"
   transition="dialog-transition"
+  value="true"
   width="600"
 >
-  <vcard-stub
+  <v-card-stub
     tag="div"
   >
-    <vcardtitle-stub
+    <v-card-title-stub
       class="headline grey lighten-2"
       id="appIdText"
     >
       <span>
-        App 
         <b>
           testApp
         </b>
-         is requesting : 
       </span>
-    </vcardtitle-stub>
+    </v-card-title-stub>
      
-    <vcardtext-stub>
+    <v-card-text-stub>
+      <h4>
+        Is requesting permission:
+      </h4>
+       
       <ul>
         <li>
           
-          A permission on stream 
-          <b>
+          to read 
+          <u>
             Diary
-          </b>
-           with level 
-          <b>
-            READ
-          </b>
+          </u>
         </li>
         <li>
           
-          A permission on stream 
-          <b>
+          to manage 
+          <u>
             Work
-          </b>
-           with level 
-          <b>
-            MANAGE
-          </b>
+          </u>
         </li>
       </ul>
-    </vcardtext-stub>
-     
-    <vcardtext-stub />
-     
-    <vdivider-stub />
-     
-    <vcardactions-stub>
-      <vspacer-stub />
        
-      <vbtn-stub
+      <!---->
+       
+      <br />
+       
+      <!---->
+    </v-card-text-stub>
+     
+    <!---->
+     
+    <v-divider-stub />
+     
+    <v-card-actions-stub>
+      <v-spacer-stub />
+       
+      <v-btn-stub
         activeclass="v-btn--active"
         id="refusePermissions"
-        ripple="true"
         tag="button"
         type="button"
       >
         Reject
-      </vbtn-stub>
+      </v-btn-stub>
        
-      <vbtn-stub
+      <v-btn-stub
         activeclass="v-btn--active"
         id="acceptPermissions"
-        ripple="true"
         tag="button"
         type="button"
       >
         Accept
-      </vbtn-stub>
-    </vcardactions-stub>
-  </vcard-stub>
-</vdialog-stub>
+      </v-btn-stub>
+    </v-card-actions-stub>
+  </v-card-stub>
+</v-dialog-stub>
 `;

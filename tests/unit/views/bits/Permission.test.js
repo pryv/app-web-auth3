@@ -1,5 +1,6 @@
 import { shallowMount } from '@vue/test-utils';
 import Permissions from '@/components/views/bits/Permissions';
+import Context from '../../../../src/context';
 import Vue from 'vue';
 import Vuetify from 'vuetify';
 
@@ -13,11 +14,17 @@ describe('Permissions.test.js', () => {
     {defaultName: 'Work', level: 'manage'},
   ];
 
-  beforeAll(() => {
+  beforeAll(async () => {
+    const context = new Context({});
+    await context.init();
+    context.checkAppResult.checkedPermissions = permissions;
+    context.accessState = {
+      requestedPermissions: permissions,
+      requestingAppId: appId,
+    };
     wrapper = shallowMount(Permissions, {
       propsData: {
-        permissionsList: permissions,
-        appId: appId,
+        ctx: context,
         accept: () => {},
         refuse: () => {},
       },
