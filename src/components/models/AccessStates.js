@@ -4,7 +4,6 @@ import type { PermissionsList } from '../models/PryvServiceExtension';
 
 export const ACCEPTED_STATUS = 'ACCEPTED';
 export const REFUSED_STATUS = 'REFUSED';
-export const ERROR_STATUS = 'ERROR';
 export const NEED_SIGNIN_STATUS = 'NEED_SIGNIN';
 
 export type AcceptedAccessState = {
@@ -18,14 +17,6 @@ export type RefusedAccessState = {
   status: 'REFUSED';
   reasonId: string;
   message: string;
-  serviceInfo: string;
-}
-
-export type ErrorAccessState = {
-  status: 'ERROR';
-  id: number;
-  message: string;
-  detail: string;
   serviceInfo: string;
 }
 
@@ -46,5 +37,5 @@ export type NeedSigninState = {
   serviceInfo: string;
 }
 
-export type TerminationAccessState = AcceptedAccessState|RefusedAccessState|ErrorAccessState;
+export type TerminationAccessState = AcceptedAccessState|RefusedAccessState;
 export type AccessState = TerminationAccessState|NeedSigninState;
