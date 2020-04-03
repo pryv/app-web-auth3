@@ -37,12 +37,12 @@ describe('Permissions.test.js', () => {
 
   it('shows the id of the requesting app', () => {
     const appIdText = wrapper.find('#appIdText');
-    expect(appIdText.html()).toContain(`App <b>${appId}</b> is requesting :`);
+    expect(appIdText.html()).toContain(appId);
   });
 
   it('shows a list of all requested permissions', () => {
     const list = wrapper.find('ul').html();
-    expect(list).toContain(`A permission on stream <b>Diary</b> with level <b>READ</b></li>`);
-    expect(list).toContain(`A permission on stream <b>Work</b> with level <b>MANAGE</b></li>`);
+    expect(list).toContain(`to read <u>Diary</u></li>`);
+    expect(list).toContain(`to manage <u>Work</u></li>`);
   });
 });
