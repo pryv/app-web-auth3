@@ -1,7 +1,7 @@
 // @flow
 
 import type Context from '../../../context.js';
-import type {AcceptedAccessState} from '../../models/AccessStates.js';
+import type {AccessState} from '../../models/AccessStates.js';
 import {ACCEPTED_STATUS} from '../../models/AccessStates.js';
 import closeOrRedirect from './close_or_redirect.js';
 import type { AppCheck } from '../../models/PryvServiceExtension';
@@ -31,7 +31,7 @@ async function checkAccess (
 
   // A matching access exists, returning it alongside with accepted state
   if (checkAppResult.matchingAccess != null) {
-    const acceptedState: AcceptedAccessState = {
+    const acceptedState: AccessState = {
       status: ACCEPTED_STATUS,
       username: ctx.user.username,
       token: checkAppResult.matchingAccess.token,

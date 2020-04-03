@@ -1,7 +1,7 @@
 // @flow
 
 import { ACCEPTED_STATUS } from '../../models/AccessStates.js';
-import type { AcceptedAccessState } from '../../models/AccessStates.js';
+import type { AccessState } from '../../models/AccessStates.js';
 import closeOrRedirect from './close_or_redirect.js';
 import type Context from '../../../context.js';
 
@@ -42,7 +42,7 @@ async function acceptAccess (ctx: Context): Promise<void> {
     requestData);
 
   // Notify register about accepted state
-  const acceptedState: AcceptedAccessState = {
+  const acceptedState: AccessState = {
     status: ACCEPTED_STATUS,
     username: ctx.user.username, // to be deprecated
     token: appAccess.token, // to be deprecated

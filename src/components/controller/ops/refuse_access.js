@@ -2,11 +2,11 @@
 
 import type Context from '../../../context.js';
 import {REFUSED_STATUS} from '../../models/AccessStates.js';
-import type {RefusedAccessState} from '../../models/AccessStates.js';
+import type {AccessState} from '../../models/AccessStates.js';
 import closeOrRedirect from './close_or_redirect.js';
 
 async function refuseAccess (ctx: Context): Promise<void> {
-  const refusedState: RefusedAccessState = {
+  const refusedState: AccessState = {
     status: REFUSED_STATUS,
     reasonId: 'REFUSED_BY_USER',
     message: 'The user refused to give access to the requested permissions',
