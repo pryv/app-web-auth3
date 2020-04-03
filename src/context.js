@@ -62,7 +62,6 @@ class Context {
   async loadAccessState () {
     try {
       const res = await Pryv.utils.superagent.get(this.pollUrl).set('accept', 'json');
-      if (!res.body.status) throw new Error();
       this.accessState = res.body;
       return this.accessState;
     } catch (e) {
