@@ -71,6 +71,7 @@ It exposes one single `index.html` file but the application has several **entry 
 In order to expose these entrypoints, you can either 
 
 #### Use Symbolic Links
+
 Reference the entry points to `dist/index.html`
 
 The build process automatically creates the necessary links in `dist/` and this folder can be directly exposed by a web sever.
@@ -78,6 +79,7 @@ The build process automatically creates the necessary links in `dist/` and this 
 The pages are accessible by https://your-app-domain.com/access/register.html 
 
 #### Use a reverse proxy, example with NGINX
+
 Redirect requests to these endpoint to index.html with a reverse proxy. You can find an example for NGINX bellow. 
 
 We present here an example of Nginx configuration for using app-web-auth3 within a Pryv.io installation.
