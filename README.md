@@ -43,6 +43,10 @@ Open one of the entrypoint you need to test such as:
 Once you have started `yarn webserver` also start `yarn webserver-test` and open [https://l.rec.la:5443/](https://l.rec.la:5443/).
 You might want to edit the page `./tests/webpage-auth/index.html`.
 
+#### Vue.js snapshot testing
+
+- [Doc for snapshot testing](https://vue-test-utils.vuejs.org/)
+
 ### Publish to github pages
 
 If it is the first time you publish app-web-auth3, be sure to run `yarn setup` once.
