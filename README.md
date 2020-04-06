@@ -38,14 +38,15 @@ Open one of the entrypoint you need to test such as:
 
  Note: you can override default hardcoded serviceInfoUrl with the query parameter  `pryvServiceInfoUrl` as shown.
 
-#### testing Auth flow, with Rec-la
+#### Testing Auth flow, with Rec-la
 
 Once you have started `yarn webserver` also start `yarn webserver-test` and open [https://l.rec.la:5443/](https://l.rec.la:5443/).
 You might want to edit the page `./tests/webpage-auth/index.html`.
 
-#### Vue.js testing
+### Vue.js testing
 
-- [Doc for Vue.js testing](https://vue-test-utils.vuejs.org/)
+- unit: [Doc for Vue.js testing](https://vue-test-utils.vuejs.org/)
+- e2e: [Doc for Testcafe](https://devexpress.github.io/testcafe/)
 
 ### Publish to github pages
 
