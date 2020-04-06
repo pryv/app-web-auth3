@@ -5,6 +5,7 @@
   "author": {"name": "Pryv SA", "email": "tech@pryv.com", "url": "https://pryv.com"},
   "contributors": ["Thiébaud Modoux", "Pierre-Mikael Legris"],
   "private": true,
+  "license": "BSD-3-Clause",
   "scripts": {
     "dev": "webpack-dev-server --inline --progress --config build/webpack.dev.conf.js",
     "start": "yarn run dev",
