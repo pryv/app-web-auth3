@@ -20,16 +20,15 @@ let testcafe = null;
         .browsers(['chrome'])
         .startApp('yarn dev');
 
-
       if (process.argv.includes('-s')) {
-        console.log('saving snapshots')
+        console.log('saving snapshots');
         // screenshots does not work for an unkown reason.
         // needs to investigate
         // https://devexpress.github.io/testcafe/documentation/using-testcafe/programming-interface/runner.html#screenshots
         runner.screenshots({
           path: 'screenshots',
-          takeOnFails: true
-        })
+          takeOnFails: true,
+        });
       };
 
       return runner.run();
@@ -38,5 +37,4 @@ let testcafe = null;
       console.log('Tests failed: ' + failedCount);
       testcafe.close();
     });
-
 })();
