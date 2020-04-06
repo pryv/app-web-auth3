@@ -1,6 +1,8 @@
 // @flow
 import Pryv from 'pryv';
 import type { AccessState } from './components/models/AccessStates.js';
+// augment Pryv with additional functions
+import './components/models/PryvServiceExtension';
 
 type QueryParameters = {
   key: string,
