@@ -1,4 +1,4 @@
-import { shallowMount } from '@vue/test-utils';
+import { shallowMount, RouterLinkStub } from '@vue/test-utils';
 import RegisterUser from '@/components/views/RegisterUser';
 import Vue from 'vue';
 import Vuetify from 'vuetify';
@@ -13,7 +13,9 @@ describe('RegisterUser.test.js', () => {
       mocks: {
         $route: {query: {}},
       },
-      stubs: ['router-link'],
+      stubs: {
+        RouterLink: RouterLinkStub,
+      },
     });
   });
 

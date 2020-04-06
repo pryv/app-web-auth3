@@ -1,4 +1,4 @@
-import { shallowMount } from '@vue/test-utils';
+import { shallowMount, RouterLinkStub } from '@vue/test-utils';
 import ResetPassword from '@/components/views/ResetPassword';
 import Password from '@/components/views/bits/Password';
 import Vue from 'vue';
@@ -14,7 +14,9 @@ describe('ResetPassword.test.js', () => {
       mocks: {
         $route: {query: {}},
       },
-      stubs: ['router-link'],
+      stubs: {
+        RouterLink: RouterLinkStub,
+      },
     });
   });
 

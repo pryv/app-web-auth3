@@ -1,4 +1,4 @@
-import { shallowMount } from '@vue/test-utils';
+import { shallowMount, RouterLinkStub } from '@vue/test-utils';
 import Authorization from '@/components/views/Authorization';
 import Permissions from '@/components/views/bits/Permissions';
 import Vue from 'vue';
@@ -14,7 +14,9 @@ describe('Authorization.test.js', () => {
       mocks: {
         $route: {query: {}},
       },
-      stubs: ['router-link'],
+      stubs: {
+        RouterLink: RouterLinkStub,
+      },
     });
   });
 

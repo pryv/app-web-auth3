@@ -96,21 +96,17 @@ exports[`Authorization.test.js renders correctly (snapshots matching) 1`] = `
     class="mt-3 mb-2"
   />
    
-  <router-link-stub
-    to="[object Object]"
-  >
+  <a>
     <h3>
       Create an account
     </h3>
-  </router-link-stub>
+  </a>
    
-  <router-link-stub
-    to="[object Object]"
-  >
+  <a>
     <h3>
       Forgot password
     </h3>
-  </router-link-stub>
+  </a>
    
   <alerts-stub
     errormsg=""
