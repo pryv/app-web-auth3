@@ -7663,9 +7663,10 @@ prr@~1.0.1:
   resolved "https://registry.yarnpkg.com/prr/-/prr-1.0.1.tgz#d3fc114ba06995a45ec6893f484ceb1d78f5f476"
   integrity sha1-0/wRS6BplaRexok/SEzrHXj19HY=
 
-"pryv@git://github.com/pryv/lib-js.git#2.0.0":
+pryv@2.0.1:
   version "2.0.1"
-  resolved "git://github.com/pryv/lib-js.git#b86ad042fa028e35dbb926fe177da83a6f70877d"
+  resolved "https://registry.yarnpkg.com/pryv/-/pryv-2.0.1.tgz#ba91fde5666f5f53a2b63fe9018a5058855d53a3"
+  integrity sha512-Qi598M2od0FhjU/N2lQBgtOzU2H+7fY+FlUwCsAE1EDcf439oYpLDz88dq3kjdvvJoFRgEO5abaYXP1wTR80Og==
   dependencies:
     superagent "^5.2.1"
 
