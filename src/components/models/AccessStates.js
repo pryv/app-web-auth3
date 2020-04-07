@@ -19,11 +19,13 @@ export type AccessState = {
   returnURL?: string,
   poll_rate_ms?: number,
   clientData?: Object,
-  expireAfter?: number,
   url?: string,
   lang?: string,
   poll?: string,
+  pollKey?: string, // why is this still here?
   oaccessState?: string,
+  expireAfter?: number, // to be added
+  deviceName?: string, // to be added
 
   // status=ACCEPTED
   username?: string,

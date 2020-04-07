@@ -91,7 +91,7 @@ Pryv.Service.prototype.createAppAccess = async function createAppAccess (
   return res.body.access;
 };
 
-// POST/core: delete an new  access, 
+// POST/core: delete an new  access
 Pryv.Service.prototype.deleteAppAccess = async function deleteAppAccess (
   username: string, personalToken: string,
   accessId: string): Promise<AppAccess> {
@@ -167,7 +167,7 @@ Pryv.Service.prototype.requestPasswordReset = async function requestPasswordRese
 };
 
 // POST/core: change Pryv password using a reset token
-Pryv.Service.prototype.changePassword = async function changePassword (username: string, 
+Pryv.Service.prototype.changePassword = async function changePassword (username: string,
   newPassword: string,
   resetToken: string,
   appId: string): Promise<number> {
