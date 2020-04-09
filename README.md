@@ -12,6 +12,28 @@ These web pages are the "popup frame" that opens during the [app authorization p
 
 # Document Content
 
+- [Authentication and Access token creation flow](#authentication-and-access-token-creation-flow)
+  * [Authorization flow](#authorization-flow)
+  * [Register user flow](#register-user-flow)
+  * [Reset password flow](#reset-password-flow)
+  * [Operations in details](#operations-in-details)
+    + [login](#login)
+    + [checkAccess](#checkaccess)
+    + [acceptAccess](#acceptaccess)
+    + [refuseAccess](#refuseaccess)
+    + [closeOrRedirect](#closeorredirect)
+- [Development and Deployment](#development-and-deployment)
+  * [Prerequisites](#prerequisites)
+  * [Commands](#commands)
+  * [Tests](#tests)
+    + [rec-la for local manual test](#rec-la-for-local-manual-test)
+      - [Testing Auth flow, with Rec-la](#testing-auth-flow-with-rec-la)
+    + [Vue.js testing](#vuejs-testing)
+    + [Publish to github pages](#publish-to-github-pages)
+  * [Possible deployments and structure](#possible-deployments-and-structure)
+    + [Use Symbolic Links](#use-symbolic-links)
+    + [Use a reverse proxy, example with NGINX](#use-a-reverse-proxy-example-with-nginx)
+  * [Assets & Visual Usage and Customization](#assets--visual-usage-and-customization)
 
 
 # Authentication and Access token creation flow
