@@ -1,16 +1,16 @@
 # Authorization web app (app-web-auth v3)
 
-Pryv.io web pages for app authorization, user registration and password reset
+Pryv.io web pages for app authorization, user registration and password reset.
 
-This is a **Template App** developped with [Vue.js](https://vue.js) to be adapted and refactored for each Pryv.io deployment. It can also be used as reference if you prefer to use another framework.
+This is a **Template App** developped with [Vue.js](https://vue.js) to be adapted for each Pryv.io platform. It also serves as a reference if you prefer to use another framework.
 
-These web pages are the "popup frame" that opens during the [app authorization process](https://api.pryv.com/reference/#authorizing-your-app)
+These web pages are the "popup frame" that opens during the [app authorization process](https://api.pryv.com/reference/#authorizing-your-app), as well as registration and password reset.
 
 | Registration                                                 | Sign in                                                      | Consent                                                      | Reset-Password                                               |
 | ------------------------------------------------------------ | ------------------------------------------------------------ | ------------------------------------------------------------ | ------------------------------------------------------------ |
 | <img src="doc-src/3-register.png" alt="1-signin" style="zoom:33%;" /> | <img src="doc-src/1-signin.png" alt="1-signin" style="zoom:33%;" /> | <img src="doc-src/4-consent.png" alt="1-signin" style="zoom:33%;" /> | <img src="doc-src/2-reset-email.png" alt="1-signin" style="zoom:33%;" /> |
 
-# Document Content
+# Table of contents
 
 - [Authentication and Access token creation flow](#authentication-and-access-token-creation-flow)
   * [Authorization flow](#authorization-flow)
@@ -36,101 +36,90 @@ These web pages are the "popup frame" that opens during the [app authorization p
   * [Assets & Visual Usage and Customization](#assets--visual-usage-and-customization)
 
 
-# Authentication and Access token creation flow
+# Web pages flow
 
-In this section, we explain how the three main goals of app-web-auth3 are implemented; namely authorizing client applications, registering new Pryv users and resetting forgotten passwords. We first present the three flows and then give more details about each operation that takes part in these flows.
+In this section, we explain how the 3 main functions of app-web-auth3 are implemented; namely authorizing client applications, registering new Pryv.io users and resetting forgotten passwords. We first present the logic flow and then provide additional details about the operations they perform.
 
 ## Authorization flow
 
-1. (This step is happening outside app-web-auth3)
-  The client application performs an auth request, as explained [API doc - Authorizing your app](https://api.pryv.com/reference/#authorizing-your-app).
-  From this request, the app receives an URL to open (e.g as a popup), which actually targets app-web-auth3 auth page.
-  This URL transmits as query parameters the requesting permissions and requesting app id from the auth request. [API doc - Auth request](https://api.pryv.com/reference/#auth-request)
+1. (This step is happenning outside app-web-auth3)
+  The client application performs an auth request call, as explained here: [API doc - Authorizing your app](https://api.pryv.com/reference/#authorizing-your-app).
+  As a response, the app receives an URL to open (e.g as a popup), which actually targets the app-web-auth3 auth page.
+  This URL carries as query parameters the requesting permissions and requesting app id from the auth request, see [API doc - Auth request](https://api.pryv.com/reference/#auth-request)
   
   This step can be tested with: 
   
-  - [App web access](https://api.pryv.com/app-web-access/?pryvServiceInfoUrl=https://reg.pryv.me/service/info) on github.
+  - [App web access](https://api.pryv.com/app-web-access/?pryvServiceInfoUrl=https://reg.pryv.me/service/info) on Github pages.
   - [Simple web app](https://codepen.io/pryv/pen/ExVYemE) on code pen.
   
-2. The app-web-auth3 auth page shows a form for a user to enter its Pryv.io username and password.
+2. The app-web-auth3 auth page prompts the user to enter his Pryv.io username and password.
 
-3. Clicking on Sign-in triggers a Pryv login ([login operation](#login)) and finally generates a personal token for this user. 
+3. Clicking on Sign-in triggers a login ([login operation](#login)) returning a personal token for this user. 
 
-4. Using the personal token, the requested app access is checked, it produces a set of checkedPermissions (important details are being omitted here, see [checkAccess operation](#checkapp)).
+4. Using the personal token, the app verifies the format of the requested permissions against the requesting app id to see if such a request was already accepted, if the permissions are different to one already provided for such an app id or if it is a new one (see [checkAccess operation](#checkapp)).
 
-5. The checkedPermissions are shown to the user, who can decide to Accept ([acceptAccess operation](#acceptaccess)) or Refuse ([refuseAccess operation](#refuseaccess)) to grant access to the app by clicking on the corresponding buttons. Creation of a new app access happens only after accepting.
+5. The requested permissions are shown to the user, who can decide to Accept ([acceptAccess operation](#acceptaccess)) or Refuse ([refuseAccess operation](#refuseaccess)) granting access to the app by clicking on the corresponding button. If accepted, it creates a new app access.
 
-6. The authorization flow ends by returning ([closeOrRedirect operation](#closeorredirect)) the result of this flow (the new app access or only a message in case of error/refuse/cancelation) to the requesting app.
+6. The authorization flow ends by returning ([closeOrRedirect operation](#closeorredirect)) the result of this flow: the new app access token or a message in case of error/refuse/cancelation to the requesting app.
 
 ## Register user flow
 
-It follows account creation flows: [API doc - account creation](https://api.pryv.com/reference-system/#account-creation)
+It follows the account creation flows: [API doc - account creation](https://api.pryv.com/reference-system/#account-creation)
 
-1. At the loading of the registration page, a list of available Pryv.io hostings is loaded (form register)
+1. Upon loading, a list of available Pryv.io hostings is loaded (See [API doc - Get hostings](https://api.pryv.com/reference-system/#get-hostings)).
 
-   [API doc - Get hostings](https://api.pryv.com/reference-system/#get-hostings)
+2. A form asks for information about the new user: email, username, password, choice of hosting.
 
-2. A form ask for information about the new user: email, username, password, choice of hosting
+3. Clicking on Create triggers the user creation.
 
-3. Clicking on Create triggers the user creation
+4. The registration flow ends and the new user is redirected to the demo [dashboard](https://github.com/pryv/app-web).
 
-4. The registration flow ends and the new user can now login and proceed to the authorization flow.
 
-   [API doc - Create user](https://api.pryv.com/reference-system/#create-user)
+## Reset password request flow
 
-## Reset password flow
+1. A form asks for a Pryv.io username or email.
 
-1. In a first phase, a form ask for a Pryv username or email.
+2. Clicking on Request password reset triggers the sending of a reset password email to the user (sent from the Pryv.io server/core) (See [API doc - Reset password request](https://api.pryv.com/reference-full/#request-password-reset)).
 
-2. Clicking on Request password reset triggers the sending of a reset email to the user (sent from Pryv server/core)
+3. The user opens the email and clicks on the reset link. The link targets the password reset page, but this time provides a reset token as query string.
 
-   [API doc - Reset password request](https://api.pryv.com/reference-full/#request-password-reset)
+4. A new form is presented to the user asking for his username or email and a new password.
 
-3. The user opens the email and clicks on the reset link. The link still targets app-web-auth3 reset page, but this time provides a reset token as query string.
+5. Clicking on Change password will update the password with the new one, using the reset token (See [API doc - Reset password](https://api.pryv.com/reference-full/#reset-password)).
 
-4. A new form is presented to the user asking for username or email and a new password.
-
-5. Clicking on Change password will update the password with the new one, using the reset token.
-
-   [API doc - Reset password](https://api.pryv.com/reference-full/#reset-password)
-
-6. The reset flow ends.
 
 ## Operations in details
 
 ### login
 
-Uses provided Pryv credentials (username, password) to login against Pryv API. [API doc login](https://api.pryv.com/reference-full/#login-user)
-Before actually login in, two preliminary calls happens:
+Resolves the username if an email is provided, verifies the username existence then uses the provided Pryv.io credentials (username, password) to login with the Pryv.io API (See [API doc login](https://api.pryv.com/reference-full/#login-user)).
 
-  - getUsernameForEmail: if a Pryv email was provided instead of the username, convert it to username. [API doc email for username](https://api.pryv.com/reference-system/#get-username-from-email)
-  - checkUsernameExistence: check if provided username exists (i.e. is assigned to a Pryv server/core). [API doc check username](https://api.pryv.com/reference-system/#check-username)
+  - [API doc email for username](https://api.pryv.com/reference-system/#get-username-from-email)
+  - [API doc check username](https://api.pryv.com/reference-system/#check-username)
 
 ### checkAccess
 
-Checks the requested app access (especially the permissions it contains) and compare it with eventually existing ones (only [accesses of type 'app'](https://api.pryv.com/concepts/#accesses) are considered here).
+Checks the requested app access (especially the permissions it contains) and compares it with eventually existing ones (only [accesses of type 'app'](https://api.pryv.com/concepts/#accesses) are considered here).
 
 **Reference:** [API doc CheckApp Access](https://api.pryv.com/reference-full/#check-app-authorization)
 
-From this check, three different objects can be returned, depending on the situation:
+The API response will contain the following fields:
   - in any case, **checkedPermissions** will contain the set of requested permissions that has been checked and corrected (for example to ensure that stream names stay unique using provided defaultNames).
   - if a similar app access already exists and its permissions match the requested permissions, **matchingAccess** will contain the existing ,matching access.
   - if a similar app access already exists but its permissions do not match the requested permissions, **mismatchingAccess** will contain the mismatching access.
 
 Knowing that, this operation continues as follow:
 
-If **matchingAccess** exists, register is notified by sending an AcceptedAccessState (which contains the username and the app token) to the poll endpoint (so that the app token can further be retrieved by the app doing polling). Finally, we can just jump to the end of the [auth flow](#authorization-flow) (step 5), returning the existing access.
+If a **matchingAccess** exists, the Pryv.io register is notified by sending an AcceptedAccessState (which contains the username and the app access token) to the poll endpoint so that the app access token can further be retrieved by the app doing the polling (See [auth flow](#authorization-flow), step 5).
 
-Otherwise, we first replace the permissions list with the **checkedPermissions** and then show them to the user so that he can consent (or not) to the creation of the new access ([auth flow](#authorization-flow), step 4).
+Otherwise, we first replace the permissions list with the **checkedPermissions** and then show them to the user so that he can consent (or not) to the creation of the new app access ([auth flow](#authorization-flow), step 4).
 
-If **mismatchingAccess** exists, we still show the **checkedPermissions** to the user, but instead of creating a new access upon user consent ([auth flow](#authorization-flow), step 4), we just update the existing one with the new permissions.
-
-Updating an access is a two step process **delete** then **create**  to preserve history.
+If a **mismatchingAccess** exists, we still show the **checkedPermissions** to the user, but instead of creating a new access upon user consent ([auth flow](#authorization-flow), step 4), we just update the existing one with the new permissions. Updating an access is a two step process **delete** then **create**  to preserve history.
 
 
 ### acceptAccess
 
-Triggered when user accept to consent to the new app access.
+Triggered when the user accepts to consent to the new app access.
 
 1. (optional) **Delete** if it's an update, first delete the existing one. [API doc Access delete](https://api.pryv.com/reference-full/#delete-access)
 2. **Create** the access according to provided username, personalToken and permissionsList (or updates an existing **mismatchingAccess** using its access id). [API doc Access create](https://api.pryv.com/reference-full/#create-access)
@@ -152,7 +141,7 @@ Triggered when user accept to consent to the new app access.
 
 ### refuseAccess
 
-Triggered when user refuses to consent to the new app access, it notifies register by sending an RefusedAccessState (which contains nothing more than a refuse message) and then ends the auth flow ([closeOrRedirect operation](#closeorredirect)).
+Triggered when the user refuses to consent to the new app access, it notifies the Pryv.io register by sending a RefusedAccessState (which contains nothing more than a refusal message) and ends the auth flow ([closeOrRedirect operation](#closeorredirect)).
 
 `POST {poll url}` 
 
