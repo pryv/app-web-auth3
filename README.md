@@ -132,9 +132,9 @@ Triggered when the user accepts to consent to the new app access.
 ```json
 {
 	"status": "ACCEPTED",
-	"pryvApiEndpoint", "https://{token}@{apiEndpoint}"
-	"username": "....", // will be deprecated
-	"token": "...", // will be deprecated
+	"pryvApiEndpoint": "https://{token}@{apiEndpoint}",
+	"username": "..will be deprecated..",
+	"token": "..will be deprecated..",
 }
 
 ```
