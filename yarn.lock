@@ -7912,10 +7912,10 @@ realpath-native@^1.0.0:
   dependencies:
     util.promisify "^1.0.0"
 
-rec-la@^0.1.8:
-  version "0.1.8"
-  resolved "https://registry.yarnpkg.com/rec-la/-/rec-la-0.1.8.tgz#85ecf6f6caf4b70805360adc5513613ffab3a70c"
-  integrity sha512-aKcFmzSuKg6cV086d7jDGILXdEhmNITmysb3zvOrwxFwSXzUpGPx3xoGKJituQHb8lX7mQ8WvCUS7vI8qRIQUw==
+rec-la@^0.1.10:
+  version "0.1.10"
+  resolved "https://registry.yarnpkg.com/rec-la/-/rec-la-0.1.10.tgz#fb0e929919169bede4d400f464128da638ec326f"
+  integrity sha512-2YwRg7rtlxsPCadpmg/TLbEEZXsXkSG13MwSqi61cAFZJxzzEURs7H1I2FcA2nLAaTDPTsb7zhetZcaAuwYQMg==
   dependencies:
     express "^4.14.0"
 
