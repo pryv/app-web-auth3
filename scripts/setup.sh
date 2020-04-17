@@ -12,7 +12,7 @@ Installing Node modules from 'package.json' if necessary...
 "
 yarn install
 
-if [ -d dist ] && [! -d dist/.git]
+if [ -d dist ] && [ ! -d dist/.git ]
 then
   echo "
   Conflict with previous unpublished build, cleaning 'dist' folder."
