@@ -28,7 +28,7 @@ class Context {
   constructor (queryParams: QueryParameters) {
     this.language = queryParams.lang || 'en';
     this.appId = 'pryv-app-web-auth-3';
-    this.pollUrl = queryParams.poll;
+    this.pollUrl = queryParams.poll || queryParams.pollUrl;
     if (this.isAccessRequest()) {
       // Context will set necessary serviceInfo during Context.init();
       this.pryvService = new Pryv.Service();
