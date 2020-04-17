@@ -22,7 +22,6 @@ export type AccessState = {
   url?: string,
   lang?: string,
   poll?: string,
-  pollUrl?: string, // should be removed from register and use "poll" only
   pollKey?: string, // why is this still here?
   oaccessState?: string,
   expireAfter?: number, // to be added

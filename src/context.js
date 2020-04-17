@@ -8,7 +8,8 @@ type QueryParameters = {
   key: string,
   pryvServiceInfoUrl: string,
   poll: string,
-  lang: ?string,
+  pollUrl?: string; // should be removed from register's authUrl response and use "poll" only
+  lang?: string,
 }
 
 class Context {
