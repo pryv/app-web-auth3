@@ -13,11 +13,11 @@ type QueryParameters = {
 }
 
 class Context {
-  appId: string; // id of the web-auth app
+  appId: string; // id of the web-auth app 
   language: string;
   accessState: AccessState; // used only in the context of a "Auth" process
   pollUrl: string; // used only in the context of a "Auth" process
-  checkAppResult: Object; // use nly in the context of a "Auth" process after check-app
+  checkAppResult: Object; // use only in the context of a "Auth" process after check-app
   pryvService: Pryv.Service;
   user: {
     username: string,
