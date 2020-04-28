@@ -12,10 +12,11 @@ These web pages are the "popup frame" that opens during the [app authorization p
 
 # Table of contents
 
-- [Authentication and Access token creation flow](#authentication-and-access-token-creation-flow)
+- [Fork repository for GitHub pages](#fork-repository-for-github-pages)
+- [Web pages flow](#web-pages-flow)
   * [Authorization flow](#authorization-flow)
   * [Register user flow](#register-user-flow)
-  * [Reset password flow](#reset-password-flow)
+  * [Reset password frequest low](#reset-password-request-flow)
   * [Operations in details](#operations-in-details)
     + [login](#login)
     + [checkAccess](#checkaccess)
@@ -35,6 +36,13 @@ These web pages are the "popup frame" that opens during the [app authorization p
     + [Use a reverse proxy, example with NGINX](#use-a-reverse-proxy-example-with-nginx)
   * [Assets & Visual Usage and Customization](#assets--visual-usage-and-customization)
 
+# Fork repository for GitHub pages
+
+After you have forked the repository on GitHub, you must adapt the [upload](/scripts/setup.sh) script so it pushes to the `gh-pages` branch of your repository by modifying the [following line](/scripts/setup.sh#L27) as following:
+
+```sh
+  git clone git@github.com:{YOUR-GITHUB-ACCOUNT}/app-web-auth3.git dist && cd dist && git checkout gh-pages
+``
 
 # Web pages flow
 
