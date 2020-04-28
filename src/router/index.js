@@ -9,9 +9,12 @@ import Aliases from './aliases.js';
 
 Vue.use(VueRouter);
 
+const path = (new URL(document.location)).pathname;
+const basePath = path.substring(0, path.lastIndexOf('/access/')) + '/' + Aliases.basePath;
+
 let Router = new VueRouter({
   mode: 'history',
-  base: Aliases.basePath,
+  base: basePath,
   routes: [
     {
       path: '/',
