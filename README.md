@@ -42,7 +42,7 @@ After you have forked the repository on GitHub, you must adapt the [upload](/scr
 
 ```sh
   git clone git@github.com:{YOUR-GITHUB-ACCOUNT}/app-web-auth3.git dist && cd dist && git checkout gh-pages
-``
+```
 
 # Web pages flow
 
