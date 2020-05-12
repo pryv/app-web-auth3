@@ -44,6 +44,8 @@ After you have forked the repository on GitHub, you must adapt the [upload](/scr
   git clone git@github.com:{YOUR-GITHUB-ACCOUNT}/app-web-auth3.git dist && cd dist && git checkout gh-pages
 ```
 
+In order for GitHub to build the GH pages once, you must make a commit in the `gh-pages` branch. An easy way to achieve this is to do a commit that adds an extra space or line at the end of a file.
+
 # Web pages flow
 
 In this section, we explain how the 3 main functions of app-web-auth3 are implemented; namely authorizing client applications, registering new Pryv.io users and resetting forgotten passwords. We first present the logic flow and then provide additional details about the operations they perform.
