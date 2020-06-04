@@ -31,6 +31,7 @@ These web pages are the "popup frame" that opens during the [app authorization p
       - [Testing Auth flow, with Rec-la](#testing-auth-flow-with-rec-la)
     + [Vue.js testing](#vuejs-testing)
     + [Publish to github pages](#publish-to-github-pages)
+    + [Publish in Open Pryv.io environment](#publish-in-open-pryv.io-environment)
   * [Possible deployments and structure](#possible-deployments-and-structure)
     + [Use Symbolic Links](#use-symbolic-links)
     + [Use a reverse proxy, example with NGINX](#use-a-reverse-proxy-example-with-nginx)
@@ -231,6 +232,10 @@ Then, publish your changes by running `yarn upload ${commit-message}`
 
 If you encounter conflicts while publishing, run `yarn clear` to reset the `dist/` folder,
 then build and publish again.
+
+### Publish in Open Pryv.io environment
+
+During the installation of Open Pryv.io App-web-auth3 has been published in a `../public_html/access/`. If you customize the application, you just have to copy or move the `./dist/` content to into.
 
 ## Possible deployments and structure
 
