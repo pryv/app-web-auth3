@@ -3,17 +3,18 @@ import Pryv from 'pryv';
 import type { AccessState } from './components/models/AccessStates.js';
 // augment Pryv with additional functions
 import './components/models/PryvServiceExtension';
+import defaults from './defaults';
 
 type QueryParameters = {
   key: string,
   pryvServiceInfoUrl: string,
   poll: string,
-  pollUrl?: string; // should be removed from register's authUrl response and use "poll" only
+  pollUrl: string; // should be removed from register's authUrl response and use "poll" only
   lang?: string,
 }
 
 class Context {
-  appId: string; // id of the web-auth app 
+  appId: string; // id of the web-auth app
   language: string;
   accessState: AccessState; // used only in the context of a "Auth" process
   pollUrl: string; // used only in the context of a "Auth" process
@@ -34,8 +35,7 @@ class Context {
       // Context will set necessary serviceInfo during Context.init();
       this.pryvService = new Pryv.Service();
     } else {
-      const domain = domainFromUrl() || 'pryv.li'; // should be depracted
-      const serviceInfoUrl = queryParams.pryvServiceInfoUrl || 'https://reg.' + domain + '/service/info';
+      const serviceInfoUrl = queryParams.pryvServiceInfoUrl || defaultPryvServiceInfoUrl();
       this.pryvService = new Pryv.Service(serviceInfoUrl);
     }
     this.user = {
@@ -82,8 +82,15 @@ class Context {
   }
 }
 
-function domainFromUrl () {
-  return location.hostname.split('.').slice(1).join('.');
+/**
+ * In case default url has not been provided
+ */
+function defaultPryvServiceInfoUrl () {
+  if (defaults.DNSLess) {
+    return new URL('/reg/service/info', window.location.href).href;
+  }
+  const domain = location.hostname.split('.').slice(1).join('.') || 'pryv.li'; // should be depracted
+  return 'https://reg.' + domain + '/service/info';
 }
 
 export default Context;

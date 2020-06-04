@@ -16,7 +16,11 @@ function closeOrRedirect (ctx: Context): void {
     }
 
     if (ctx.accessState.oaccessState) { // OK to use pollKey here
-      returnUrl += `state=${ctx.accessState.oaccessState}&code=${ctx.accessState.pollKey}&poll=${ctx.pollUrl}`;
+      let pollKey = '';
+      if (ctx.accessState.pollKey) {
+        pollKey = `&code=${ctx.accessState.pollKey}`;
+      }
+      returnUrl += `state=${ctx.accessState.oaccessState}${pollKey}&poll=${ctx.pollUrl}`;
     } else {
       returnUrl += `prYvpoll=${ctx.pollUrl}`;
       // the following code should be deprecated

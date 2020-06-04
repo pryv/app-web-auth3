@@ -26,6 +26,7 @@ export type AccessState = {
   oaccessState?: string,
   expireAfter?: number, // to be added
   deviceName?: string, // to be added
+  referer?: string, // to be added
 
   // status=ACCEPTED
   username?: string,
