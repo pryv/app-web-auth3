@@ -75,6 +75,10 @@ class Context {
 
   // POST/reg: advertise updated auth state
   async updateAccessState (accessState: AccessState): Promise<number> {
+    // always keep the following
+    if (this.accessState && this.accessState.returnURL) {
+      accessState.returnURL = this.accessState.returnURL;
+    }
     const res = await Pryv.utils.superagent.post(this.pollUrl).send(accessState);
     this.accessState = accessState;
     if (this.accessState.lang != null) this.language = this.accessState.lang;
