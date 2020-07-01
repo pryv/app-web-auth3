@@ -235,7 +235,7 @@ then build and publish again.
 
 ### Publish in Open Pryv.io environment
 
-During the installation of Open Pryv.io App-web-auth3 has been published in a `../public_html/access/`. If you customize the application, you just have to copy or move the `./dist/` content to into.
+During the installation of Open Pryv.io, the app-web-auth3 files have been published in the `../public_html/access/` folder of your `open-pryv.io` repo. If you customize the application, you should copy the content from the `app-web-auth3/dist/` folder to `open-pryv.io/public_html` and reboot Open Pryv.io .
 
 ## Possible deployments and structure
 
@@ -247,11 +247,11 @@ It exposes one single `index.html` file but the application has several **entry 
 - reset-password.html - To request a password reset. See [reference](https://api.pryv.com/reference-full/#request-password-reset)
 - siginhub.html - To sign in users and redirect them to the [default dashboard app](https://github.com/pryv/app-web). (it depends on Pryv.io deployment)
 
-In order to expose these entrypoints, you can either 
+In order to expose these entrypoints, you can either :
 
 ### Use Symbolic Links
 
-Reference the entry points to `dist/index.html`
+Reference the entry points to `dist/index.html`.
 
 The build process automatically creates the necessary links in `dist/` and this folder can be directly exposed by a web sever.
 
@@ -259,9 +259,9 @@ The pages are accessible by https://your-app-domain.com/access/register.html
 
 ### Use a reverse proxy, example with NGINX
 
-Redirect requests to these endpoint to index.html with a reverse proxy. You can find an example for NGINX bellow. 
+Redirect requests to these endpoint to index.html with a reverse proxy. You can find an example for NGINX below. 
 
-We present here an example of Nginx configuration for using app-web-auth3 within a Pryv.io installation.
+We present here an example of NGINX configuration for using app-web-auth3 within a Pryv.io installation.
 
 ```
 # Static Web: /static/nginx/conf/site.conf
@@ -287,7 +287,7 @@ server {
 
 ## Assets & Visual Usage and Customization
 
-To customize assets and visual, refer to: [https://github.com/pryv/assets-pryv.me](https://github.com/pryv/assets-pryv.me)
+To customize assets and visual, you can refer to: [https://github.com/pryv/assets-pryv.me](https://github.com/pryv/assets-pryv.me).
 
 # License
 
