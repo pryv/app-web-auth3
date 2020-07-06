@@ -12,8 +12,8 @@
       <v-text-field
         id="email"
         v-model="email"
-        :rules="[rules.required, rules.email]"
         label="E-mail"
+        placeholder="Optional (required for password reset)"
       />
 
       <v-text-field
@@ -90,7 +90,6 @@ export default {
     success: '',
     rules: {
       required: value => !!value || 'This field is required.',
-      email: value => /.+@.+/.test(value) || 'E-mail must be valid.',
     },
     validForm: false,
   }),
@@ -107,6 +106,9 @@ export default {
     submit () {
       if (this.$refs.form.validate()) {
         this.submitting = true;
+
+        this.generateRandomEmailIfNeeded();
+
         this.c.createUser(this.password, this.email, this.hosting)
           .then((newUser) => {
             this.newUser = newUser;
@@ -131,6 +133,21 @@ export default {
     showError (error) {
       this.error = error.msg;
     },
+    generateRandomEmailIfNeeded () {
+      if (this.email == null || (typeof this.email === 'string' && this.email.length === 0)) {
+        this.email = randomUsername(20) + '@pryv.io';
+      }
+    },
   },
 };
+
+function randomUsername (length) {
+  let result = '';
+  let characters = 'abcdefghijklmnopqrstuvwxyz0123456789';
+  let charactersLength = characters.length;
+  for (let i = 0; i < length; i++) {
+    result += characters.charAt(Math.floor(Math.random() * charactersLength));
+  }
+  return result;
+}
 </script>
