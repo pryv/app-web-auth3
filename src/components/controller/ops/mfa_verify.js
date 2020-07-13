@@ -1,5 +1,3 @@
-// @flow
-
 import type Context from '../../../Context.js';
 import AppError from '../../models/AppError.js';
 
