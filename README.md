@@ -2,6 +2,8 @@
 
 Pryv.io web pages for app authorization, user registration and password reset.
 
+You can take a look at the [demo](https://youtu.be/MfGTAgXr2WI) here.
+
 This is a **Template App** developed with [Vue.js](https://vue.js) to be adapted for each Pryv.io platform. It also serves as a reference if you prefer to use another framework.
 
 These web pages are the "popup frame" that opens during the [app authorization process](https://api.pryv.com/reference/#authorizing-your-app), as well as registration and password reset.
