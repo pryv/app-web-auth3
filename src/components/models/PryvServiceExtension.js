@@ -167,7 +167,7 @@ Pryv.Service.prototype.requestPasswordReset = async function requestPasswordRese
 };
 
 // POST/core: change Pryv password using a reset token
-Pryv.Service.prototype.changePassword = async function changePassword (username: string,
+Pryv.Service.prototype.resetPassword = async function resetPassword (username: string,
   newPassword: string,
   resetToken: string,
   appId: string): Promise<number> {
@@ -179,6 +179,22 @@ Pryv.Service.prototype.changePassword = async function changePassword (username:
       newPassword: newPassword,
       appId: appId,
       resetToken: resetToken,
+    });
+  return res.status;
+};
+
+Pryv.Service.prototype.changePassword = async function changePassword (
+  username: string,
+  oldPassword: string,
+  newPassword: string,
+  personalToken: string) {
+  const res = await Pryv.utils.superagent
+    .post(this.apiEndpointForSync(username) + 'account/change-password')
+    .set('accept', 'json')
+    .set('Authorization', personalToken)
+    .send({
+      oldPassword: oldPassword,
+      newPassword: newPassword,
     });
   return res.status;
 };

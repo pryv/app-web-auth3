@@ -1,4 +1,3 @@
-
 /**
  * Used by Vue Router and build process
  **/
@@ -11,5 +10,6 @@ module.exports = {
     register: '/register.html',
     reset: '/reset-password.html',
     signin: '/signinhub.html',
+    changepass: '/change-password.html',
   },
 };

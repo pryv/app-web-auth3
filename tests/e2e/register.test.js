@@ -72,7 +72,7 @@ test('Register new user with hostings retrieval', async testController => {
     // Fill the new user information
     .typeText('#username', testHelpers.user)
     .typeText('#password', testHelpers.password)
-    .typeText('#passConfirmation', testHelpers.password)
+    .typeText('#passwordConfirmation', testHelpers.password)
     .typeText('#email', testHelpers.email)
     .click('#submitButton')
     // User creation call was performed
