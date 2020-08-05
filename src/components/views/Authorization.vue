@@ -145,6 +145,9 @@ export default {
         this.submitting = true;
         try {
           await this.c.login(this.password);
+          if (!this.ctx.accessState) {
+            throw new Error('Context access state not defined. Verify that you are performing Oauth process and either "poll" or "pollUrl" is specified in url parameters.');
+          }
           if (!this.mfaActivated) {
             await this.c.checkAccess(this.showPermissions);
           }
@@ -180,7 +183,7 @@ export default {
       this.c.refuseAccess().catch(this.showError);
     },
     showError (error) {
-      this.error = error.msg;
+      this.error = error.msg || error.message;
     },
     showInfos (infos) {
       this.serviceInfos = infos;
