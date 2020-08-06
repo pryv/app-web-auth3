@@ -68,6 +68,8 @@ exports[`Authorization.test.js renders correctly (snapshots matching) 1`] = `
     />
      
     <password-stub
+      id="password"
+      label="Password"
       value=""
     />
      
@@ -105,6 +107,12 @@ exports[`Authorization.test.js renders correctly (snapshots matching) 1`] = `
   <a>
     <h3>
       Forgot password
+    </h3>
+  </a>
+   
+  <a>
+    <h3>
+      Change password
     </h3>
   </a>
    

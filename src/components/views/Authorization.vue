@@ -146,7 +146,7 @@ export default {
         try {
           await this.c.login(this.password);
           if (!this.ctx.accessState) {
-            throw new Error('Context access state not defined. Verify that you are performing Oauth process and either "poll" or "pollUrl" is specified in url parameters.');
+            throw new Error('Context access state not defined. Verify that you are performing an Auth request process and either "poll" is specified in query parameters.');
           }
           if (!this.mfaActivated) {
             await this.c.checkAccess(this.showPermissions);
