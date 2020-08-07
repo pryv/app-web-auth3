@@ -10,7 +10,7 @@ These web pages are the "popup frame" that opens during the [app authorization p
 
 | Registration | Change-Password | Consent | Reset-Password |
 | ------------------------------------------------------------ | ------------------------------------------------------------ | ------------------------------------------------------------ | ------------------------------------------------------------ |
-| <img src="doc-src/3-register.png" alt="1-signin" style="zoom:33%;" /> | <img src="doc-src/5-change-password.png" alt="5-change-password" style="zoom:40%;" /> | <img src="doc-src/4-consent.png" alt="1-signin" style="zoom:33%;" /> | <img src="doc-src/2-reset-email.png" alt="1-signin" style="zoom:33%;" /> |
+| <img src="doc-src/3-register.png" alt="1-signin" style="zoom:33%;" /> | <img src="doc-src/5-change-password.png" alt="5-change-password" style="zoom:33%;" /> | <img src="doc-src/4-consent.png" alt="1-signin" style="zoom:33%;" /> | <img src="doc-src/2-reset-email.png" alt="1-signin" style="zoom:33%;" /> |
 
 # Table of contents
 
