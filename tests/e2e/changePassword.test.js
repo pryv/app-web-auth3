@@ -13,7 +13,7 @@ const changePasswordReqLogger = RequestLogger(changePasswordEndpoint, {
   stringifyRequestBody: true,
 });
 
-const authRequestMock = RequestMock()
+const authLoginRequestMock = RequestMock()
   .onRequestTo(authEndpoint)
   .respond({ token: 'personalToken' }, 200, { 'Access-Control-Allow-Origin': '*' });
 const changePasswordRequestMock = RequestMock()
@@ -22,7 +22,7 @@ const changePasswordRequestMock = RequestMock()
 
 fixture(`Change password request`)
   .page('http://localhost:8080/change-password')
-  .requestHooks(authReqLogger, changePasswordReqLogger, changePasswordRequestMock, authRequestMock);
+  .requestHooks(authReqLogger, changePasswordReqLogger, changePasswordRequestMock, authLoginRequestMock);
 
 test('Change password', async testController => {
   await testController
