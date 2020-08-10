@@ -3,10 +3,11 @@
     <h1>Sign in</h1>
 
     <Permissions
-      v-if="ctx.checkAppResult.checkedPermissions!=null"
+      v-if="ctx.checkAppResult.checkedPermissions != null"
       :ctx="ctx"
       @accepted="accept"
-      @refused="refuse"/>
+      @refused="refuse"
+    />
 
     <!--v-model below may be replaced by v-if-->
     <v-dialog
@@ -14,19 +15,27 @@
       persistent
       width="600">
       <v-card>
-        <v-card-title class="headline grey lighten-2">MFA verification</v-card-title>
+        <v-card-title
+          class="headline grey lighten-2"
+        >MFA verification</v-card-title
+        >
         <v-text-field
           id="mfaCode"
           v-model="mfaCode"
           :rules="[rules.required]"
           class="ma-3"
-          label="MFA code"/>
+          label="MFA code"
+        />
         <v-card-actions>
-          <v-spacer/>
+          <v-spacer />
           <v-btn
-            @click="ctx.user.mfaToken = ''; mfaCode = ''">Cancel</v-btn>
-          <v-btn
-            @click="handleMFA()">Ok</v-btn>
+            @click="
+              ctx.user.mfaToken = '';
+              mfaCode = '';
+            "
+          >Cancel</v-btn
+          >
+          <v-btn @click="handleMFA()">Ok</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -35,43 +44,51 @@
       ref="form"
       v-model="validForm"
       @submit.prevent>
-
       <v-text-field
         id="usernameOrEmail"
         v-model="ctx.user.username"
         :rules="[rules.required]"
-        label="Username or email"/>
+        label="Username or email"
+      />
 
-      <Password v-model="password"/>
+      <Password v-model="password" />
 
       <v-btn
         id="submitButton"
-        :disabled="!validForm||submitting"
+        :disabled="!validForm || submitting"
         @click="submit"
-      >Sign In</v-btn>
+      >Sign In</v-btn
+      >
 
-      <v-btn
-        @click="refuse"
-      >Cancel</v-btn>
+      <v-btn @click="refuse">Cancel</v-btn>
 
       <div v-if="serviceInfos.support">
         Feel free to reach our
         <a
           :href="serviceInfos.support"
-          target="_blank">
-          helpdesk</a>
+          target="_blank"> helpdesk</a>
         if you have questions.
       </div>
     </v-form>
 
-    <v-divider class="mt-3 mb-2"/>
+    <v-divider class="mt-3 mb-2" />
 
-    <router-link :to="{ name: 'RegisterUser' }"><h3>Create an account</h3></router-link>
+    <router-link
+      :to="{ name: 'RegisterUser' }"
+    ><h3>Create an account</h3></router-link
+    >
 
-    <router-link :to="{ name: 'ResetPassword' }"><h3>Forgot password</h3></router-link>
+    <router-link
+      :to="{ name: 'ResetPassword' }"
+    ><h3>Forgot password</h3></router-link
+    >
 
-    <Alerts
-      :errorMsg="error"/>
+    <router-link
+      :to="{ name: 'ChangePassword' }"
+    ><h3>Change password</h3></router-link
+    >
+
+    <Alerts :errorMsg="error" />
   </div>
 </template>
 
@@ -101,8 +118,8 @@ export default {
     c: null,
     ctx: {},
     rules: {
-      required: value => !!value || 'This field is required.',
-      email: value => /.+@.+/.test(value) || 'E-mail must be valid',
+      required: (value) => !!value || 'This field is required.',
+      email: (value) => /.+@.+/.test(value) || 'E-mail must be valid',
     },
     validForm: false,
   }),
@@ -117,7 +134,8 @@ export default {
     this.ctx = new Context(this.$route.query);
     await this.ctx.init();
     this.c = controllerFactory(this.ctx);
-    this.c.getServiceInfo()
+    this.c
+      .getServiceInfo()
       .then(this.showInfos)
       .catch(this.showError);
   },
@@ -127,6 +145,9 @@ export default {
         this.submitting = true;
         try {
           await this.c.login(this.password);
+          if (!this.ctx.accessState) {
+            throw new Error('Context access state not defined. Verify that you are performing an Auth request process and either "poll" is specified in query parameters.');
+          }
           if (!this.mfaActivated) {
             await this.c.checkAccess(this.showPermissions);
           }
@@ -155,16 +176,14 @@ export default {
     },
     // The user accepts the requested permissions
     accept () {
-      this.c.acceptAccess()
-        .catch(this.showError);
+      this.c.acceptAccess().catch(this.showError);
     },
     // The user refuses the requested permissions
     refuse () {
-      this.c.refuseAccess()
-        .catch(this.showError);
+      this.c.refuseAccess().catch(this.showError);
     },
     showError (error) {
-      this.error = error.msg;
+      this.error = error.msg || error.message;
     },
     showInfos (infos) {
       this.serviceInfos = infos;

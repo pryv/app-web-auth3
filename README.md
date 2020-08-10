@@ -8,9 +8,9 @@ This is a **Template App** developed with [Vue.js](https://vue.js) to be adapted
 
 These web pages are the "popup frame" that opens during the [app authorization process](https://api.pryv.com/reference/#authorizing-your-app), as well as registration and password reset.
 
-| Registration                                                 | Sign in                                                      | Consent                                                      | Reset-Password                                               |
+| Registration | Change-Password | Consent | Reset-Password |
 | ------------------------------------------------------------ | ------------------------------------------------------------ | ------------------------------------------------------------ | ------------------------------------------------------------ |
-| <img src="doc-src/3-register.png" alt="1-signin" style="zoom:33%;" /> | <img src="doc-src/1-signin.png" alt="1-signin" style="zoom:33%;" /> | <img src="doc-src/4-consent.png" alt="1-signin" style="zoom:33%;" /> | <img src="doc-src/2-reset-email.png" alt="1-signin" style="zoom:33%;" /> |
+| <img src="doc-src/3-register.png" alt="1-signin" style="zoom:33%;" /> | <img src="doc-src/5-change-password.png" alt="5-change-password" style="zoom:33%;" /> | <img src="doc-src/4-consent.png" alt="1-signin" style="zoom:33%;" /> | <img src="doc-src/2-reset-email.png" alt="1-signin" style="zoom:33%;" /> |
 
 # Table of contents
 

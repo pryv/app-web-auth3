@@ -9,7 +9,7 @@ import AppError from '../../models/AppError.js';
 async function login (
   ctx: Context,
   password: string): Promise<void> {
-  if (ctx.accessState.status !== NEED_SIGNIN_STATUS) {
+  if (ctx.accessState && ctx.accessState.status !== NEED_SIGNIN_STATUS) {
     return closeOrRedirect(ctx);
   }
 

@@ -1,22 +1,22 @@
 <template>
   <div>
     <v-text-field
-      id="password"
+      :id="id"
       :value="value"
       :appendIcon="visiblePass ? 'lock_open' : 'lock'"
       :type="visiblePass ? 'text' : 'password'"
       :rules="[rules.required]"
-      label="Password"
+      :label="label"
       @input="$emit('input', $event)"
       @click:append="() => (visiblePass = !visiblePass)"/>
 
     <v-text-field
       v-if="confirmation"
-      id="passConfirmation"
+      :id="`${id}Confirmation`"
       v-model="repass"
       :type="visiblePass ? 'text' : 'password'"
       :rules="[matchPassword]"
-      label="Password confirmation"/>
+      :label="`${label} confirmation`"/>
   </div>
 </template>
 
@@ -25,6 +25,8 @@ export default {
   props: {
     confirmation: {type: Boolean, default: false},
     value: {type: String, default: ''},
+    label: {type: String, default: 'Password'},
+    id: {type: String, default: 'password'},
   },
   data: () => ({
     visiblePass: false,

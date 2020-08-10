@@ -21,7 +21,7 @@ describe('Password.test.js', () => {
     const password = wrapper.find('#password');
     expect(password.exists()).toBe(true);
     // Does not render password confirmation
-    const confirmation = wrapper.find('#passConfirmation');
+    const confirmation = wrapper.find('#passwordConfirmation');
     expect(confirmation.exists()).toBe(false);
   });
 
@@ -34,7 +34,7 @@ describe('Password.test.js', () => {
     const password = wrapper.find('#password');
     expect(password.exists()).toBe(true);
     // Also renders password confirmation
-    const confirmation = wrapper.find('#passConfirmation');
+    const confirmation = wrapper.find('#passwordConfirmation');
     expect(confirmation.exists()).toBe(true);
   });
 

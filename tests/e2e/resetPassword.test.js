@@ -36,7 +36,7 @@ test('Reset password with email conversion', async testController => {
     // Fill password change form
     .typeText('#usernameOrEmail', testHelpers.email)
     .typeText('#password', '123456789')
-    .typeText('#passConfirmation', '123456789')
+    .typeText('#passwordConfirmation', '123456789')
     .click('#submitButton')
     // Email to username call was performed
     .expect(emailLogger.contains(record =>

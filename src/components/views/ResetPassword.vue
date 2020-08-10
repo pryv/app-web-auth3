@@ -85,7 +85,7 @@ export default {
         this.submitting = true;
         // Ask for a reset token
         if (this.resetToken == null) {
-          this.c.resetPassword()
+          this.c.requestResetPassword()
             .then(() => {
               this.showForm = false;
               this.success = 'We have sent password reset instructions to your e-mail address.';
@@ -94,7 +94,7 @@ export default {
             .finally(() => { this.submitting = false; });
         } else {
           // If we already got a reset token, we can change the password
-          this.c.changePassword(this.password, this.resetToken)
+          this.c.resetPassword(this.password, this.resetToken)
             .then(() => {
               this.showForm = false;
               this.success = 'Your password have been successfully changed.';

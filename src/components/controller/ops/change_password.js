@@ -5,14 +5,14 @@ import checkUsername from './check_username.js';
 
 async function changePassword (
   ctx: Context,
-  newPassword: string,
-  resetToken: string): Promise<void> {
+  oldPassword: string,
+  newPassword: string): Promise<void> {
   await checkUsername(ctx);
   await ctx.pryvService.changePassword(
     ctx.user.username,
+    oldPassword,
     newPassword,
-    resetToken,
-    ctx.appId);
+    ctx.user.personalToken);
 }
 
 export default changePassword;

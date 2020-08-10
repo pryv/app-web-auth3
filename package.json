@@ -2,8 +2,15 @@
   "name": "app-web-auth3",
   "version": "1.0.0",
   "description": "Pryv.io web pages for user registration, authentication & password reset.",
-  "author": {"name": "Pryv SA", "email": "tech@pryv.com", "url": "https://pryv.com"},
-  "contributors": ["Thiébaud Modoux", "Pierre-Mikael Legris"],
+  "author": {
+    "name": "Pryv SA",
+    "email": "tech@pryv.com",
+    "url": "https://pryv.com"
+  },
+  "contributors": [
+    "Thiébaud Modoux",
+    "Pierre-Mikael Legris"
+  ],
   "private": true,
   "license": "BSD-3-Clause",
   "scripts": {
@@ -21,9 +28,9 @@
     "webserver-test": "node node_modules/.bin/rec-la ./tests/webpage-auth/ 5443"
   },
   "dependencies": {
-    "pryv": "2.0.1",
     "marked": "^0.5.2",
     "mkdirp": "0",
+    "pryv": "2.0.1",
     "vue": "^2.5.2",
     "vue-router": "^3.0.1",
     "vuetify": "^1.0.0"
