@@ -93,7 +93,7 @@ function defaultPryvServiceInfoUrl () {
   if (defaults.DNSLess) {
     return new URL('/reg/service/info', window.location.href).href;
   }
-  const domain = location.hostname.split('.').slice(1).join('.') || 'pryv.li'; // should be depracted
+  const domain = location.hostname.split('.').slice(1).join('.') || 'pryv.me'; // should be depracted
   return 'https://reg.' + domain + '/service/info';
 }
 

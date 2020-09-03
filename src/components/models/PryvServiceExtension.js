@@ -2,6 +2,7 @@
 
 import Pryv from 'pryv';
 import Hostings from './Hostings.js';
+const url = require('url');
 
 type Permission = {
   streamId: string,
@@ -114,21 +115,24 @@ Pryv.Service.prototype.getAvailableHostings = async function getAvailableHosting
 };
 
 // POST/reg: create a new Pryv user
-Pryv.Service.prototype.createUser = async function createUser (username: string,
+Pryv.Service.prototype.createUser = async function createUser (
+  availableCore: string,
+  username: string,
   password: string, email: string,
   hosting: string, lang: string, appId: string,
   invitation: ?string, referer: ?string): Promise<NewUser> {
+
   const res = await Pryv.utils.superagent
-    .post(this.infoSync().register + 'user')
+    .post(url.resolve(availableCore, 'users'))
     .set('accept', 'json')
     .send({
-      appid: appId,
+      appId: appId,
       username: username,
       password: password,
       email: email,
       hosting: hosting,
-      languageCode: lang || 'en',
-      invitationtoken: invitation || 'enjoy',
+      language: lang || 'en',
+      invitationToken: invitation || 'enjoy',
       referer: referer,
     });
   return res.body;

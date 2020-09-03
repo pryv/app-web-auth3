@@ -108,8 +108,14 @@ export default {
         this.submitting = true;
 
         this.generateRandomEmailIfNeeded();
-
-        this.c.createUser(this.password, this.email, this.hosting)
+        // get least ocupied core in the hosting
+        let availableCore = '';
+        this.hostingsSelection.forEach(selection => {
+          if (selection.value === this.hosting) {
+            availableCore = selection.availableCore;
+          }
+        });
+        this.c.createUser(availableCore, this.password, this.email, this.hosting)
           .then((newUser) => {
             this.newUser = newUser;
             this.success = `New user successfully created: ${newUser.username}.`;

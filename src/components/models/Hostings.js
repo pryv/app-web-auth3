@@ -7,7 +7,8 @@ type Hosting = {
   localizedDescription: {
     [language: string]: string,
   },
-  available: ?boolean
+  available: ?boolean,
+  availableCore: ?string
 };
 
 type HostingList = {
@@ -43,6 +44,7 @@ type HostingDefinition = {
 };
 
 type HostingSelectionItem = {
+  availableCore: ?string,
   value: string,
   text: string,
   description: string,
@@ -73,6 +75,7 @@ class Hostings {
             value: hostingKey,
             text: info,
             description: hosting.description,
+            availableCore: hosting.availableCore,
           });
         });
       });
