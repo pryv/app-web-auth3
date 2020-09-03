@@ -108,7 +108,7 @@ export default {
         this.submitting = true;
 
         this.generateRandomEmailIfNeeded();
-        // get least ocupied core in the hosting
+        // get least occupied core in the hosting
         let availableCore = '';
         this.hostingsSelection.forEach(selection => {
           if (selection.value === this.hosting) {
