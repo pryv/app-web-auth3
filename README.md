@@ -56,7 +56,7 @@ In this section, we explain how the 3 main functions of app-web-auth3 are implem
 ## Authorization flow
 
 1. (This step is happening outside app-web-auth3)
-  The client application performs an auth request call, as explained here: [API doc - Authorizing your app](https://api.pryv.com/reference/#authorizing-your-app).
+  The client application performs an auth request call, as explained here: [API doc - Authorizing your app](https://api.pryv.com/reference/#account-creation).
   As a response, the app receives an URL to open (e.g as a popup), which actually targets the app-web-auth3 auth page.
   This URL carries as query parameters the requesting permissions and requesting app id from the auth request, see [API doc - Auth request](https://api.pryv.com/reference/#auth-request)
   
