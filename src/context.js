@@ -4,6 +4,7 @@ import type { AccessState } from './components/models/AccessStates.js';
 // augment Pryv with additional functions
 import './components/models/PryvServiceExtension';
 import defaults from './defaults';
+import _ from 'lodash';
 
 type QueryParameters = {
   key: string,
@@ -11,6 +12,7 @@ type QueryParameters = {
   poll: string,
   pollUrl: string; // should be removed from register's authUrl response and use "poll" only
   lang?: string,
+  oauthState?: string, // ifttt
 }
 
 class Context {
@@ -31,6 +33,9 @@ class Context {
     this.language = queryParams.lang || 'en';
     this.appId = 'pryv-app-web-auth-3';
     this.pollUrl = queryParams.poll || queryParams.pollUrl;
+    this.accessState = {
+      oaccessState: queryParams.oauthState,
+    };
     if (this.isAccessRequest()) {
       // Context will set necessary serviceInfo during Context.init();
       this.pryvService = new Pryv.Service();
@@ -65,7 +70,7 @@ class Context {
   async loadAccessState () {
     try {
       const res = await Pryv.utils.superagent.get(this.pollUrl).set('accept', 'json');
-      this.accessState = res.body;
+      this.accessState = _.merge(this.accessState, res.body);
       return this.accessState;
     } catch (e) {
       console.log(e);
@@ -80,7 +85,7 @@ class Context {
       accessState.returnURL = this.accessState.returnURL;
     }
     const res = await Pryv.utils.superagent.post(this.pollUrl).send(accessState);
-    this.accessState = accessState;
+    this.accessState = _.merge(this.accessState, accessState);
     if (this.accessState.lang != null) this.language = this.accessState.lang;
     return res.status;
   }

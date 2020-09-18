@@ -28,6 +28,7 @@
     "webserver-test": "node node_modules/.bin/rec-la ./tests/webpage-auth/ 5443"
   },
   "dependencies": {
+    "lodash": "^4.17.20",
     "marked": "^0.5.2",
     "mkdirp": "0",
     "pryv": "^2.0.7",

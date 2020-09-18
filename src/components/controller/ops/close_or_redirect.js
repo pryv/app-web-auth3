@@ -17,8 +17,8 @@ function closeOrRedirect (ctx: Context): void {
 
     if (ctx.accessState.oaccessState) { // OK to use pollKey here
       let pollKey = '';
-      if (ctx.accessState.pollKey) {
-        pollKey = `&code=${ctx.accessState.pollKey}`;
+      if (ctx.accessState.key) {
+        pollKey = `&code=${ctx.accessState.key}`;
       }
       returnUrl += `state=${ctx.accessState.oaccessState}${pollKey}&poll=${ctx.pollUrl}`;
     } else {
