@@ -1,4 +1,4 @@
-name: PrYv Admin Panel deployment workflow
+name: PrYv App-Web-Auth3 deployment workflow
 
 on:
   pull_request:

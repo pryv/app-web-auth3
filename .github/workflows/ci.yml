@@ -1,4 +1,4 @@
-name: PrYv Admin Panel CI
+name: PrYv App-Web-Auth3 CI
 
 on:
   pull_request:
