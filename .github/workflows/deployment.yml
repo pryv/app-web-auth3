@@ -51,7 +51,7 @@ jobs:
         run: yarn install
 
       - name: Tests
-        run: yarn test
+        run: yarn e2e
 
       - name: Build image
         run: cd ./build && docker build --rm -f Dockerfile -t pryvio/app-web-auth3 ./..
