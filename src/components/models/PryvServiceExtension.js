@@ -2,6 +2,7 @@
 
 import Pryv from 'pryv';
 import Hostings from './Hostings.js';
+const url = require('url');
 
 type Permission = {
   streamId: string,
@@ -104,6 +105,28 @@ Pryv.Service.prototype.deleteAppAccess = async function deleteAppAccess (
 };
 
 // ---------- REGISTER calls ----------
+function isFirstVersionIsEqualOrHigher (version1, version2) {
+  const version1parts = version1.split('.');
+  const version2parts = version2.split('.');
+  // TODO - handle opensource version too
+
+  for (let i = 0; i < version1parts.length; ++i) {
+    // if the versions match, continue
+    if (version1parts[i] === version2parts[i]) {
+      // if the cycle reached the last minor version
+      if (version2parts.length === (i + 1)) {
+        return true;
+      } else {
+        continue;
+      }
+    } else if (version1parts[i] > version2parts[i]) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+  return false;
+}
 
 // GET/reg: retrieve all available Pryv hostings
 Pryv.Service.prototype.getAvailableHostings = async function getAvailableHostings (): Promise<Hostings> {
@@ -114,23 +137,44 @@ Pryv.Service.prototype.getAvailableHostings = async function getAvailableHosting
 };
 
 // POST/reg: create a new Pryv user
-Pryv.Service.prototype.createUser = async function createUser (username: string,
+Pryv.Service.prototype.createUser = async function createUser (
+  availableCore: string,
+  username: string,
   password: string, email: string,
   hosting: string, lang: string, appId: string,
   invitation: ?string, referer: ?string): Promise<NewUser> {
-  const res = await Pryv.utils.superagent
-    .post(this.infoSync().register + 'user')
-    .set('accept', 'json')
-    .send({
-      appid: appId,
-      username: username,
-      password: password,
-      email: email,
-      hosting: hosting,
-      languageCode: lang || 'en',
-      invitationtoken: invitation || 'enjoy',
-      referer: referer,
-    });
+  const platformVersion = this.infoSync().version;
+  let res;
+  if (platformVersion && isFirstVersionIsEqualOrHigher(platformVersion, '1.6.0')) {
+    res = await Pryv.utils.superagent
+      .post(url.resolve(availableCore, 'users'))
+      .set('accept', 'json')
+      .send({
+        appId: appId,
+        username: username,
+        password: password,
+        email: email,
+        hosting: hosting,
+        language: lang || 'en',
+        invitationToken: invitation || 'enjoy',
+        referer: referer,
+      });
+  } else {
+    res = await Pryv.utils.superagent
+      .post(this.infoSync().register + 'user')
+      .set('accept', 'json')
+      .send({
+        appid: appId,
+        username: username,
+        password: password,
+        email: email,
+        hosting: hosting,
+        languageCode: lang || 'en',
+        invitationtoken: invitation || 'enjoy',
+        referer: referer,
+      });
+  }
+
   return res.body;
 };
 

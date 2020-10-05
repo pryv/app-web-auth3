@@ -7,9 +7,17 @@ type SubErrorData = {
 
 type SubErrors = Array<SubErrorData>;
 
+type ValidationError = {
+  code: ?string,
+  message: string,
+  param: ?string,
+  path: ?string
+}
+
 type EncapsulatedError = {
   message: string,
   detail: ?string,
+  data: ?any,
   body: SubErrors,
 }
 
@@ -52,10 +60,27 @@ class AppError {
     let errorMsg = `<b>${this.parseErrorData(encapsulatedError || errorData)}</b>`;
 
     // Parse additional sub errors
+
     const subErrors = encapsulatedError ? encapsulatedError.body : errorData.errors;
     errorMsg += this.parseSubErrors(subErrors);
 
+    // error formats are not unified and nested errors could appear in error:data,
+    // so handle those suberrors too
+    if (encapsulatedError && encapsulatedError.data && Array.isArray(encapsulatedError.data)) {
+      errorMsg += this.parseValidationSubErrors(encapsulatedError.data);
+    }
+
     return errorMsg;
+  }
+
+  parseValidationSubErrors (subErrors: ?Array<ValidationError>): string {
+    let subErrorMsg = '';
+    if (subErrors != null && Array.isArray(subErrors)) {
+      subErrors.forEach(subError => {
+        subErrorMsg += `<br/>${subError.message}`;
+      });
+    }
+    return subErrorMsg;
   }
 
   parseSubErrors (subErrors: ?SubErrors): string {

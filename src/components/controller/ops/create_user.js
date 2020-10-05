@@ -9,6 +9,7 @@ export type NewUser = {
 
 async function createUser (
   ctx: Context,
+  availableCore: string,
   password: string,
   email: string,
   hosting: string,
@@ -19,6 +20,7 @@ async function createUser (
     referer = ctx.accessState.referer || ctx.accessState.requestingAppId;
   };
   const newUser = await ctx.pryvService.createUser(
+    availableCore,
     ctx.user.username,
     password,
     email,

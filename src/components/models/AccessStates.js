@@ -8,7 +8,7 @@ export const NEED_SIGNIN_STATUS = 'NEED_SIGNIN';
 
 export type AccessState = {
   // common
-  status: string,
+  status?: string,
 
   // status=NEED_SIGNIN
   serviceInfo?: Object,
