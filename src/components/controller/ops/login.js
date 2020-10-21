@@ -27,8 +27,9 @@ async function login (
     ctx.user.personalToken = pryvConnection.token || '';
   } catch (err) {
     // MFA is required
-    if (err.response != null && err.response.body != null && err.response.body.mfaToken != null) {
-      const mfaToken = err.response.body.mfaToken;
+    console.log('got err', err);
+    if (err.mfaToken != null) {
+      const mfaToken = err.mfaToken;
       try {
         await ctx.pryvService.mfaChallenge(username, mfaToken);
         ctx.user.mfaToken = mfaToken || '';

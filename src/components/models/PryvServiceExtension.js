@@ -246,21 +246,35 @@ Pryv.Service.prototype.changePassword = async function changePassword (
 Pryv.Service.prototype.loginWithThrow = async function loginWithThrow (username, password, appId, originHeader) {
   const apiEndpoint = await this.apiEndpointFor(username);
 
-  const headers = { accept: 'json' };
-  originHeader = originHeader || (await this.info()).register;
+  try {
+    const headers = { accept: 'json' };
+    originHeader = originHeader || (await this.info()).register;
 
-  const res = await Pryv.utils.superagent.post(apiEndpoint + 'auth/login')
-    .set(headers)
-    .send({ username: username, password: password, appId: appId });
+    const res = await Pryv.utils.superagent.post(apiEndpoint + 'auth/login')
+      .set(headers)
+      .send({ username: username, password: password, appId: appId });
 
-  if (!res.body.token) {
-    throw new Error('Invalid login response: ' + res.body);
+    if (!res.body.token) {
+      throw new Error('Invalid login response: ' + res.body);
+    }
+    return new Pryv.Connection(
+      Pryv.Service.buildAPIEndpoint(
+        await this.info(),
+        username,
+        res.body.token),
+      this // Pre load Connection with service
+    );
+  } catch (e) {
+    if (e.response && e.response.body && e.response.body) {
+      const errBody = e.response.body;
+      if (errBody.error && errBody.error.message) {
+        throw new Error(errBody.error.message);
+      }
+      if (errBody.mfaToken) {
+        const e: any = new Error();
+        e.mfaToken = errBody.mfaToken;
+        throw e;
+      }
+    }
   }
-  return new Pryv.Connection(
-    Pryv.Service.buildAPIEndpoint(
-      await this.info(),
-      username,
-      res.body.token),
-    this // Pre load Connection with service
-  );
 };
