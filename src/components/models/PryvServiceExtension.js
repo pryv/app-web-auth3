@@ -247,9 +247,11 @@ Pryv.Service.prototype.loginWithThrow = async function loginWithThrow (username,
   const apiEndpoint = await this.apiEndpointFor(username);
 
   try {
-    const headers = { accept: 'json' };
+    const headers: any = { accept: 'json' };
     originHeader = originHeader || (await this.info()).register;
-
+    if (!Pryv.utils.isBrowser()) {
+      headers.Origin = originHeader;
+    }
     const res = await Pryv.utils.superagent.post(apiEndpoint + 'auth/login')
       .set(headers)
       .send({ username: username, password: password, appId: appId });

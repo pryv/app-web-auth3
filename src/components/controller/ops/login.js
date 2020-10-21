@@ -36,7 +36,8 @@ async function login (
         throw new AppError('Failed to perform MFA challenge.');
       }
     } else {
-      throw new AppError(err.message);
+      const msg = err.message || 'Failed to login.';
+      throw new AppError(msg);
     }
   }
 }
