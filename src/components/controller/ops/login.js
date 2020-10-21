@@ -27,7 +27,6 @@ async function login (
     ctx.user.personalToken = pryvConnection.token || '';
   } catch (err) {
     // MFA is required
-    console.log('got err', err);
     if (err.mfaToken != null) {
       const mfaToken = err.mfaToken;
       try {
@@ -37,7 +36,7 @@ async function login (
         throw new AppError('Failed to perform MFA challenge.');
       }
     } else {
-      throw new AppError('Failed to login.');
+      throw new AppError(err.message);
     }
   }
 }
