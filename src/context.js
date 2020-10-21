@@ -33,9 +33,12 @@ class Context {
     this.language = queryParams.lang || 'en';
     this.appId = 'pryv-app-web-auth-3';
     this.pollUrl = queryParams.poll || queryParams.pollUrl;
-    this.accessState = {
-      oaccessState: queryParams.oauthState,
-    };
+    if (queryParams != null && queryParams.oauthState != null) {
+      this.accessState = {
+        oaccessState: queryParams.oauthState,
+      };
+    }
+
     if (this.isAccessRequest()) {
       // Context will set necessary serviceInfo during Context.init();
       this.pryvService = new Pryv.Service();
