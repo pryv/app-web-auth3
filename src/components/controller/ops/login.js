@@ -19,7 +19,7 @@ async function login (
   // Login against Pryv
 
   try {
-    const pryvConnection = await ctx.pryvService.login(
+    const pryvConnection = await ctx.pryvService.loginWithThrow(
       username,
       password,
       ctx.appId);
