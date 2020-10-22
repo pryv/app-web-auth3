@@ -49,8 +49,7 @@ jobs:
           password: ${{ secrets.REGISTRY_PRYV_PASSWORD_DOCKERHUB }}
 
       - name: Build image
-        run: cd ./build && docker build --rm -f Dockerfile -t ${{ secrets.REGISTRY_PRYV_SERVER_DOCKERHUB }}/pryvio/app-web-auth3 ./..
+        run: cd ./build && docker build --rm -f Dockerfile -t ${{ secrets.REGISTRY_PRYV_SERVER_DOCKERHUB }}/pryvio/app-web-auth3:${{ steps.get-latest-tag.outputs.tag }} ./..
 
-      - name: tag and upload new image to Docker Hub
-        run: docker push ${{ secrets.REGISTRY_PRYV_SERVER }}/pryv/app-web-auth3:${{ steps.get-latest-tag.outputs.tag }}
-  
+      - name: upload new image to Docker Hub
+        run: docker push ${{ secrets.REGISTRY_PRYV_SERVER_DOCKERHUB }}/pryvio/app-web-auth3:${{ steps.get-latest-tag.outputs.tag }}
