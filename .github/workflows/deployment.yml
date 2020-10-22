@@ -1,0 +1,58 @@
+name: Pryv app-web-auth3 deployment workflow
+
+on:
+  push:
+    tags:
+      - '*'
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [12.13]
+
+    steps:
+      - name: Download master branch
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: Install Node.js with version ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Login to the docker containers registry
+        uses: azure/docker-login@v1
+        with:
+          login-server: ${{ secrets.REGISTRY_PRYV_SERVER }}
+          username: ${{ secrets.REGISTRY_PRYV_USERNAME }}
+          password: ${{ secrets.REGISTRY_PRYV_PASSWORD }}
+
+      - name: Download base image and change the tag
+        run: |
+          docker pull ${{ secrets.REGISTRY_PRYV_SERVER }}/pryv/base:1.5.1
+          docker tag "${{ secrets.REGISTRY_PRYV_SERVER }}/pryv/base:1.5.1" "pryv/base:1.5.1"
+
+      - name: Get latest git tag
+        uses: 'WyriHaximus/github-action-get-previous-tag@master'
+        id: get-latest-tag
+
+      - name: Npm packages installation
+        run: yarn install
+
+      - name: Login to the docker hub containers registry
+        uses: azure/docker-login@v1
+        with:
+          username: ${{ secrets.REGISTRY_PRYV_USERNAME_DOCKERHUB }}
+          password: ${{ secrets.REGISTRY_PRYV_PASSWORD_DOCKERHUB }}
+
+      - name: Build image
+        run: cd ./build && docker build --rm -f Dockerfile -t ${{ secrets.REGISTRY_PRYV_SERVER_DOCKERHUB }}/pryvio/app-web-auth3 ./..
+
+      - name: Upload new image to docker hub
+        run: docker images && docker push ${{ secrets.REGISTRY_PRYV_SERVER_DOCKERHUB }}/pryvio/app-web-auth3:latest
+  
+      - name: Upload image with version tag to docker hub
+        run: docker tag ${{ secrets.REGISTRY_PRYV_SERVER_DOCKERHUB }}/pryvio/app-web-auth3:latest ${{ secrets.REGISTRY_PRYV_SERVER_DOCKERHUB }}/pryvio/app-web-auth3:${{ steps.get-latest-tag.outputs.tag }} && docker images && docker push ${{ secrets.REGISTRY_PRYV_SERVER_DOCKERHUB }}/pryvio/app-web-auth3:${{ steps.get-latest-tag.outputs.tag }}
