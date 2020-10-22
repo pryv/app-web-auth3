@@ -1,4 +1,4 @@
-name: PrYv App-Web-Auth3 deployment workflow
+name: Pryv app-web-auth3 deployment workflow
 
 on:
   push:
