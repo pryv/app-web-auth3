@@ -51,8 +51,7 @@ jobs:
       - name: Build image
         run: cd ./build && docker build --rm -f Dockerfile -t ${{ secrets.REGISTRY_PRYV_SERVER_DOCKERHUB }}/pryvio/app-web-auth3 ./..
 
-      - name: Upload new image to docker hub
+      - name: tag and upload new image to Docker Hub
         run: docker images && docker push ${{ secrets.REGISTRY_PRYV_SERVER_DOCKERHUB }}/pryvio/app-web-auth3:latest
+             docker tag ${{ secrets.REGISTRY_PRYV_SERVER_DOCKERHUB }}/pryvio/app-web-auth3:${{ steps.get-latest-tag.outputs.tag }} && docker push ${{ secrets.REGISTRY_PRYV_SERVER_DOCKERHUB }}/pryvio/app-web-auth3:${{ steps.get-latest-tag.outputs.tag }}
   
-      - name: Upload image with version tag to docker hub
-        run: docker tag ${{ secrets.REGISTRY_PRYV_SERVER_DOCKERHUB }}/pryvio/app-web-auth3:latest ${{ secrets.REGISTRY_PRYV_SERVER_DOCKERHUB }}/pryvio/app-web-auth3:${{ steps.get-latest-tag.outputs.tag }} && docker images && docker push ${{ secrets.REGISTRY_PRYV_SERVER_DOCKERHUB }}/pryvio/app-web-auth3:${{ steps.get-latest-tag.outputs.tag }}
