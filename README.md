@@ -33,7 +33,7 @@ These web pages are the "popup frame" that opens during the [app authorization p
       - [Testing Auth flow, with Rec-la](#testing-auth-flow-with-rec-la)
     + [Vue.js testing](#vuejs-testing)
     + [Publish to github pages](#publish-to-github-pages)
-    + [Publish in Open Pryv.io environment](#publish-in-open-pryv.io-environment)
+    + [Publish in Open Pryv.io environment](#publish-in-open-pryvio-environment)
   * [Possible deployments and structure](#possible-deployments-and-structure)
     + [Use Symbolic Links](#use-symbolic-links)
     + [Use a reverse proxy, example with NGINX](#use-a-reverse-proxy-example-with-nginx)
