@@ -32,8 +32,8 @@ jobs:
 
       - name: Download base image and change the tag
         run: |
-          docker pull ${{ secrets.REGISTRY_PRYV_SERVER }}/pryv/base:1.5.1
-          docker tag "${{ secrets.REGISTRY_PRYV_SERVER }}/pryv/base:1.5.1" "pryv/base:1.5.1"
+          docker pull ${{ secrets.REGISTRY_PRYV_SERVER }}/pryvio/base:1.5.1
+          docker tag "${{ secrets.REGISTRY_PRYV_SERVER }}/pryvio/base:1.5.1" "pryvio/base:1.5.1"
 
       - name: Get latest git tag
         uses: 'WyriHaximus/github-action-get-previous-tag@master'
