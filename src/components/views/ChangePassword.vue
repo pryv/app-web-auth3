@@ -67,6 +67,7 @@ export default {
   },
   methods: {
     submit () {
+      this.ctx.user.username = this.ctx.user.username.trim();
       if (this.$refs.form.validate()) {
         this.submitting = true;
         this.controllerFactory.login(this.oldPassword)

@@ -141,6 +141,7 @@ export default {
   },
   methods: {
     async submit () {
+      this.ctx.user.username = this.ctx.user.username.trim();
       if (this.$refs.form.validate()) {
         this.submitting = true;
         try {

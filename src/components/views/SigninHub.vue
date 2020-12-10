@@ -57,6 +57,7 @@ export default {
   },
   methods: {
     submit () {
+      this.ctx.user.username = this.ctx.user.username.trim();
       if (this.$refs.form.validate()) {
         this.c.checkUsername()
           .then(this.toMyPryv)
