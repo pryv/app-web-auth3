@@ -1,6 +1,7 @@
 // @flow
 import Pryv from 'pryv';
 import type { AccessState } from './components/models/AccessStates.js';
+import type { PryvService } from './components/models/PryvServiceExtension';
 // augment Pryv with additional functions
 import './components/models/PryvServiceExtension';
 import defaults from './defaults';
@@ -21,7 +22,7 @@ class Context {
   accessState: AccessState; // used only in the context of a "Auth" process
   pollUrl: string; // used only in the context of a "Auth" process
   checkAppResult: Object; // use only in the context of a "Auth" process after check-app
-  pryvService: Pryv.Service;
+  pryvService: PryvService;
   user: {
     username: string,
     personalToken: string,
@@ -55,7 +56,7 @@ class Context {
     this.initialized = false;
   }
 
-  async init () {
+  async init (): Promise<void> {
     if (this.initialized) return;
     this.initialized = false;
     if (this.isAccessRequest()) {
@@ -65,12 +66,12 @@ class Context {
     await this.pryvService.info();
   }
 
-  isAccessRequest () {
-    return this.pollUrl;
+  isAccessRequest (): boolean {
+    return this.pollUrl != null;
   }
 
   // in Auth process load the Poll Url
-  async loadAccessState () {
+  async loadAccessState (): ?AccessState {
     try {
       const res = await Pryv.utils.superagent.get(this.pollUrl).set('accept', 'json');
       this.accessState = _.merge(this.accessState, res.body);
@@ -97,7 +98,7 @@ class Context {
 /**
  * In case default url has not been provided
  */
-function defaultPryvServiceInfoUrl () {
+function defaultPryvServiceInfoUrl (): string {
   if (defaults.DNSLess) {
     return new URL('/reg/service/info', window.location.href).href;
   }

@@ -14,6 +14,7 @@ type Permission = {
 export type PermissionsList = Array<Permission>;
 
 type AppAccess = {
+  id: string,
   type: 'app',
   permissions: PermissionsList,
   expires: ?number,
@@ -40,7 +41,33 @@ export type ServiceInfos = {
   home: string,
   support: string,
   terms: string,
-}
+};
+
+export type PryvConnection = {
+  token: string,
+};
+
+export type PryvService = {
+  // defined here
+  apiEndpointForSync: (string, string) => string,
+  mfaChallenge: (string, string) => Promise<void>,
+  mfaVerify: (string, string, string) => Promise<string>,
+  checkAppAccess: (string, string, Object) => Promise<AppCheck>,
+  createAppAccess: (string, string, Object) => Promise<AppAccess>,
+  deleteAppAccess: (string, string, string) => Promise<AppAccess>,
+  getAvailableHostings: (void) => Promise<Hostings>,
+  createUser: (string, string, string, string, string, string, string, ?string, ?string) => Promise<NewUser>,
+  checkUsernameExistence: (string) => Promise<string>,
+  getUsernameForEmail: (string) => Promise<string>,
+  requestPasswordReset: (string, string) => Promise<void>,
+  resetPassword: (string, string, string, string) => Promise<void>,
+  changePassword: (string, string, string, string) => Promise<number>,
+  loginWithThrow: (string, string, string) => Promise<PryvConnection>,
+
+  // from lib
+  info: (void) => Promise<ServiceInfos>,
+  setServiceInfo: (?ServiceInfos) => void,
+};
 
 Pryv.Service.prototype.apiEndpointForSync = function apiEndpointForSync (username, token) {
   return Pryv.Service.buildAPIEndpoint(this.infoSync(), username, token);
@@ -105,7 +132,7 @@ Pryv.Service.prototype.deleteAppAccess = async function deleteAppAccess (
 };
 
 // ---------- REGISTER calls ----------
-function isFirstVersionIsEqualOrHigher (version1, version2) {
+function isFirstVersionIsEqualOrHigher (version1: string, version2: string): boolean {
   const version1parts = version1.split('.');
   const version2parts = version2.split('.');
   // TODO - handle opensource version too
@@ -231,7 +258,7 @@ Pryv.Service.prototype.changePassword = async function changePassword (
   username: string,
   oldPassword: string,
   newPassword: string,
-  personalToken: string) {
+  personalToken: string): Promise<number> {
   const res = await Pryv.utils.superagent
     .post(this.apiEndpointForSync(username) + 'account/change-password')
     .set('accept', 'json')

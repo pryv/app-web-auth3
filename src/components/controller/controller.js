@@ -30,7 +30,7 @@ function tryAndCatch (ctx, fun) {
   };
 }
 
-function controllerFactory (ctx: Context) {
+function controllerFactory (ctx: Context): {} {
   return {
     acceptAccess: tryAndCatch(ctx, acceptAccess),
     resetPassword: tryAndCatch(ctx, resetPassword),
