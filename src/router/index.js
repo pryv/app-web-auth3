@@ -1,4 +1,5 @@
 import Vue from 'vue';
+import i18n from '../i18n';
 import VueRouter from 'vue-router';
 import RegisterUser from '@/components/views/RegisterUser';
 import ResetPassword from '@/components/views/ResetPassword';
@@ -14,6 +15,7 @@ const path = (new URL(document.location)).pathname;
 const basePath = path.substring(0, path.lastIndexOf('/access/')) + '/' + Aliases.basePath;
 
 let Router = new VueRouter({
+  i18n,
   mode: 'history',
   base: basePath,
   routes: [

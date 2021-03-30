@@ -37,7 +37,8 @@ These web pages are the "popup frame" that opens during the [app authorization p
   * [Possible deployments and structure](#possible-deployments-and-structure)
     + [Use Symbolic Links](#use-symbolic-links)
     + [Use a reverse proxy, example with NGINX](#use-a-reverse-proxy-example-with-nginx)
-  * [Assets & Visual Usage and Customization](#assets--visual-usage-and-customization)
+    + [Assets & Visual Usage and Customization](#assets--visual-usage-and-customization)
+  * [Translating](#translating)
 
 # Fork repository for GitHub pages
 
@@ -290,6 +291,14 @@ server {
 ## Assets & Visual Usage and Customization
 
 To customize assets and visual, you can refer to: [https://github.com/pryv/assets-pryv.me](https://github.com/pryv/assets-pryv.me).
+
+## Translating
+
+The Web app translation is managed by [Vue.js I18n plugin](https://kazupon.github.io/vue-i18n/)
+
+Configuration can be changed in `config/i18n.config.js` and locales can be found in `locales`. 
+
+To add a language, just copy and translate one of the `.json` file in locales and rebuild the Application.
 
 # License
 
