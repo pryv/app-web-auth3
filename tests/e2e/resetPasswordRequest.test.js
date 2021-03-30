@@ -21,10 +21,10 @@ const resetRequestMock = RequestMock()
 
 const usernameForEmailMock = RequestMock()
   .onRequestTo(emailEndpoint)
-  .respond({uid: 'js-lib'}, 200, {'Access-Control-Allow-Origin': '*'});
+  .respond({uid: 'appwebauth3test'}, 200, {'Access-Control-Allow-Origin': '*'});
 
 fixture(`Reset password request`)
-  .page('http://localhost:8080/reset')
+  .page('http://localhost:8080/reset-password.html')
   .requestHooks(resetLogger, emailLogger, resetRequestMock, usernameForEmailMock);
 
 test('Reset request with email-username conversion', async testController => {

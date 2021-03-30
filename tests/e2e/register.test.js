@@ -1,25 +1,26 @@
 import {RequestMock, RequestLogger} from 'testcafe';
 import testHelpers from '../test-helpers';
 
-const registerEndpoint = testHelpers.serviceInfo.register + 'user';
+const registerEndpoint = 'https://co1.pryv.me/users';
 const hostingsEndpoint = testHelpers.serviceInfo.register + 'hostings';
 const redirectEndpoint = testHelpers.apiEndpoint;
 const fakeHostings = {
-  'regions': {
-    'europe': {
-      'name': 'Europe',
-      'localizedName': {'fr': 'Europe'},
-      'zones': {
-        'france': {
-          'name': 'France',
-          'localizedName': {'fr': 'France'},
-          'hostings': {
+  regions: {
+    europe: {
+      name: 'Europe',
+      localizedName: {fr: 'Europe'},
+      zones: {
+        france: {
+          name: 'France',
+          localizedName: {fr: 'France'},
+          hostings: {
             'gandi.net-fr': {
-              'url': 'http://gandi.net',
-              'name': 'Gandi',
-              'description': 'Domains made simple. Since 1999.',
-              'localizedDescription': {},
-              'available': true,
+              url: 'http://gandi.net',
+              name: 'Gandi',
+              description: 'Domains made simple. Since 1999.',
+              localizedDescription: {},
+              available: true,
+              availableCore: 'https://co1.pryv.me/',
             },
           },
         },
@@ -79,12 +80,9 @@ test('Register new user with hostings retrieval', async testController => {
     .expect(registerLogger.contains(record =>
       record.request.method === 'post' &&
       record.response.statusCode === 200 &&
-      record.request.body.includes('"appid":"' + testHelpers.appId + '"') &&
+      record.request.body.includes('"appId":"' + testHelpers.appId + '"') &&
       record.request.body.includes('"username":"' + testHelpers.user + '"') &&
       record.request.body.includes('"password":"' + testHelpers.password + '"') &&
-      record.request.body.includes('"email":"' + testHelpers.email + '"') &&
-      record.request.body.includes('"hosting":"gandi.net-fr"') &&
-      record.request.body.includes('"languageCode":"fr"') &&
-      record.request.body.includes('"invitationtoken":"enjoy"')
+      record.request.body.includes('"email":"' + testHelpers.email + '"')
     )).ok();
 });
