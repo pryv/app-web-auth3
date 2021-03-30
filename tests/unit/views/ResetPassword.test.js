@@ -54,7 +54,7 @@ describe('ResetPassword.test.js', () => {
     const usernameOrEmail = wrapper.find('#usernameOrEmail');
     expect(usernameOrEmail.exists()).toBe(true);
     // Does not ask for password
-    const password = wrapper.find(Password);
+    const password = wrapper.findComponent(Password);
     expect(password.exists()).toBe(false);
   });
 
@@ -71,7 +71,7 @@ describe('ResetPassword.test.js', () => {
     const usernameOrEmail = wrapper.find('#usernameOrEmail');
     expect(usernameOrEmail.exists()).toBe(true);
     // Ask for password
-    const password = wrapper.find(Password);
+    const password = wrapper.findComponent(Password);
     expect(password.exists()).toBe(true);
   });
 });
