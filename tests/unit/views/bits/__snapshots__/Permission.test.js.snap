@@ -26,7 +26,9 @@ exports[`Permissions.test.js renders correctly (snapshots matching) 1`] = `
       </span>
     </v-card-title-stub>
      
-    <v-card-text-stub>
+    <v-card-text-stub
+      style="text-align: left;"
+    >
       <h4>
         Is requesting permission:
       </h4>

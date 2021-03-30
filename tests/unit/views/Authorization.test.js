@@ -47,10 +47,10 @@ describe('Authorization.test.js', () => {
 
   it('shows authorization form by default', () => {
     // Renders auth form
-    const authForm = wrapper.find({ref: 'form'});
+    const authForm = wrapper.findComponent({ref: 'form'});
     expect(authForm.exists()).toBe(true);
     // Does not render permissions
-    const permissions = wrapper.find(Permissions);
+    const permissions = wrapper.findComponent(Permissions);
     expect(permissions.exists()).toBe(false);
   });
 
@@ -59,7 +59,7 @@ describe('Authorization.test.js', () => {
       checkedPermissions: [{streamId: 'diary', level: 'read'}],
     });
     // Renders permissions instead
-    const permissions = wrapper.find(Permissions);
+    const permissions = wrapper.findComponent(Permissions);
     expect(permissions.exists()).toBe(true);
   });
 });
