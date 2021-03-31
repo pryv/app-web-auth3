@@ -1,0 +1,12 @@
+{
+  "lang": "Français",
+  "global": {
+    "requiredField": "Ce champ est requis."
+  },
+  "signinHub": {
+    "title": "Signin Hub",
+    "userNameOrEmail": "Identifiant ou email",
+    "goToHomePage": "aller à ma page d'entrée",
+    "signupMsg": "nouveau sur {serviceName} ? Creez un compte."
+  }
+}
