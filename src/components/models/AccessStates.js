@@ -1,6 +1,6 @@
 // @flow
 
-import type { PermissionsList } from '../models/PryvServiceExtension';
+import type { PermissionsList, ServiceInfos } from './PryvServiceExtension';
 
 export const ACCEPTED_STATUS = 'ACCEPTED';
 export const REFUSED_STATUS = 'REFUSED';
@@ -11,7 +11,7 @@ export type AccessState = {
   status?: string,
 
   // status=NEED_SIGNIN
-  serviceInfo?: Object,
+  serviceInfo?: ServiceInfos,
   code?: number,
   key?: string,
   requestingAppId?: string,
