@@ -97,7 +97,7 @@ class AppError {
     return errorData.detail || errorData.message || this.unexpectedError();
   }
 
-  unexpectedError () {
+  unexpectedError (): string {
     return 'Unexpected error';
   }
 }
