@@ -9,6 +9,7 @@
     <v-app>
       <v-content>
         <v-container>
+          <LocaleChanger/>
           <img
             :src="logoSrcUrl"
             height="50px">
@@ -21,9 +22,13 @@
 
 <script>
 import Context from './context.js';
+import LocaleChanger from './components/views/bits/LocaleChanger';
 
 export default {
   name: 'App',
+  components: {
+    LocaleChanger,
+  },
   data: () => ({
     title: 'App-web-auth3',
     logoSrcUrl: null,

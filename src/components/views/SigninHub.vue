@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1>Signin hub</h1>
+    <h1>{{ $t('signinHub.title') }}</h1>
 
     <v-form
       ref="form"
@@ -11,18 +11,18 @@
         id="usernameOrEmail"
         v-model="ctx.user.username"
         :rules="[rules.required]"
-        label="Username or email"/>
+        :label="$t('signinHub.userNameOrEmail')"/>
 
       <v-btn
         id="submitButton"
         :disabled="!validForm"
         @click="submit"
-      >Go to my homepage</v-btn>
+      >{{ $t('signinHub.goToHomePage') }}</v-btn>
 
     </v-form>
 
     <v-divider class="mt-3 mb-2"/>
-    <router-link :to="{ name: 'RegisterUser' }"><h3>New to {{ serviceInfo.name }} ? Create an account</h3></router-link>
+    <router-link :to="{ name: 'RegisterUser' }"><h3>{{ $t('signinHub.signupMsg', {serviceName: serviceInfo.name}) }}</h3></router-link>
 
     <Alerts
       :errorMsg="error"/>
@@ -30,6 +30,7 @@
 </template>
 
 <script>
+import i18n from '../../i18n';
 import Alerts from './bits/Alerts';
 import Context from '../../context.js';
 import controllerFactory from '../controller/controller.js';
@@ -44,7 +45,7 @@ export default {
     ctx: {},
     c: null,
     rules: {
-      required: value => !!value || 'This field is required.',
+      required: value => !!value || i18n.t('global.requiredField'),
     },
     validForm: false,
     serviceInfo: {name: ''},
