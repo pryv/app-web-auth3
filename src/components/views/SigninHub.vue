@@ -47,7 +47,7 @@ export default {
       required: value => !!value || 'This field is required.',
     },
     validForm: false,
-    serviceInfo: {name: ''},
+    serviceInfo: { name: '' },
   }),
   async created () {
     this.ctx = new Context(this.$route.query);

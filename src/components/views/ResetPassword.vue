@@ -51,7 +51,7 @@ export default {
     Alerts,
   },
   props: {
-    resetToken: {type: String, default: null},
+    resetToken: { type: String, default: null },
   },
   data: () => ({
     password: '',

@@ -89,6 +89,7 @@
     "testcafe": "^1.18.4",
     "uglifyjs-webpack-plugin": "^2.2.0",
     "url-loader": "^4.1.1",
+    "vue-eslint-parser": "^8.3.0",
     "vue-loader": "^15.9.8",
     "vue-server-renderer": "^2.6.14",
     "vue-style-loader": "^4.1.3",

@@ -69,6 +69,8 @@ export default {
       if (this.ctx.accessState.clientData != null) {
         const description = this.ctx.accessState.clientData['app-web-auth:description'];
         return description != null ? marked.parse(description.content) : '';
+      } else {
+        return null;
       }
     },
     accessMismatch: function () {

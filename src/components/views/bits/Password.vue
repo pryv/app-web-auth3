@@ -23,10 +23,10 @@
 <script>
 export default {
   props: {
-    confirmation: {type: Boolean, default: false},
-    value: {type: String, default: ''},
-    label: {type: String, default: 'Password'},
-    id: {type: String, default: 'password'},
+    confirmation: { type: Boolean, default: false },
+    value: { type: String, default: '' },
+    label: { type: String, default: 'Password' },
+    id: { type: String, default: 'password' },
   },
   data: () => ({
     visiblePass: false,

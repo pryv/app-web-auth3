@@ -2,7 +2,11 @@
 
 module.exports = {
   root: true,
-  parser: "@babel/eslint-parser",
+  parser: 'vue-eslint-parser',
+  parserOptions: {
+    parser: '@babel/eslint-parser',
+    sourceType: 'module'
+  },
   env: {
     browser: true,
     commonjs: true,
@@ -31,9 +35,12 @@ module.exports = {
     'generator-star-spacing': 'off',
     // allow debugger during development
     'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off',
-    'semi': [2, "always"],
-    "flowtype-errors/show-errors": 2,
-    "comma-dangle": ["error", "always-multiline"],
-    'vue/attribute-hyphenation': [2, 'never', { 'ignore': [] }]
+    semi: [2, 'always'],
+    'flowtype-errors/show-errors': 2,
+    'comma-dangle': ['error', 'always-multiline'],
+    'vue/attribute-hyphenation': [2, 'never', { ignore: [] }],
+    'vue/multi-word-component-names': ['error', {
+      ignores: ['Authorization', 'Alerts', 'Password', 'Permissions']
+    }]
   }
 }

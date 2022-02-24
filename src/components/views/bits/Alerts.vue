@@ -13,8 +13,8 @@
 <script>
 export default {
   props: {
-    errorMsg: {type: String, default: ''},
-    successMsg: {type: String, default: ''},
+    errorMsg: { type: String, default: '' },
+    successMsg: { type: String, default: '' },
   },
   computed: {
     alertMsg: function () {
