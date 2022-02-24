@@ -28,6 +28,7 @@ class Context {
     personalToken: string,
     mfaToken: string,
   };
+
   initialized: boolean;
 
   constructor (queryParams: QueryParameters) {
@@ -71,7 +72,7 @@ class Context {
   }
 
   // in Auth process load the Poll Url
-  async loadAccessState (): ?AccessState {
+  async loadAccessState (): Promise<AccessState> {
     try {
       const res = await Pryv.utils.superagent.get(this.pollUrl).set('accept', 'json');
       this.accessState = _.merge(this.accessState, res.body);

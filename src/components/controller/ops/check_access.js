@@ -1,8 +1,8 @@
 // @flow
 
 import type Context from '../../../context.js';
-import type {AccessState} from '../../models/AccessStates.js';
-import {ACCEPTED_STATUS} from '../../models/AccessStates.js';
+import type { AccessState } from '../../models/AccessStates.js';
+import { ACCEPTED_STATUS } from '../../models/AccessStates.js';
 import closeOrRedirect from './close_or_redirect.js';
 import type { AppCheck } from '../../models/PryvServiceExtension';
 

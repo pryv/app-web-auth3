@@ -2,7 +2,7 @@
 
 import Pryv from 'pryv';
 import Hostings from './Hostings.js';
-const url = require('url');
+const path = require('path');
 
 type Permission = {
   streamId: string,
@@ -127,7 +127,7 @@ Pryv.Service.prototype.deleteAppAccess = async function deleteAppAccess (
     .delete(this.apiEndpointForSync(username) + 'accesses/' + accessId)
     .set('accept', 'json')
     .set('Authorization', personalToken)
-    .send({id: accessId});
+    .send({ id: accessId });
   return res.body.accessDeletion;
 };
 
@@ -174,7 +174,7 @@ Pryv.Service.prototype.createUser = async function createUser (
   let res;
   if (platformVersion && isFirstVersionIsEqualOrHigher(platformVersion, '1.6.0')) {
     res = await Pryv.utils.superagent
-      .post(url.resolve(availableCore, 'users'))
+      .post(path.join(availableCore, 'users'))
       .set('accept', 'json')
       .send({
         appId: appId,
@@ -291,7 +291,7 @@ Pryv.Service.prototype.loginWithThrow = async function loginWithThrow (username,
         await this.info(),
         username,
         res.body.token),
-      this // Pre load Connection with service
+      this, // Pre load Connection with service
     );
   } catch (e) {
     if (e.response && e.response.body && e.response.body) {

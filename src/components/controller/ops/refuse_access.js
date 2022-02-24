@@ -1,8 +1,8 @@
 // @flow
 
 import type Context from '../../../context.js';
-import {REFUSED_STATUS} from '../../models/AccessStates.js';
-import type {AccessState} from '../../models/AccessStates.js';
+import { REFUSED_STATUS } from '../../models/AccessStates.js';
+import type { AccessState } from '../../models/AccessStates.js';
 import closeOrRedirect from './close_or_redirect.js';
 
 async function refuseAccess (ctx: Context): Promise<void> {

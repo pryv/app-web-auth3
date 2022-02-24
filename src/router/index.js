@@ -13,13 +13,13 @@ Vue.use(VueRouter);
 const path = (new URL(document.location)).pathname;
 const basePath = path.substring(0, path.lastIndexOf('/access/')) + '/' + Aliases.basePath;
 
-let Router = new VueRouter({
+const Router = new VueRouter({
   mode: 'history',
   base: basePath,
   routes: [
     {
       path: '/',
-      redirect: {name: 'Authorization'},
+      redirect: { name: 'Authorization' },
     },
     {
       path: '/auth',
