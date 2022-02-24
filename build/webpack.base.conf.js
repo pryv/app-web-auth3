@@ -2,22 +2,20 @@
 const path = require('path')
 const utils = require('./utils')
 const config = require('../config')
+const ESLintPlugin = require('eslint-webpack-plugin')
+const { VueLoaderPlugin } = require('vue-loader')
 const vueLoaderConfig = require('./vue-loader.conf')
 
 function resolve (dir) {
   return path.join(__dirname, '..', dir)
 }
 
-const createLintingRule = () => ({
-  test: /\.(js|vue)$/,
-  loader: 'eslint-loader',
-  enforce: 'pre',
-  include: [resolve('src'), resolve('test')],
-  options: {
-    formatter: require('eslint-friendly-formatter'),
-    emitWarning: !config.dev.showEslintErrorsInOverlay
-  }
-})
+const esLintOptions = {
+  extensions: ['js', 'vue'],
+  files: [resolve('src'), resolve('test')],
+  formatter: require('eslint-friendly-formatter'),
+  emitWarning: !config.dev.showEslintErrorsInOverlay
+}
 
 module.exports = {
   context: path.resolve(__dirname, '../'),
@@ -34,18 +32,25 @@ module.exports = {
   resolve: {
     extensions: ['.js', '.vue', '.json'],
     alias: {
-      'vue$': 'vue/dist/vue.esm.js',
+      vue$: 'vue/dist/vue.esm.js',
       '@': resolve('src'),
+    },
+    fallback: {
+      path: require.resolve('path-browserify')
     }
   },
+  plugins: [
+    new VueLoaderPlugin(),
+    ...(config.dev.useEslint ? [new ESLintPlugin(esLintOptions)] : [])
+  ],
   module: {
     rules: [
-      ...(config.dev.useEslint ? [createLintingRule()] : []),
       {
         test: /\.vue$/,
         loader: 'vue-loader',
         options: vueLoaderConfig
       },
+      // style loaders are defined in utils.js and merged from dev/prod config
       {
         test: /\.js$/,
         loader: 'babel-loader',
