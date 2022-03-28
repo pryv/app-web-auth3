@@ -31,6 +31,7 @@ class Context {
   initialized: boolean;
 
   constructor (queryParams: QueryParameters) {
+    console.log('QUERY PARAMS', queryParams);
     this.language = queryParams.lang || 'en';
     this.appId = 'pryv-app-web-auth-3';
     this.pollUrl = queryParams.poll || queryParams.pollUrl;
@@ -75,6 +76,7 @@ class Context {
     try {
       const res = await Pryv.utils.superagent.get(this.pollUrl).set('accept', 'json');
       this.accessState = _.merge(this.accessState, res.body);
+      if (this.accessState.lang != null) this.language = this.accessState.lang;
       return this.accessState;
     } catch (e) {
       console.log(e);

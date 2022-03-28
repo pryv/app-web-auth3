@@ -24,14 +24,15 @@
     "setup": "sh scripts/setup.sh",
     "upload": "sh scripts/upload.sh",
     "clear": "rm -rf dist/ && yarn setup",
-    "webserver": "node node_modules/.bin/rec-la ./dist",
-    "webserver-test": "node node_modules/.bin/rec-la ./tests/webpage-auth/ 5443"
+    "webserver": "node node_modules/.bin/rec.la ./dist",
+    "webserver-test": "node node_modules/.bin/rec.la ./tests/webpage-auth/ 5443"
   },
   "dependencies": {
     "lodash": "^4.17.20",
     "marked": "^4.0.12",
     "mkdirp": "0",
     "pryv": "^2.0.7",
+    "rec.la": "^0.3.0",
     "vue": "^2.5.2",
     "vue-router": "^3.0.1",
     "vuetify": "^1.0.0"
@@ -83,7 +84,6 @@
     "postcss-import": "^11.0.0",
     "postcss-loader": "^2.0.8",
     "postcss-url": "^7.2.1",
-    "rec-la": "^0.1.10",
     "rimraf": "^2.6.0",
     "semver": "^5.3.0",
     "shelljs": "^0.8.5",
