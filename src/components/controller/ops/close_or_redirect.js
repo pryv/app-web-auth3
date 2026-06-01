@@ -10,6 +10,13 @@ function closeOrRedirect (ctx: Context): void {
     return;
   }
 
+  // Multi-core auth handoff: the access moved to a different core; the
+  // auth UI follows the new poll URL rather than completing here.
+  if (ctx.accessState.status === 'REDIRECTED' && ctx.accessState.redirectUrl) {
+    location.href = ctx.accessState.redirectUrl;
+    return;
+  }
+
   let returnUrl = ctx.accessState.returnURL;
   // If no return URL was provided, just close the popup
   if (returnUrl == null || returnUrl === 'false' || !returnUrl) {
@@ -22,12 +29,12 @@ function closeOrRedirect (ctx: Context): void {
       returnUrl += '?';
     }
 
-    if (ctx.accessState.oaccessState) { // OK to use pollKey here
-      let pollKey = '';
+    if (ctx.accessState.oauthState) {
+      let codeParam = '';
       if (ctx.accessState.key) {
-        pollKey = `&code=${ctx.accessState.key}`;
+        codeParam = `&code=${ctx.accessState.key}`;
       }
-      returnUrl += `state=${ctx.accessState.oaccessState}${pollKey}&poll=${ctx.pollUrl}`;
+      returnUrl += `state=${ctx.accessState.oauthState}${codeParam}&poll=${ctx.pollUrl}`;
     } else {
       returnUrl += `prYvpoll=${ctx.pollUrl}`;
       // the following code should be deprecated

@@ -40,13 +40,17 @@ class Context {
     this.cli = queryParams.cli === '1';
     if (queryParams != null && queryParams.oauthState != null) {
       this.accessState = {
-        oaccessState: queryParams.oauthState,
+        oauthState: queryParams.oauthState,
       };
     }
 
     if (this.isAccessRequest()) {
-      // Context will set necessary serviceInfo during Context.init();
-      this.pryvService = new Pryv.Service();
+      // Context normally sets serviceInfo from the poll response during
+      // Context.init(); derive a serviceInfoUrl from the poll URL as a
+      // fallback so `pryvService.info()` works even if a future server
+      // stops embedding serviceInfo in the poll body.
+      const fallbackServiceInfoUrl = deriveServiceInfoUrlFromPollUrl(this.pollUrl);
+      this.pryvService = new Pryv.Service(fallbackServiceInfoUrl);
     } else {
       const serviceInfoUrl = queryParams.pryvServiceInfoUrl || defaultPryvServiceInfoUrl();
       this.pryvService = new Pryv.Service(serviceInfoUrl);
@@ -65,7 +69,14 @@ class Context {
     this.initialized = false;
     if (this.isAccessRequest()) {
       await this.loadAccessState();
-      this.pryvService.setServiceInfo(this.accessState.serviceInfo);
+      // serviceInfo may be embedded in the poll response (legacy behaviour)
+      // or omitted (newer servers only embed it on the initial access POST
+      // and on the ACCEPTED state). Skip setServiceInfo if absent — the
+      // pryvService.info() call below falls back to fetching it from
+      // the platform's /service/info endpoint.
+      if (this.accessState.serviceInfo) {
+        this.pryvService.setServiceInfo(this.accessState.serviceInfo);
+      }
     }
     await this.pryvService.info();
   }
@@ -98,6 +109,19 @@ class Context {
     if (this.accessState.lang != null) this.language = this.accessState.lang;
     return res.status;
   }
+}
+
+/**
+ * The poll URL is always shaped `{coreUrl}/reg/access/{key}` (see
+ * open-pryv.io `routes/reg/access.ts`). Replace the trailing
+ * `access/{key}` with `service/info` to get a service-info URL on the
+ * same core. Returns null if the URL doesn't match the expected shape.
+ */
+function deriveServiceInfoUrlFromPollUrl (pollUrl: ?string): ?string {
+  if (pollUrl == null) return null;
+  const m = /^(.*\/reg\/)access\/[^/]+\/?$/.exec(pollUrl);
+  if (m == null) return null;
+  return m[1] + 'service/info';
 }
 
 /**
