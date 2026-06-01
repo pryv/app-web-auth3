@@ -12,21 +12,18 @@ export type AccessState = {
 
   // status=NEED_SIGNIN
   serviceInfo?: ServiceInfos,
-  code?: number,
   key?: string,
   requestingAppId?: string,
   requestedPermissions?: PermissionsList,
   returnURL?: string,
   poll_rate_ms?: number,
   clientData?: Object,
-  url?: string,
   lang?: string,
   poll?: string,
-  pollKey?: string, // why is this still here?
-  oaccessState?: string,
-  expireAfter?: number, // to be added
-  deviceName?: string, // to be added
-  referer?: string, // to be added
+  oauthState?: string,
+  expireAfter?: number,
+  deviceName?: string,
+  referer?: string,
 
   // status=ACCEPTED
   username?: string,
@@ -36,4 +33,7 @@ export type AccessState = {
   // status=REFUSED
   reasonId?: string;
   message?: string;
+
+  // status=REDIRECTED (multi-core)
+  redirectUrl?: string;
 }
