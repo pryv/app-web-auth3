@@ -14,6 +14,7 @@ type QueryParameters = {
   pollUrl: string; // should be removed from register's authUrl response and use "poll" only
   lang?: string,
   oauthState?: string, // ifttt
+  cli?: string, // '1' when the calling app is headless and there is no popup/parent window to close or redirect
 }
 
 class Context {
@@ -29,12 +30,14 @@ class Context {
     mfaToken: string,
   };
   initialized: boolean;
+  cli: boolean; // true when the auth UI was launched by a headless caller (no popup/parent window)
 
   constructor (queryParams: QueryParameters) {
     console.log('QUERY PARAMS', queryParams);
     this.language = queryParams.lang || 'en';
     this.appId = 'pryv-app-web-auth-3';
     this.pollUrl = queryParams.poll || queryParams.pollUrl;
+    this.cli = queryParams.cli === '1';
     if (queryParams != null && queryParams.oauthState != null) {
       this.accessState = {
         oaccessState: queryParams.oauthState,

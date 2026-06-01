@@ -3,6 +3,13 @@
 import type Context from '../../../context.js';
 
 function closeOrRedirect (ctx: Context): void {
+  // Headless caller (CLI) — no popup to close, no parent window to redirect.
+  // Render a terminal "you can close this window" message and stop.
+  if (ctx.cli) {
+    renderCliTerminalMessage();
+    return;
+  }
+
   let returnUrl = ctx.accessState.returnURL;
   // If no return URL was provided, just close the popup
   if (returnUrl == null || returnUrl === 'false' || !returnUrl) {
@@ -31,6 +38,21 @@ function closeOrRedirect (ctx: Context): void {
       }
     }
     location.href = returnUrl;
+  }
+}
+
+function renderCliTerminalMessage (): void {
+  const message = 'You\'re successfully logged in, you can close this window.';
+  document.title = 'Logged in';
+  const root = document.getElementById('app') || document.body;
+  if (root) {
+    root.innerHTML =
+      '<div style="' +
+      'font-family: system-ui, -apple-system, sans-serif;' +
+      'display: flex; align-items: center; justify-content: center;' +
+      'min-height: 100vh; padding: 2em; text-align: center;' +
+      'font-size: 1.25em; color: #333;' +
+      '">' + message + '</div>';
   }
 }
 
