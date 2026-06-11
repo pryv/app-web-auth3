@@ -38,10 +38,8 @@ describe('RegisterUser.test.js', () => {
     expect(submitButton.attributes().disabled).toBeFalsy();
   });
 
-  it('validates email correctly', () => {
-    const emailRule = wrapper.vm.rules.email;
-    expect(emailRule('invalidEmail')).toBe('E-mail must be valid.');
-    expect(emailRule('validEmail@test.com')).toBe(true);
+  it('treats email as optional (no email rule — a random one is generated when empty)', () => {
+    expect(wrapper.vm.rules.email).toBeUndefined();
   });
 
   it('validates required fields correctly', () => {

@@ -44,19 +44,16 @@ describe('Password.test.js', () => {
     expect(requiredRule('notEmpty')).toBe(true);
   });
 
-  it('validates password confirmation correctly', () => {
-    wrapper.setProps({
+  it('validates password confirmation correctly', async () => {
+    await wrapper.setProps({
       value: '1234',
     });
-    wrapper.setData({
+    await wrapper.setData({
       repass: '1234',
     });
     // Password confirmation matches
     expect(wrapper.vm.matchPassword).toBe(true);
-    wrapper.setProps({
-      value: '1234',
-    });
-    wrapper.setData({
+    await wrapper.setData({
       repass: '4321',
     });
     // Password confirmation does not match

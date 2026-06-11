@@ -54,11 +54,10 @@ describe('Authorization.test.js', () => {
     expect(permissions.exists()).toBe(false);
   });
 
-  it('shows requested permissions when app access check is successful', () => {
-    wrapper.setData({
-      checkedPermissions: [{streamId: 'diary', level: 'read'}],
-    });
-    // Renders permissions instead
+  it('shows requested permissions when app access check is successful', async () => {
+    // Rendering is keyed on the context's check-app result
+    wrapper.vm.ctx.checkAppResult = {checkedPermissions: [{streamId: 'diary', level: 'read'}]};
+    await Vue.nextTick();
     const permissions = wrapper.findComponent(Permissions);
     expect(permissions.exists()).toBe(true);
   });
