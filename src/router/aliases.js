@@ -11,5 +11,6 @@ module.exports = {
     reset: '/reset-password.html',
     signin: '/signinhub.html',
     changepass: '/change-password.html',
+    oauth2: '/oauth2-authorize.html',
   },
 };
