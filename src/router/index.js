@@ -5,6 +5,7 @@ import ResetPassword from '@/components/views/ResetPassword';
 import Authorization from '@/components/views/Authorization';
 import OAuth2Authorize from '@/components/views/OAuth2Authorize';
 import CmcAccept from '@/components/views/CmcAccept';
+import CmcScopeUpdate from '@/components/views/CmcScopeUpdate';
 import PageNotFound from '@/components/views/PageNotFound';
 import SigninHub from '@/components/views/SigninHub';
 import ChangePassword from '@/components/views/ChangePassword';
@@ -66,6 +67,11 @@ let Router = new VueRouter({
       path: '/cmc-accept',
       name: 'CmcAccept',
       component: CmcAccept,
+    },
+    {
+      path: '/cmc-scope-update',
+      name: 'CmcScopeUpdate',
+      component: CmcScopeUpdate,
     },
     {
       path: '*',
