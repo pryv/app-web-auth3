@@ -293,4 +293,4 @@ To customize assets and visual, you can refer to: [https://github.com/pryv/asset
 
 # License
 
-[Revised BSD license](https://github.com/pryv/documents/blob/master/license-bsd-revised.md)
+[Revised BSD license](LICENSE.md)
