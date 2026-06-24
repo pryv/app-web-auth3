@@ -175,6 +175,34 @@ If the requesting app specified a returnUrl within the auth request, the current
 
 Otherwise, the auth page is just closed and the requesting app will be able to retrieve the result of the auth flow by calling the polling endpoint on register (since it has been notified about AcceptedAccessState/RefusedAccessState).
 
+## CMC accept hand-off (`/cmc-accept`)
+
+Apps that integrate the [Pryv.io CMC](https://github.com/pryv/open-pryv.io/blob/master/components/cmc/IMPLEMENTERS-GUIDE.md) (Cross-account Messaging & Consent) flow can delegate consent acceptance to this app when they don't already hold a personal access token. Pryv.io requires personal-token authentication for `consent/accept-cmc` writes — without this hand-off page, app- or shared-token consumers would be blocked from accepting an invite at all.
+
+**Route:** `/cmc-accept`
+
+**Query parameters:**
+
+| Param | Required | Description |
+|---|---|---|
+| `capabilityUrl` | yes | The requester-side capability URL minted at invite time (`https://<token>@<host>/`). |
+| `scopeStreamId` | yes | The recipient's own `:_cmc:apps:<app-code>[:...]` stream where the accept trigger lands. |
+| `pryvApi` | yes | The recipient's Pryv API base (e.g. `https://reg.pryv.me/`). The page calls `/<username>/auth/login` here for sign-in and `/<username>/events` for the trigger write. |
+| `accessName` | no | Override the default data-grant access name. |
+| `mode` | no | `popup` (default — `postMessage` to opener) or `redirect` (navigate to `returnUrl`). |
+| `returnUrl` | no | Required for `mode=redirect`. The page navigates here with `?cmcAcceptResult=<json>`. |
+
+**Return shape** (popup `postMessage` payload or `cmcAcceptResult` query-decoded JSON):
+
+```json
+{ "type": "cmc-accept-result", "ok": true,  "dataGrantApiEndpoint": "https://t@x/", "acceptEventId": "ev-..." }
+{ "type": "cmc-accept-result", "ok": false, "reason": "user-refused" }
+```
+
+The page renders the offer details (requester identity, requested permissions, consent message) **before** the login form, so the user knows what they're signing in to accept. Offer metadata is fetched client-side via the capability URL.
+
+The corresponding lib-js helpers `pryv.cmc.requestAccept(opts)` and `pryv.cmc.requestAcceptUrl(opts)` (in `@pryv/cmc` ≥ 3.8) build the URL and drive the popup / redirect from the calling app's side.
+
 # Development and Deployment
 
 ## Prerequisites
