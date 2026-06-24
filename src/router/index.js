@@ -4,6 +4,7 @@ import RegisterUser from '@/components/views/RegisterUser';
 import ResetPassword from '@/components/views/ResetPassword';
 import Authorization from '@/components/views/Authorization';
 import OAuth2Authorize from '@/components/views/OAuth2Authorize';
+import CmcAccept from '@/components/views/CmcAccept';
 import PageNotFound from '@/components/views/PageNotFound';
 import SigninHub from '@/components/views/SigninHub';
 import ChangePassword from '@/components/views/ChangePassword';
@@ -60,6 +61,11 @@ let Router = new VueRouter({
       name: 'OAuth2Authorize',
       component: OAuth2Authorize,
       alias: Aliases.pages.oauth2,
+    },
+    {
+      path: '/cmc-accept',
+      name: 'CmcAccept',
+      component: CmcAccept,
     },
     {
       path: '*',
