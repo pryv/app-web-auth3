@@ -201,7 +201,37 @@ Apps that integrate the [Pryv.io CMC](https://github.com/pryv/open-pryv.io/blob/
 
 The page renders the offer details (requester identity, requested permissions, consent message) **before** the login form, so the user knows what they're signing in to accept. Offer metadata is fetched client-side via the capability URL.
 
-The corresponding lib-js helpers `pryv.cmc.requestAccept(opts)` and `pryv.cmc.requestAcceptUrl(opts)` (in `@pryv/cmc` ≥ 3.8) build the URL and drive the popup / redirect from the calling app's side.
+The corresponding lib-js helpers `pryv.cmc.requestAccept(opts)` and `pryv.cmc.requestAcceptUrl(opts)` (in `@pryv/cmc` ≥ 3.9) build the URL and drive the popup / redirect from the calling app's side.
+
+## CMC scope-update hand-off (`/cmc-scope-update`)
+
+Sibling to `/cmc-accept`: when the user wants to accept a scope-change proposal from a collector (the collector previously posted `consent/scope-request-cmc`), apps without a personal token defer the resulting `consent/scope-update-cmc` write to this page.
+
+**Route:** `/cmc-scope-update`
+
+**Query parameters:**
+
+| Param | Required | Description |
+|---|---|---|
+| `scopeRequestEventId` | yes | The collector-side scope-request event id (resolvable on the user's Pryv account once they sign in). |
+| `pryvApi` | yes | The user's Pryv API base. The page calls `/<username>/auth/login` for sign-in, `/<username>/events/<id>` to fetch the request, and `/<username>/events` to write the trigger. |
+| `scopeStreamId` | no | The user's collector stream the trigger lands on. Defaults to the scope-request event's home stream when omitted. |
+| `mode` | no | `popup` (default) or `redirect`. |
+| `returnUrl` | no | Required for `mode=redirect`. The page navigates here with `?cmcScopeUpdateResult=<json>`. |
+
+**Return shape** (popup `postMessage` payload or `cmcScopeUpdateResult` query-decoded JSON):
+
+```json
+{ "type": "cmc-scope-update-result", "ok": true,  "updateEventId": "ev-...", "action": "accept" }
+{ "type": "cmc-scope-update-result", "ok": true,  "updateEventId": "ev-...", "action": "refuse" }
+{ "type": "cmc-scope-update-result", "ok": false, "reason": "user-cancelled" }
+```
+
+The page shows the login form first (the scope-request event lives on the user's own account and can only be fetched once authenticated), then renders the new permissions side-by-side with the previous permissions so the user knows what they're confirming.
+
+Lib helpers: `pryv.cmc.requestScopeUpdate(opts)` + `pryv.cmc.requestScopeUpdateUrl(opts)` (in `@pryv/cmc` ≥ 3.9).
+
+**No `/cmc-revoke` route exists.** `consent/revoke-cmc` is access-permission-gated server-side (via `AccessLogic.canDeleteAccess`, which honours the `selfRevoke` feature permission), so apps holding the relationship's data-grant access self-revoke directly via `pryv.cmc.revokeAcceptance` / `revokeRelationship` — no auth-page hand-off needed.
 
 # Development and Deployment
 
