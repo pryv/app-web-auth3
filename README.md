@@ -268,13 +268,13 @@ Run:
 
 Open one of the entrypoint you need to test such as:
 
- - [https://l.rec.la:4443/access/signinhub.html?pryvServiceInfoUrl=https://reg.pryv.me/service/info](https://l.rec.la:4443/access/signinhub.html?pryvServiceInfoUrl=https://reg.pryv.me/service/info)
+ - [https://l.backloop.dev:4443/access/signinhub.html?pryvServiceInfoUrl=https://reg.pryv.me/service/info](https://l.backloop.dev:4443/access/signinhub.html?pryvServiceInfoUrl=https://reg.pryv.me/service/info)
 
  Note: you can override default hardcoded serviceInfoUrl with the query parameter  `pryvServiceInfoUrl` as shown.
 
-#### Testing Auth flow, with Rec-la
+#### Testing Auth flow, with backloop.dev
 
-Once you have started `yarn webserver` also start `yarn webserver-test` and open [https://l.rec.la:5443/](https://l.rec.la:5443/).
+Once you have started `yarn webserver` also start `yarn webserver-test` and open [https://l.backloop.dev:5443/](https://l.backloop.dev:5443/).
 You might want to edit the page `./tests/webpage-auth/index.html`.
 
 ### Vue.js testing
@@ -351,4 +351,4 @@ To customize assets and visual, you can refer to: [https://github.com/pryv/asset
 
 # License
 
-[Revised BSD license](https://github.com/pryv/documents/blob/master/license-bsd-revised.md)
+[Revised BSD license](LICENSE.md)
