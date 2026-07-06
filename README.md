@@ -1,3 +1,10 @@
+> ## ⚠️ Deprecated
+>
+> **This app is superseded by [`app-web-user-account`](https://github.com/pryv/app-web-user-account)**, the current reference auth / account web app.
+> New deployments should use `app-web-user-account`. `app-web-auth3` remains
+> available for platforms that have not yet migrated, but is no longer the
+> recommended auth/account UI and receives no new features.
+
 # Authorization web app (app-web-auth v3)
 
 Pryv.io web pages for app authorization, user registration and password reset.
