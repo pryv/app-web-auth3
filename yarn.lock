@@ -1313,10 +1313,9 @@ babylon@^6.18.0:
   resolved "https://registry.yarnpkg.com/babylon/-/babylon-6.18.0.tgz#af2f3b88fa6f5c1e4c634d1a0f8eac4f55b395e3"
   integrity sha512-q/UEjfGJ2Cm3oKV71DJz9d25TPnq5rhBVL2Q4fA5wcC3jcrdn7+SssEybFIxwAvvP+YCsCYNKughoF33GxgycQ==
 
-backloop.dev@^3.0.3:
-  version "3.0.3"
-  resolved "https://registry.yarnpkg.com/backloop.dev/-/backloop.dev-3.0.3.tgz#5f5c270422fb28ee6538cc7e3633fa4f6e921f58"
-  integrity sha512-t0XY3i9pzrE3oTCjR4CLCaif/+iLSu4Z6yYK58BCbi9KSGGsiBXQOYT6vjlXH90xldpmWljxogmjt4tNf601UA==
+"backloop.dev@git+https://github.com/perki/backloop.dev-node.git#v5.1.0":
+  version "5.1.0"
+  resolved "git+https://github.com/perki/backloop.dev-node.git#1243c7382d29c7880f3354931547a39ab5b41311"
 
 balanced-match@^0.4.2:
   version "0.4.2"
